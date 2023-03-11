@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>ComputerScience on Yeelight の 小屋</title>
+    <link>https://feiniaobf.github.io/tags/computerscience/</link>
+    <description>Recent content in ComputerScience on Yeelight の 小屋</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 10 Mar 2023 21:08:35 +0800</lastBuildDate><atom:link href="https://feiniaobf.github.io/tags/computerscience/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>一.什么是Internet</title>
+      <link>https://feiniaobf.github.io/posts/internet-1/</link>
+      <pubDate>Fri, 10 Mar 2023 21:08:35 +0800</pubDate>
+      
+      <guid>https://feiniaobf.github.io/posts/internet-1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>零.计算机网络导读</title>
+      <link>https://feiniaobf.github.io/posts/internet-0/</link>
+      <pubDate>Wed, 08 Mar 2023 21:08:30 +0800</pubDate>
+      
+      <guid>https://feiniaobf.github.io/posts/internet-0/</guid>
+      <description>初学计算机网络</description>
+    </item>
+    
+  </channel>
+</rss>
