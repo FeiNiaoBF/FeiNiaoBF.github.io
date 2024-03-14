@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="计算机语言基础 C 语言 项目练习 Go 语言 ———&gt; Go 语言学习 项目练习 python 语言 项目练习 TG_bot 数据结构 数据结构是对计算机高级语言最能体现打基础的学习，目">
+<title>CS学习计划</title>
+
+<link rel='canonical' href='https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/'>
+
+<link rel="stylesheet" href="/scss/style.min.d8118f156935b64eca93aca758476adca858d2c47354971654d9bd2933a0e45f.css"><meta property='og:title' content="CS学习计划">
+<meta property='og:description' content="计算机语言基础 C 语言 项目练习 Go 语言 ———&gt; Go 语言学习 项目练习 python 语言 项目练习 TG_bot 数据结构 数据结构是对计算机高级语言最能体现打基础的学习，目">
+<meta property='og:url' content='https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/'>
+<meta property='og:site_name' content='Yeelight の 小屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-03-10T15:58:41&#43;08:00'/><meta property='article:modified_time' content='2024-03-10T15:58:41&#43;08:00'/><meta property='og:image' content='https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/matt-le-SJSpo9hQf7s-unsplash.jpg' />
+<meta name="twitter:title" content="CS学习计划">
+<meta name="twitter:description" content="计算机语言基础 C 语言 项目练习 Go 语言 ———&gt; Go 语言学习 项目练习 python 语言 项目练习 TG_bot 数据结构 数据结构是对计算机高级语言最能体现打基础的学习，目"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/matt-le-SJSpo9hQf7s-unsplash.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/zh-cn/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu22c762c923636fe3e0f29f976348b4e1_4912_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌞</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn">Yeelight の 小屋</a></h1>
+            <h2 class="site-description">简单是稳定的前提( •̀ ω •́ )✧</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/FeiNiaoBF'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/blog/' >
+                
+                
+                
+                    <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1710417924804" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2097" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 47.104c-253.952 0-460.8 184.32-460.8 409.6 0 186.368 141.312 346.112 333.824 393.216l126.976 126.976 126.976-126.976c192.512-49.152 333.824-206.848 333.824-393.216 0-225.28-206.848-409.6-460.8-409.6z m231.424 698.368c-43.008 26.624-90.112 47.104-143.36 57.344l-63.488 63.488-24.576 24.576-24.576-24.576-63.488-63.488c-53.248-10.24-100.352-30.72-143.36-57.344-102.4-63.488-167.936-169.984-167.936-288.768C112.64 260.096 290.816 102.4 512 102.4s399.36 159.744 399.36 354.304c0 118.784-67.584 225.28-167.936 288.768z" fill="#8a8a8a" p-id="2098"></path><path d="M733.184 460.8c-10.24 0-20.48 6.144-26.624 14.336-38.912 67.584-110.592 110.592-194.56 110.592-81.92 0-155.648-45.056-194.56-110.592-6.144-8.192-16.384-14.336-26.624-14.336-24.576 0-38.912 26.624-26.624 45.056 49.152 83.968 141.312 141.312 247.808 141.312 104.448 0 196.608-57.344 247.808-141.312 10.24-20.48-4.096-45.056-26.624-45.056z" fill="#8a8a8a" p-id="2099"></path></svg>
+                
+                <span>博客</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://FeiNiaoBF.github.io/en/" >English</option>
+                                
+                                    <option value="https://FeiNiaoBF.github.io/zh-cn/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#计算机语言基础">计算机语言基础</a>
+      <ol>
+        <li><a href="#c-语言">C 语言</a></li>
+        <li><a href="#go-语言">Go 语言</a></li>
+        <li><a href="#python-语言">python 语言</a></li>
+      </ol>
+    </li>
+    <li><a href="#数据结构">数据结构</a>
+      <ol>
+        <li><a href="#基础结构">基础结构</a></li>
+        <li><a href="#其他结构">其他结构</a></li>
+        <li><a href="#真实世界">真实世界</a></li>
+      </ol>
+    </li>
+    <li><a href="#算法ai">算法（AI）</a>
+      <ol>
+        <li><a href="#关键要点">关键要点</a></li>
+        <li><a href="#算法的分类">算法的分类</a></li>
+      </ol>
+    </li>
+    <li><a href="#体系结构">体系结构</a></li>
+    <li><a href="#操作系统">操作系统</a></li>
+    <li><a href="#计算机网络">计算机网络</a></li>
+    <li><a href="#cs-后续学习路径">CS 后续学习路径</a></li>
+    <li><a href="#leetcode">LeetCode</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">
+                <img src="/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/matt-le-SJSpo9hQf7s-unsplash_hu958d513eeefe5556a31d065479ecc5ac_14205_800x0_resize_q75_box.jpg"
+                        srcset="/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/matt-le-SJSpo9hQf7s-unsplash_hu958d513eeefe5556a31d065479ecc5ac_14205_800x0_resize_q75_box.jpg 800w, /zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/matt-le-SJSpo9hQf7s-unsplash_hu958d513eeefe5556a31d065479ecc5ac_14205_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="533" 
+                        loading="lazy"
+                        alt="Featured image of post CS学习计划" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/zh-cn/categories/learning/" >
+                Learning
+            </a>
+        
+            <a href="/zh-cn/categories/os/" >
+                OS
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">CS学习计划</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 10, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 5 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="计算机语言基础">计算机语言基础</h2>
+<h3 id="c-语言">C 语言</h3>
+<p><strong>项目练习</strong></p>
+<h3 id="go-语言">Go 语言</h3>
+<p>———&gt; <a class="link" href="/zh-cn/post/cs/1.computerbasics/cslanguages/golang/" >Go 语言学习</a></p>
+<p><strong>项目练习</strong></p>
+<h3 id="python-语言">python 语言</h3>
+<p><strong>项目练习</strong></p>
+<ol>
+<li><a class="link" href="" >TG_bot</a></li>
+</ol>
+<h2 id="数据结构">数据结构</h2>
+<p>数据结构是对计算机高级语言最能体现打基础的学习，目前有许多常见的数据结构，我喜欢分类来处理。</p>
+<h3 id="基础结构">基础结构</h3>
+<ul>
+<li>
+<p><strong><a class="link" href="" >数组</a></strong>：是一种线性表数据结构，用于存储相同类型的数据元素。</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> <em>二分搜索</em></li>
+<li><input checked="" disabled="" type="checkbox"> <em>冒泡排序</em></li>
+<li><input disabled="" type="checkbox"> <em>动态规划</em></li>
+<li>&hellip; &hellip;</li>
+</ul>
+</li>
+<li>
+<p><strong><a class="link" href="" >链表</a></strong>：由一系列节点组成的数据结构，每个节点包含数据和指向下一个节点的指针。</p>
+<ul>
+<li><input disabled="" type="checkbox"> <em>反转链表</em></li>
+<li><input disabled="" type="checkbox"> <em>环形链表</em></li>
+<li><input disabled="" type="checkbox"> <em>LRU 缓存算法</em></li>
+<li>&hellip; &hellip;</li>
+</ul>
+</li>
+<li>
+<p><strong>栈</strong>：一种遵循后进先出（LIFO）原则的数据结构，只允许在表的一端进行插入和删除操作。</p>
+<ul>
+<li><input disabled="" type="checkbox"> </li>
+</ul>
+</li>
+<li>
+<p><strong>队列</strong>：一种遵循先进先出（FIFO）原则的数据结构，允许在表的一端进行插入，在另一端进行删除操作。</p>
+<ul>
+<li><input disabled="" type="checkbox"> </li>
+</ul>
+</li>
+<li>
+<p><strong>树</strong>：一种非线性数据结构，由节点组成，节点之间存在层次关系。</p>
+<ul>
+<li><input disabled="" type="checkbox"> </li>
+</ul>
+</li>
+<li>
+<p><strong>图</strong>：由节点（或顶点）和边组成的数据结构，用于表示多对多的关系。</p>
+<ul>
+<li><input disabled="" type="checkbox"> </li>
+</ul>
+</li>
+</ul>
+<h3 id="其他结构">其他结构</h3>
+<ul>
+<li><strong>并查集</strong>：一种用于处理不相交集合的数据结构，常用于解决连接性问题。</li>
+<li><strong>字典树</strong>：一种用于快速检索的树形数据结构，常用于字符串检索。</li>
+<li><strong>散列表</strong>：利用哈希函数将关键字映射到表中一个位置来访问记录的数据结构。</li>
+<li><strong>树状数组</strong>：一种高效的数据结构，用于维护序列前缀和的动态查询。</li>
+<li><strong>映射</strong>：一种将键映射到值的抽象数据类型，常用于快速查找。</li>
+<li><strong>集合</strong>：一种抽象数据类型，用于存储互不相同的元素的集合。</li>
+</ul>
+<h3 id="真实世界">真实世界</h3>
+<p>在实际项目中，数据结构和算法的选择取决于具体的应用场景和问题需求。一般来说，对于不涉及高精尖、复杂算法的项目，可以尽量选择简单的数据结构。以下是一些建议和实践：</p>
+<ol>
+<li>
+<p><strong>根据场景选择数据结构</strong>：静态数组适合元素不超过 100 的场合，动态数组适合元素不超过 1000 的场合，链表适合元素不超过 3000 的场合。在需要动态分配内存的场合，可以考虑使用静态内存，以提高程序稳定性。</p>
+</li>
+<li>
+<p><strong>实际项目中的应用</strong>：数据结构和算法在实际项目中扮演着重要角色，可以通过实际项目场景来说明一种数据结构解决了什么实际问题，以及其各种操作时间复杂度、优缺点等。这有助于理解数据结构在编程中的重要性。</p>
+</li>
+<li>
+<p><strong>权衡选择</strong>：在实际开发中，需要权衡选择使用哪种数据结构和算法。除了考虑算法的时间复杂度、空间复杂度，还需要考虑其在具体场景下的执行效率、易用性、维护成本等因素</p>
+</li>
+</ol>
+<p>综上所述，实际项目中的数据结构和算法选择应该根据具体的应用场景和问题需求进行权衡和取舍，以达到最优的解决方案。</p>
+<h2 id="算法ai">算法（AI）</h2>
+<p>算法是解决问题的一系列清晰指令，是计算机科学的基础。在实际开发中，选择合适的数据结构和算法对程序的性能和效率至关重要。在学习算法时，需要权衡选择使用哪种数据结构和算法，不能简单地用复杂度来表示执行性能。此外，编程算法面试经验总结中提到，算法面试常涉及的主题、考察形式和评价方式，对求职备考的朋友们有所帮助。另外，算法也在机器学习领域有着广泛的应用，比如预测住房价格、探索客户的人口统计学数据以确定模式等。在实际开发中，对于数组的算法，可以通过合并两个有序数组来进行实现。对于统计相同数字出现的次数，可以利用数组元素下标对应数字，用数组元素的值表示对应数字出现的次数，这是一种典型的空间换时间的算法。如果整数的范围是 1 到 n，可以考虑使用其他的算法来实现。</p>
+<h3 id="关键要点">关键要点</h3>
+<ol>
+<li><strong>目的和问题解决：</strong> 算法的设计旨在解决特定问题或执行特定任务。它们用于执行各种计算和操作，从简单的搜索和排序到复杂的图算法和机器学习。</li>
+<li><strong>输入和输出：</strong> 算法接受一个或多个输入，通过执行一系列计算操作，产生一个输出。输入可以是数据、问题描述或其他形式的信息。</li>
+<li><strong>有限性：</strong> 算法是有限步骤的集合，每一步都可以在有限的时间内完成。这确保了算法的执行是可以终止的。</li>
+<li><strong>确定性：</strong> 算法的每一步都是确定性的，即对于给定的输入，它总是产生相同的输出。这使得算法在不同的环境中具有可重复性。</li>
+<li><strong>效率：</strong> 算法的效率是一个关键方面，通常通过时间复杂度和空间复杂度来衡量。好的算法能够以较低的时间和空间开销解决问题。</li>
+<li><strong>可读性和可维护性：</strong> 除了效率，算法的可读性和可维护性也是重要的。一个清晰、简单、易于理解的算法更容易被其他人理解和维护。</li>
+</ol>
+<h3 id="算法的分类">算法的分类</h3>
+<ul>
+<li><strong>搜索算法：</strong> 用于在数据集中查找特定元素的算法，如线性搜索和二分搜索。</li>
+<li><strong>排序算法：</strong> 对一组元素进行排列的算法，例如冒泡排序、快速排序、归并排序等。</li>
+<li><strong>图算法：</strong> 处理图数据结构的算法，包括深度优先搜索、广度优先搜索、最短路径算法等。</li>
+<li><strong>动态规划：</strong> 将复杂问题分解为简单子问题，并通过保存已解决的子问题的解来加速求解的算法。</li>
+<li><strong>贪心算法：</strong> 在每一步选择中都采取当前状态下最好或最优的选择，从而希望得到全局最好或最优解的算法。</li>
+<li><strong>回溯算法：</strong> 通过不断试错找到问题的解，是一种递归的算法。</li>
+<li><strong>分治算法：</strong> 将问题分解成相互独立且与原问题相同的子问题，然后递归地解决子问题。</li>
+<li><strong>随机化算法：</strong> 使用随机数来解决问题的算法，例如快速排序的随机化版本。</li>
+<li><strong>机器学习算法：</strong> 用于构建模型、分类和预测的一系列算法，如决策树、支持向量机、神经网络等。</li>
+</ul>
+<p>算法是计算机科学的核心，它们不仅仅是问题求解的工具，也是构建复杂系统和应对实际挑战的基础。深入理解和熟练运用各种算法，有助于提高问题解决和计算机科学建模的能力。</p>
+<h2 id="体系结构">体系结构</h2>
+<h2 id="操作系统">操作系统</h2>
+<p><a class="link" href="" >操作系统的具体学习目录</a></p>
+<h2 id="计算机网络">计算机网络</h2>
+<h2 id="cs-后续学习路径">CS 后续学习路径</h2>
+<p>为自身打造的路径
+_
+目标：人工智能<strong>Artificial intelligence</strong>
+数学
+<a class="link" href="" >Search &mdash; Graph theory</a></p>
+<p><a class="link" href="" >Knowledge &mdash; Boolean logic</a></p>
+<p><a class="link" href="" >Uncertainty &mdash; Probability</a></p>
+<p>目标：应用程序开发<strong>Application Developer</strong></p>
+<p><a class="link" href="" >Full Stack</a></p>
+<p>目标：计算机图形学<strong>Computer graphics</strong></p>
+<p>目标：软件工程<strong>Software engineering</strong></p>
+<h2 id="leetcode">LeetCode</h2>
+<p>每日任务
+<a class="link" href="" >合并两个有序数组</a></p>
+<p><a class="link" href="" >移除元素</a></p>
+<p><a class="link" href="" >删除有序数组中的重复项</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的进程和线程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E9%94%81%E5%92%8C%E5%B9%B6%E8%A1%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的锁和并行</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6-%E4%B8%AD%E7%9A%84-trap/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6 中的 trap</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的内存虚拟化</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的源码解析</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Example Person. All rights reserved.
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.24.1">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+   
+  :root {
+    --article-font-family: "Merriweather", var(--base-font-family);
+  }
+</style>
+
+<script>
+  (function () {
+    const customFont = document.createElement("link")
+    customFont.href =
+      "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+
+    customFont.type = "text/css"
+    customFont.rel = "stylesheet"
+
+    document.head.appendChild(customFont)
+  })()
+</script>
+
+    </body>
+</html>

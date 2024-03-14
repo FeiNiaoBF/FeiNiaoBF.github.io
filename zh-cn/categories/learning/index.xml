@@ -8,6 +8,140 @@
         <language>zh-cn</language>
         <copyright>Example Person. All rights reserved.</copyright>
         <lastBuildDate>Sun, 10 Mar 2024 16:37:08 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/learning/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>CS学习计划</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/</link>
+        <pubDate>Sun, 10 Mar 2024 15:58:41 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/</guid>
+        <description>&lt;img src="https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post CS学习计划" /&gt;&lt;h2 id=&#34;计算机语言基础&#34;&gt;计算机语言基础&lt;/h2&gt;
+&lt;h3 id=&#34;c-语言&#34;&gt;C 语言&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;项目练习&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;go-语言&#34;&gt;Go 语言&lt;/h3&gt;
+&lt;p&gt;———&amp;gt; &lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/post/cs/1.computerbasics/cslanguages/golang/&#34; &gt;Go 语言学习&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;项目练习&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;python-语言&#34;&gt;python 语言&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;项目练习&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;TG_bot&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;数据结构&#34;&gt;数据结构&lt;/h2&gt;
+&lt;p&gt;数据结构是对计算机高级语言最能体现打基础的学习，目前有许多常见的数据结构，我喜欢分类来处理。&lt;/p&gt;
+&lt;h3 id=&#34;基础结构&#34;&gt;基础结构&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;数组&lt;/a&gt;&lt;/strong&gt;：是一种线性表数据结构，用于存储相同类型的数据元素。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;二分搜索&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;冒泡排序&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;动态规划&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&amp;hellip; &amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;链表&lt;/a&gt;&lt;/strong&gt;：由一系列节点组成的数据结构，每个节点包含数据和指向下一个节点的指针。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;反转链表&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;环形链表&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;LRU 缓存算法&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&amp;hellip; &amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;栈&lt;/strong&gt;：一种遵循后进先出（LIFO）原则的数据结构，只允许在表的一端进行插入和删除操作。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;队列&lt;/strong&gt;：一种遵循先进先出（FIFO）原则的数据结构，允许在表的一端进行插入，在另一端进行删除操作。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;树&lt;/strong&gt;：一种非线性数据结构，由节点组成，节点之间存在层次关系。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;图&lt;/strong&gt;：由节点（或顶点）和边组成的数据结构，用于表示多对多的关系。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;其他结构&#34;&gt;其他结构&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;并查集&lt;/strong&gt;：一种用于处理不相交集合的数据结构，常用于解决连接性问题。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;字典树&lt;/strong&gt;：一种用于快速检索的树形数据结构，常用于字符串检索。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;散列表&lt;/strong&gt;：利用哈希函数将关键字映射到表中一个位置来访问记录的数据结构。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;树状数组&lt;/strong&gt;：一种高效的数据结构，用于维护序列前缀和的动态查询。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;映射&lt;/strong&gt;：一种将键映射到值的抽象数据类型，常用于快速查找。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;集合&lt;/strong&gt;：一种抽象数据类型，用于存储互不相同的元素的集合。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;真实世界&#34;&gt;真实世界&lt;/h3&gt;
+&lt;p&gt;在实际项目中，数据结构和算法的选择取决于具体的应用场景和问题需求。一般来说，对于不涉及高精尖、复杂算法的项目，可以尽量选择简单的数据结构。以下是一些建议和实践：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;根据场景选择数据结构&lt;/strong&gt;：静态数组适合元素不超过 100 的场合，动态数组适合元素不超过 1000 的场合，链表适合元素不超过 3000 的场合。在需要动态分配内存的场合，可以考虑使用静态内存，以提高程序稳定性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;实际项目中的应用&lt;/strong&gt;：数据结构和算法在实际项目中扮演着重要角色，可以通过实际项目场景来说明一种数据结构解决了什么实际问题，以及其各种操作时间复杂度、优缺点等。这有助于理解数据结构在编程中的重要性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;权衡选择&lt;/strong&gt;：在实际开发中，需要权衡选择使用哪种数据结构和算法。除了考虑算法的时间复杂度、空间复杂度，还需要考虑其在具体场景下的执行效率、易用性、维护成本等因素&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;综上所述，实际项目中的数据结构和算法选择应该根据具体的应用场景和问题需求进行权衡和取舍，以达到最优的解决方案。&lt;/p&gt;
+&lt;h2 id=&#34;算法ai&#34;&gt;算法（AI）&lt;/h2&gt;
+&lt;p&gt;算法是解决问题的一系列清晰指令，是计算机科学的基础。在实际开发中，选择合适的数据结构和算法对程序的性能和效率至关重要。在学习算法时，需要权衡选择使用哪种数据结构和算法，不能简单地用复杂度来表示执行性能。此外，编程算法面试经验总结中提到，算法面试常涉及的主题、考察形式和评价方式，对求职备考的朋友们有所帮助。另外，算法也在机器学习领域有着广泛的应用，比如预测住房价格、探索客户的人口统计学数据以确定模式等。在实际开发中，对于数组的算法，可以通过合并两个有序数组来进行实现。对于统计相同数字出现的次数，可以利用数组元素下标对应数字，用数组元素的值表示对应数字出现的次数，这是一种典型的空间换时间的算法。如果整数的范围是 1 到 n，可以考虑使用其他的算法来实现。&lt;/p&gt;
+&lt;h3 id=&#34;关键要点&#34;&gt;关键要点&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;目的和问题解决：&lt;/strong&gt; 算法的设计旨在解决特定问题或执行特定任务。它们用于执行各种计算和操作，从简单的搜索和排序到复杂的图算法和机器学习。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;输入和输出：&lt;/strong&gt; 算法接受一个或多个输入，通过执行一系列计算操作，产生一个输出。输入可以是数据、问题描述或其他形式的信息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;有限性：&lt;/strong&gt; 算法是有限步骤的集合，每一步都可以在有限的时间内完成。这确保了算法的执行是可以终止的。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;确定性：&lt;/strong&gt; 算法的每一步都是确定性的，即对于给定的输入，它总是产生相同的输出。这使得算法在不同的环境中具有可重复性。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;效率：&lt;/strong&gt; 算法的效率是一个关键方面，通常通过时间复杂度和空间复杂度来衡量。好的算法能够以较低的时间和空间开销解决问题。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;可读性和可维护性：&lt;/strong&gt; 除了效率，算法的可读性和可维护性也是重要的。一个清晰、简单、易于理解的算法更容易被其他人理解和维护。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;算法的分类&#34;&gt;算法的分类&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;搜索算法：&lt;/strong&gt; 用于在数据集中查找特定元素的算法，如线性搜索和二分搜索。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;排序算法：&lt;/strong&gt; 对一组元素进行排列的算法，例如冒泡排序、快速排序、归并排序等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;图算法：&lt;/strong&gt; 处理图数据结构的算法，包括深度优先搜索、广度优先搜索、最短路径算法等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;动态规划：&lt;/strong&gt; 将复杂问题分解为简单子问题，并通过保存已解决的子问题的解来加速求解的算法。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;贪心算法：&lt;/strong&gt; 在每一步选择中都采取当前状态下最好或最优的选择，从而希望得到全局最好或最优解的算法。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;回溯算法：&lt;/strong&gt; 通过不断试错找到问题的解，是一种递归的算法。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分治算法：&lt;/strong&gt; 将问题分解成相互独立且与原问题相同的子问题，然后递归地解决子问题。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;随机化算法：&lt;/strong&gt; 使用随机数来解决问题的算法，例如快速排序的随机化版本。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;机器学习算法：&lt;/strong&gt; 用于构建模型、分类和预测的一系列算法，如决策树、支持向量机、神经网络等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;算法是计算机科学的核心，它们不仅仅是问题求解的工具，也是构建复杂系统和应对实际挑战的基础。深入理解和熟练运用各种算法，有助于提高问题解决和计算机科学建模的能力。&lt;/p&gt;
+&lt;h2 id=&#34;体系结构&#34;&gt;体系结构&lt;/h2&gt;
+&lt;h2 id=&#34;操作系统&#34;&gt;操作系统&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;操作系统的具体学习目录&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;计算机网络&#34;&gt;计算机网络&lt;/h2&gt;
+&lt;h2 id=&#34;cs-后续学习路径&#34;&gt;CS 后续学习路径&lt;/h2&gt;
+&lt;p&gt;为自身打造的路径
+_
+目标：人工智能&lt;strong&gt;Artificial intelligence&lt;/strong&gt;
+数学
+&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Search &amp;mdash; Graph theory&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Knowledge &amp;mdash; Boolean logic&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Uncertainty &amp;mdash; Probability&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;目标：应用程序开发&lt;strong&gt;Application Developer&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Full Stack&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;目标：计算机图形学&lt;strong&gt;Computer graphics&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;目标：软件工程&lt;strong&gt;Software engineering&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;leetcode&#34;&gt;LeetCode&lt;/h2&gt;
+&lt;p&gt;每日任务
+&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;合并两个有序数组&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;移除元素&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;删除有序数组中的重复项&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>XV6的进程和线程</title>
         <link>https://FeiNiaoBF.github.io/zh-cn/p/xv6%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/</link>
         <pubDate>Sun, 10 Mar 2024 16:37:08 +0800</pubDate>
