@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="性能快 -&gt; 性能慢 硬件的提升 其实早在 21 世纪初的时候 CPU 的单核的性能可以说到达了一个瓶颈，单个 CPU 已经不可以满足需求了，计算机科学家们需要找一个突破瓶">
+<title>XV6的锁和并行</title>
+
+<link rel='canonical' href='https://FeiNiaoBF.github.io/zh-cn/p/xv6%E7%9A%84%E9%94%81%E5%92%8C%E5%B9%B6%E8%A1%8C/'>
+
+<link rel="stylesheet" href="/scss/style.min.d8118f156935b64eca93aca758476adca858d2c47354971654d9bd2933a0e45f.css"><meta property='og:title' content="XV6的锁和并行">
+<meta property='og:description' content="性能快 -&gt; 性能慢 硬件的提升 其实早在 21 世纪初的时候 CPU 的单核的性能可以说到达了一个瓶颈，单个 CPU 已经不可以满足需求了，计算机科学家们需要找一个突破瓶">
+<meta property='og:url' content='https://FeiNiaoBF.github.io/zh-cn/p/xv6%E7%9A%84%E9%94%81%E5%92%8C%E5%B9%B6%E8%A1%8C/'>
+<meta property='og:site_name' content='Yeelight の 小屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-03-10T16:36:19&#43;08:00'/><meta property='article:modified_time' content='2024-03-10T16:36:19&#43;08:00'/>
+<meta name="twitter:title" content="XV6的锁和并行">
+<meta name="twitter:description" content="性能快 -&gt; 性能慢 硬件的提升 其实早在 21 世纪初的时候 CPU 的单核的性能可以说到达了一个瓶颈，单个 CPU 已经不可以满足需求了，计算机科学家们需要找一个突破瓶">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/zh-cn/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu22c762c923636fe3e0f29f976348b4e1_4912_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌞</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn">Yeelight の 小屋</a></h1>
+            <h2 class="site-description">简单是稳定的前提( •̀ ω •́ )✧</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/FeiNiaoBF'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/blog/' >
+                
+                
+                
+                    <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1710417924804" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2097" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 47.104c-253.952 0-460.8 184.32-460.8 409.6 0 186.368 141.312 346.112 333.824 393.216l126.976 126.976 126.976-126.976c192.512-49.152 333.824-206.848 333.824-393.216 0-225.28-206.848-409.6-460.8-409.6z m231.424 698.368c-43.008 26.624-90.112 47.104-143.36 57.344l-63.488 63.488-24.576 24.576-24.576-24.576-63.488-63.488c-53.248-10.24-100.352-30.72-143.36-57.344-102.4-63.488-167.936-169.984-167.936-288.768C112.64 260.096 290.816 102.4 512 102.4s399.36 159.744 399.36 354.304c0 118.784-67.584 225.28-167.936 288.768z" fill="#8a8a8a" p-id="2098"></path><path d="M733.184 460.8c-10.24 0-20.48 6.144-26.624 14.336-38.912 67.584-110.592 110.592-194.56 110.592-81.92 0-155.648-45.056-194.56-110.592-6.144-8.192-16.384-14.336-26.624-14.336-24.576 0-38.912 26.624-26.624 45.056 49.152 83.968 141.312 141.312 247.808 141.312 104.448 0 196.608-57.344 247.808-141.312 10.24-20.48-4.096-45.056-26.624-45.056z" fill="#8a8a8a" p-id="2099"></path></svg>
+                
+                <span>博客</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://FeiNiaoBF.github.io/en/" >English</option>
+                                
+                                    <option value="https://FeiNiaoBF.github.io/zh-cn/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#硬件的提升">硬件的提升</a></li>
+    <li><a href="#为什么要使用锁">为什么要使用锁</a></li>
+    <li><a href="#什么时候使用锁">什么时候使用锁</a></li>
+    <li><a href="#锁的特性和死锁">锁的特性和死锁</a></li>
+    <li><a href="#锁与性能">锁与性能</a></li>
+    <li><a href="#实现锁">实现锁</a></li>
+    <li><a href="#sleep--wakeup">Sleep &amp; Wakeup</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/zh-cn/categories/linux/" >
+                Linux
+            </a>
+        
+            <a href="/zh-cn/categories/os/" >
+                OS
+            </a>
+        
+            <a href="/zh-cn/categories/xv6/" >
+                Xv6
+            </a>
+        
+            <a href="/zh-cn/categories/learning/" >
+                Learning
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/p/xv6%E7%9A%84%E9%94%81%E5%92%8C%E5%B9%B6%E8%A1%8C/">XV6的锁和并行</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 10, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 8 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p>性能快 -&gt; 性能慢</p>
+</blockquote>
+<hr>
+<h2 id="硬件的提升">硬件的提升</h2>
+<p>其实早在 21 世纪初的时候 CPU 的单核的性能可以说到达了一个瓶颈，单个 CPU 已经不可以满足需求了，计算机科学家们需要找一个突破瓶颈的方法。我们的需求是什么，要更加快速的性能和计算能力，有一个比较：如果强行给一个 CPU 提升性能，那么它的功耗也是增加的而且加得很多，但新加入一个 CPU 不仅仅提升了性能，而且功耗增加在接受范围，因此，多核的时代来临了。</p>
+<h2 id="为什么要使用锁">为什么要使用锁</h2>
+<p>首先，为什么在多核系统中我们需要锁？锁又是什么东西？这要从应用程序想要使用多个 CPU 核开始。我们知道使用多个 CPU 核可以带来性能的提升，如果一个应用程序运行在多个 CPU 核上，并且执行了系统调用，那么内核需要能够处理<strong>并行</strong>的系统调用。如果系统调用以<strong>并行</strong>的方式运行在多个 CPU 核上，那么它们可能会<strong>并行</strong>的访问内核中共享的数据结构或是数据。当并行的访问数据结构时，例如：一个核在读取数据，另一个核在写入数据，我们需要使用锁来<strong>协调</strong>对于<strong>共享数据的更新</strong>，以确保数据的<strong>一致性</strong>。所以，我们需要锁来控制并确保共享的数据是正确的。</p>
+<p>但是实际的情况有些令人失望，因为我们想要通过并行来获得高性能，我们想要并行的在不同的 CPU 核上执行系统调用，但是如果这些系统调用使用了共享的数据，我们又需要使用锁，而锁又会使得这些系统调用串行执行，所以最后锁反过来又限制了性能。</p>
+<p>所以现在我们处于一个矛盾的处境，出于正确性，我们需要使用锁，但是考虑到性能，锁又是极不好的。这就是我说的 <code>性能越快 -&gt; 性能越慢</code> 。</p>
+<p>首先，我们需要了解一下锁用在哪里？前面说锁是<strong>控制并确保共享的数据</strong> 的 <em>标志</em> 。这个数据是什么？其实说锁像标志不如像一个仓库管理员，一旦有人来改变仓库的东西都要 <code>他</code> 出面管理防止出问题。</p>
+<p>来看 xv6 中的 kfree() :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">kmem</span><span class="p">.</span><span class="n">lock</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">kmem</span><span class="p">.</span><span class="n">freelist</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">kmem</span><span class="p">.</span><span class="n">freelist</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">kmem</span><span class="p">.</span><span class="n">lock</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中，在锁的 acquire 和 release 之间的代码，通常被称为<strong>critical section</strong>。它就是我们要管理的数据</p>
+<p>为了确保数据的正确性，我们用锁来管理 <strong>critical section</strong> 区。当一份共享数据同时被读写时，如果没有锁的话，可能会出现 <strong>race condition</strong> （竞争条件），进而导致程序出错。如：在 <code>r-&gt;next = kmem.freelist;</code> 中 CPU0 和 CPU1 同时进行，那么 <code>r-&gt;next</code> 可能指向的是 CPU0 的数据，也可能是 CPU1 的数据，这里会出现使我们不愿意看到的巨大错误。</p>
+<p><strong>race condition</strong> 是比较讨厌的，值得一提的是 <strong>race condition</strong> 可以有不同的表现形式，并且它可能发生，也可能不发生。我们不希望发生。</p>
+<p>接下来让就具体的介绍一下锁。锁就是一个对象，就像其他在内核中的对象一样。有一个结构体叫做<code>lock</code>，它包含了一些字段，这些字段中维护了锁的状态。锁有非常直观的 API：</p>
+<ul>
+<li><strong>acquire</strong>，接收指向 lock 的指针作为参数。acquire 确保了在任何时间，只会有一个进程能够成功的获取锁。</li>
+<li><strong>release</strong>，也接收指向 lock 的指针作为参数。在同一时间尝试获取锁的其他进程需要等待，直到持有锁的进程对锁调用 release。</li>
+</ul>
+<p>所以，用锁来避免数据结构的资源竞争（<strong>race condition</strong>）和保护资源。</p>
+<h2 id="什么时候使用锁">什么时候使用锁</h2>
+<p>在使用锁之前要了解一个<strong>机制</strong> &mdash; 原子操作（atomic operation）。
+简单来讲，一般在程序中  <code>i+=1</code> 有三个动作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">ld</span>  <span class="no">t0</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">a0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">addi</span> <span class="no">t0</span><span class="p">,</span> <span class="no">t0</span><span class="p">,</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="nf">sd</span>  <span class="no">t0</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">a0</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>原子操作就是把这三个操作由一个操作完成。</p>
+<p>而之前的被保护的<strong>数据</strong>之所以被称为 <strong>critical section</strong>，是因为通常会在这里以原子的方式执行共享数据的更新。所以基本上来说，如果在 <code>acquire</code> 和 <code>release</code> 之间有多条指令，它们要么会一起执行，要么一条也不会执行。所以（CPU）永远也不可能看到位于 <strong>critical section</strong> 中的具体代码，反之，在 <strong>race condition</strong> 中多个 CPU 在 <strong>critical section</strong> 区上交织的执行。所以这样就能避免 <strong>race condition</strong>。</p>
+<p>现在的程序通常会有许多锁。实际上，XV6中就有很多的锁。为什么会有这么多锁呢？因为锁序列化了代码的执行。如果两个处理器想要进入到同一个 <strong>critical section</strong> 中，只会有一个能成功进入，另一个处理器会在第一个处理器从 <strong>critical section</strong> 中退出之后再进入。所以这里以串行执行完全没有并行执行。</p>
+<p>如果让内核中只有一把<strong>大锁</strong>，我们暂时将之称为 <strong>big kernel lock</strong>。基本上所有的系统调用都会被这把大锁保护而被序列化。系统调用会按照这样的流程处理：一个系统调用获取到了 big kernel lock，完成自己的操作，之后释放这个 big kernel lock，再返回到用户空间，之后下一个系统调用才能执行。这样的话，如果我们有一个应用程序并行的调用多个系统调用，这些系统调用会串行的执行，因为我们只有一把锁。所以通常来说，例如 XV6的操作系统会有多把锁，这样就能获得某种程度的并发执行。如果两个系统调用使用了两把不同的锁，那么它们就能完全的并行运行。</p>
+<p>很明显，锁限制了并发性，也限制了性能。没有很好的规则来规定锁的使用。如：<code>如果两个进程访问了一个共享的数据结构，并且其中一个进程会更新共享的数据结构，那么就需要对于这个共享的数据结构加锁。</code> 矛盾的是，有时候这个规则太过严格，而有时候这个规则又太过宽松了。除了共享的数据，在一些其他场合也需要锁，例如对于 printf，如果我们将一个字符串传递给它，XV6会尝试原子性的将整个字符串输出，而不是与其他进程的 printf 交织输出。尽管这里没有共享的数据结构，但在这里锁仍然很有用处，因为我们想要 printf 的输出也是序列化的。</p>
+<p>因此，锁应该与操作而不是数据关联，和操作的顺序相关。</p>
+<h2 id="锁的特性和死锁">锁的特性和死锁</h2>
+<ul>
+<li><em>锁可以避免丢失更新</em>。如果你回想我们之前在 kalloc.c 中的例子，丢失更新是指我们丢失了对于某个内存 page 在 kfree 函数中的更新。如果没有锁，在出现 race condition 的时候，内存 page 不会被加到 freelist 中。但是加上锁之后，我们就不会丢失这里的更新。</li>
+<li><em>锁可以让操作具有原子性</em>。我们之前介绍了加锁解锁之间的区域是 critical section，在 critical section 的所有操作会都会作为一个原子操作执行。</li>
+<li><em>锁可以维护共享数据结构的**不变性</em>**。共享数据结构如果不被任何进程修改的话是会保持不变的。如果某个进程acquire了锁并且做了一些更新操作，共享数据的不变性暂时会被破坏，但是在release锁之后，数据的不变性又恢复了。</li>
+</ul>
+<blockquote>
+<p>数据结构的<strong>不变性</strong>是在不同的 CPU 中相对的，比如：CPU0 改变了某数据结构对它而言是变化的，但对于 CPU1 看到的就是不变的</p>
+</blockquote>
+<p>死锁（Deadlock），在用锁的时候经常遇到，一个死锁的最简单的场景就是：首先 <code>acquire</code> 一个锁，然后进入到 <strong>critical section</strong>；在 <strong>critical section</strong> 中，再 <code>acquire</code> 同一个锁；第二个 <code>acquire</code> 必须要等到第一个 <code>acquire</code> 状态被 <code>release</code> 了才能继续执行，但是不继续执行的话又走不到第一个 <code>release</code>，所以程序就一直卡在这了。这就是一个死锁。让我想起著名的哲學家就餐問題。还有一个现实场景：堵车。</p>
+<p>死锁的解决方案是：如果你有多个锁，你需要对锁进行排序，所有的操作都必须以相同的顺序获取锁。然后以相同的顺序丢弃锁。</p>
+<h2 id="锁与性能">锁与性能</h2>
+<p>我们想要获得更好的性能，那么我们需要有更多的锁，但是这又引入了大量的工作。</p>
+<p>通常来说，开发的流程是：</p>
+<ul>
+<li>先以coarse-grained lock（大锁）开始。</li>
+<li>再对程序进行测试，来看一下程序是否能使用多核。</li>
+<li>如果可以的话，那么工作就结束了，你对于锁的设计足够好了；如果不可以的话，那意味着锁存在竞争，多个进程会尝试获取同一个锁，因此它们将会序列化的执行，性能也上不去，之后你就需要重构程序。</li>
+</ul>
+<p>在这个流程中，测试的过程比较重要。有可能模块使用了coarse-grained lock，但是它并没有经常被并行的调用，那么其实就没有必要重构程序，因为重构程序设计到大量的工作，并且也会使得代码变得复杂。所以如果不是必要的话，还是不要进行重构。</p>
+<h2 id="实现锁">实现锁</h2>
+<p>我在<a class="link" href="" >这里</a>有具体的笔记。
+一定要注意的点是：
+!!! <em>不要把锁变成 critical section 区</em> !!!
+!!! <em>不要把锁变成 critical section 区</em> !!!
+!!! <em>不要把锁变成 critical section 区</em> !!!</p>
+<p>所以 spinlock 需要处理两类并发，一类是不同 CPU 之间的并发，一类是相同 CPU 上中断和普通程序之间的并发
+我们需要在 acquire 中关闭中断。</p>
+<h2 id="sleep--wakeup">Sleep &amp; Wakeup</h2>
+<p>Sleep 函数中最后一件事情就是重新获取 condition lock。</p>
+<h2 id="总结">总结</h2>
+<p>硬件性能瓶颈是指当单个 CPU 核的性能已经不能满足应用程序的需求时，计算机科学家们需要寻找突破瓶颈的方法。多核系统中的锁用于控制并确保共享数据的更新，以确保数据的一致性。然而，锁也会限制性能，因为它会使得系统调用串行执行。为了解决这个问题，我们可以考虑使用更多的锁，以便在某种程度上获得并发执行。但是，这会引入大量的工作，因此需要对锁的设计和使用进行充分考虑。</p>
+<p>在实际应用中，我们可以通过测试程序来判断是否需要重构锁的设计，如果程序可以并行执行，那么锁的设计可能足够好；如果不能，那么需要对锁进行重构，以提高并发性能。</p>
+<p>总之，硬件性能瓶颈推动了计算机科学家们寻找突破方法，而锁是一种解决共享数据竞争的方法。然而，锁也会限制性能，因此需要在设计和使用中进行充分考虑。</p>
+<p>使用锁的原因主要有以下几点：</p>
+<ol>
+<li><strong>保证资源共享性</strong>：当多个线程同时访问共享资源时，使用锁可以确保资源在同一时间只被一个线程访问，从而避免资源不同步和错误。</li>
+<li><strong>避免资源竞争</strong>：当多个线程同时访问共享资源时，可能导致资源竞争，导致未预期的结果。使用锁可以避免资源竞争，确保资源的正确使用。</li>
+<li><strong>提高代码可重用性</strong>：使用锁可以将多线程访问的代码封装成一个线程安全的单元，从而提高代码的可重用性。</li>
+<li><strong>降低开发难度</strong>：使用锁可以简化编程者需要关注的事物，降低开发难度。</li>
+<li><strong>保证线程安全</strong>：使用锁可以确保程序中的线程安全问题，避免因线程不安全导致的错误和异常。</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的进程和线程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6-%E4%B8%AD%E7%9A%84-trap/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6 中的 trap</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的内存虚拟化</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的源码解析</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E9%80%9A%E8%BF%87-xv6-%E6%9D%A5%E5%AD%A6%E4%B9%A0%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fostep/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">通过 XV6 来学习操作系统(OSTEP)</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Example Person. All rights reserved.
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.24.1">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+   
+  :root {
+    --article-font-family: "Merriweather", var(--base-font-family);
+  }
+</style>
+
+<script>
+  (function () {
+    const customFont = document.createElement("link")
+    customFont.href =
+      "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+
+    customFont.type = "text/css"
+    customFont.rel = "stylesheet"
+
+    document.head.appendChild(customFont)
+  })()
+</script>
+
+    </body>
+</html>

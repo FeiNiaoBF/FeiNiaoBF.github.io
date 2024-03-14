@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="入门 微处理器历史 Intel的x86 在这里我想来简单的说道说道微处理器的历史发展，特此说明一下我不是专业的🙄，因此我没有详细的深入研究，如果有">
+<title>二.程序的机器级表示(CSAPP)</title>
+
+<link rel='canonical' href='https://FeiNiaoBF.github.io/zh-cn/p/%E4%BA%8C.%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BAcsapp/'>
+
+<link rel="stylesheet" href="/scss/style.min.d8118f156935b64eca93aca758476adca858d2c47354971654d9bd2933a0e45f.css"><meta property='og:title' content="二.程序的机器级表示(CSAPP)">
+<meta property='og:description' content="入门 微处理器历史 Intel的x86 在这里我想来简单的说道说道微处理器的历史发展，特此说明一下我不是专业的🙄，因此我没有详细的深入研究，如果有">
+<meta property='og:url' content='https://FeiNiaoBF.github.io/zh-cn/p/%E4%BA%8C.%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BAcsapp/'>
+<meta property='og:site_name' content='Yeelight の 小屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CSAPP' /><meta property='article:published_time' content='2023-04-09T20:13:06&#43;08:00'/><meta property='article:modified_time' content='2023-04-09T20:13:06&#43;08:00'/>
+<meta name="twitter:title" content="二.程序的机器级表示(CSAPP)">
+<meta name="twitter:description" content="入门 微处理器历史 Intel的x86 在这里我想来简单的说道说道微处理器的历史发展，特此说明一下我不是专业的🙄，因此我没有详细的深入研究，如果有">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/zh-cn/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu22c762c923636fe3e0f29f976348b4e1_4912_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌞</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn">Yeelight の 小屋</a></h1>
+            <h2 class="site-description">简单是稳定的前提( •̀ ω •́ )✧</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/FeiNiaoBF'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/blog/' >
+                
+                
+                
+                    <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1710417924804" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2097" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 47.104c-253.952 0-460.8 184.32-460.8 409.6 0 186.368 141.312 346.112 333.824 393.216l126.976 126.976 126.976-126.976c192.512-49.152 333.824-206.848 333.824-393.216 0-225.28-206.848-409.6-460.8-409.6z m231.424 698.368c-43.008 26.624-90.112 47.104-143.36 57.344l-63.488 63.488-24.576 24.576-24.576-24.576-63.488-63.488c-53.248-10.24-100.352-30.72-143.36-57.344-102.4-63.488-167.936-169.984-167.936-288.768C112.64 260.096 290.816 102.4 512 102.4s399.36 159.744 399.36 354.304c0 118.784-67.584 225.28-167.936 288.768z" fill="#8a8a8a" p-id="2098"></path><path d="M733.184 460.8c-10.24 0-20.48 6.144-26.624 14.336-38.912 67.584-110.592 110.592-194.56 110.592-81.92 0-155.648-45.056-194.56-110.592-6.144-8.192-16.384-14.336-26.624-14.336-24.576 0-38.912 26.624-26.624 45.056 49.152 83.968 141.312 141.312 247.808 141.312 104.448 0 196.608-57.344 247.808-141.312 10.24-20.48-4.096-45.056-26.624-45.056z" fill="#8a8a8a" p-id="2099"></path></svg>
+                
+                <span>博客</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://FeiNiaoBF.github.io/en/" >English</option>
+                                
+                                    <option value="https://FeiNiaoBF.github.io/zh-cn/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#微处理器历史">微处理器历史</a>
+      <ol>
+        <li><a href="#intel的x86">Intel的x86</a></li>
+      </ol>
+    </li>
+    <li><a href="#基本概念">基本概念</a>
+      <ol>
+        <li><a href="#什么是编译">什么是编译</a></li>
+      </ol>
+    </li>
+    <li><a href="#处理器的工作">处理器的工作</a></li>
+    <li><a href="#什么是isa">什么是ISA</a></li>
+    <li><a href="#ciscrisc区别">CISC&amp;RISC区别</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#整型寄存器">整型寄存器</a></li>
+    <li><a href="#数据类型">数据类型</a></li>
+    <li><a href="#操作数指示符">操作数指示符</a>
+      <ol>
+        <li><a href="#操作数基本">操作数基本</a></li>
+        <li><a href="#寻址">寻址</a></li>
+      </ol>
+    </li>
+    <li><a href="#指令">指令</a>
+      <ol>
+        <li><a href="#数据移动指令">数据移动指令</a></li>
+        <li><a href="#程序栈指令">程序栈指令</a></li>
+        <li><a href="#算术与逻辑指令">算术与逻辑指令</a>
+          <ol>
+            <li><a href="#unary-operation一元操作">Unary Operation(一元操作)</a></li>
+            <li><a href="#binary-operation二元操作">Binary Operation(二元操作)</a></li>
+            <li><a href="#shift-operations移位操作">Shift Operations(移位操作)</a></li>
+            <li><a href="#special-arithmetic-operations特殊算术操作">Special Arithmetic Operations(特殊算术操作)</a></li>
+          </ol>
+        </li>
+        <li><a href="#控制指令">控制指令</a>
+          <ol>
+            <li><a href="#条件码">条件码</a></li>
+            <li><a href="#访问条件码">访问条件码</a></li>
+            <li><a href="#c语言中的条件分支">C语言中的条件分支</a></li>
+            <li><a href="#switch">switch</a></li>
+          </ol>
+        </li>
+        <li><a href="#分支跳转risc-v">分支跳转(RISC-V)</a></li>
+      </ol>
+    </li>
+    <li><a href="#过程调用">过程调用</a></li>
+    <li><a href="#数据存储分配">数据存储分配</a></li>
+    <li><a href="#外部链接">外部链接</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/zh-cn/categories/csapp/" >
+                CSAPP
+            </a>
+        
+            <a href="/zh-cn/categories/cs/" >
+                CS
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/p/%E4%BA%8C.%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BAcsapp/">二.程序的机器级表示(CSAPP)</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Apr 09, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 14 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="入门">入门</h1>
+<h2 id="微处理器历史">微处理器历史</h2>
+<h3 id="intel的x86">Intel的x86</h3>
+<p>在这里我想来简单的说道说道微处理器的历史发展，特此说明一下我不是专业的🙄，因此我没有详细的<code>深入研究</code>，如果有任何的错误请告诉我，谢谢。</p>
+<p>自从1971年的Intel4004既第一款微处理器，也是全球第一款微处理器开始，我们人类社会标志着进入微芯片时代，在这个时代有三个主要的趋势：</p>
+<ul>
+<li>处理器的位长的倍增</li>
+<li>指令集的快速发展</li>
+<li>时钟频率的快速增加</li>
+</ul>
+<p>Intel也逐步发布了<code>Intel 8008</code>一个8位的，<code>Intel 8086</code> 一个16位的，至此，Intel的x86<code>帝国</code>开始了。在1985年，Intel的32位处理器<code>IA32</code>问世，而随着摩尔定律等的种种限制，单核的处理器已经遇到瓶颈了，各大公司继而转向了高频率、低功耗的多核处理器，处理器进入多核/多线程时代（2005）。</p>
+<p>在一些无论是竞争关系，还是研究关系，导致目前的市场上出现了两种<strong>指令集计算机</strong></p>
+<ul>
+<li>CISC(<em>Complex instruction set computer</em>)</li>
+<li>RISC(<em>Reduced instruction set computer</em>)</li>
+</ul>
+<p>在后面我会再提到的。</p>
+<p>我不知道未来的处理器向哪个方向发展，也不知道Intel是否一直在前沿（AMD：呵呵），但我相信，人类的智慧使得世界自第二次工业革命以来史无前例的大发展，在未来一定有着不一样的发展。</p>
+<h2 id="基本概念">基本概念</h2>
+<blockquote>
+<p>嗯嗯，回来回来，不去想未来，做好当下。</p>
+</blockquote>
+<p>在了解具体的体系系统前，我们来了解基本的一些东西：</p>
+<p><img src="https://s2.loli.net/2023/04/24/Jp2IxPhfSWjHNZz.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="CS61cCS"
+	
+	
+></p>
+<p>上面是来自CS61c的图片，我们现在要了解就是整个软件到硬件的过程，也可以说是抽象到具体的过程。</p>
+<p><strong>Instructure Set Architecture</strong>：指令集架构 (包括指令规格，不同规则寄存器等)，简称ISA，它是软硬件之间的<code>桥梁</code>。</p>
+<p><strong>Processor</strong>、<strong>Memory</strong>、<strong>I/O system</strong>：这是由OS进行控制的。</p>
+<p>我们这章主要的是学习ISA，CSAPP主要是x86-64的CISC指令集，CS61c主要是RISC-V的RISC指令集，没错，它们是不同的指令集，在我的笔记里面我也会不时的写上RISC-V的一些表示来证明我学习过了（笑）。</p>
+<h3 id="什么是编译">什么是编译</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">高级语言 --&gt; 汇编语言 --&gt; 机器语言
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在我们的零章的时候我说过一个*.c文件如何变成的一个可执行的程序的一个主要过程，它有一个步骤是<strong>编译</strong>，这是一个我们需要细细品味的步骤。</p>
+<p>编译过程是一个由某个高级语言（比如c文件）经过编译器的一系列的处理成为可读性低的汇编语言。换而言之，就是把我们十分清楚明白的抽象语言转换成机器语言（值得注意的是，此时机器也不知道汇编语言），在经历汇编译器<strong>翻译</strong>成二进制代码，真正的机器语言，机器可以读懂了，但我们看不懂（除了某些黑客）。</p>
+<p><img src="https://s2.loli.net/2023/04/24/ARQExTsuyrhdgYO.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="CALL"
+	
+	
+></p>
+<p>上面是cs61c中的<em>从C到机器语言</em>的完整过程，十分的详细了。程序的运行就是想像是一个<strong>翻译</strong>过程，用上一些我们明文规定的语法规则，使用编译器（GCC等）来当我们程序员和机器之间的<strong>翻译官</strong>。</p>
+<p>现在来看一看从 <code>C语言</code> 到<code>机器代码</code>(一个整型加法计算的汇编代码)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">  <span class="c1">// filename: clcyle_one
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span> 
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>经过gcc的编译，在自己的Linux机器上使用以下的代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ gcc -Og -S clcyle_one.c
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl">    <span class="na">.file</span>   <span class="s">&#34;clcyle_one.c&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">.text</span>
+</span></span><span class="line"><span class="cl">    <span class="na">.globl</span>  <span class="no">main</span>
+</span></span><span class="line"><span class="cl">    <span class="na">.type</span>   <span class="no">main</span><span class="p">,</span> <span class="na">@function</span>
+</span></span><span class="line"><span class="cl"><span class="nl">main:</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.LFB7:</span>
+</span></span><span class="line"><span class="cl">    <span class="na">.cfi_startproc</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">movl</span>    <span class="no">$0</span><span class="p">,</span> <span class="nv">%eax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jmp</span> <span class="no">.L2</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.L3:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">addl</span>    <span class="no">$1</span><span class="p">,</span> <span class="nv">%eax</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.L2:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmpl</span>    <span class="no">$9</span><span class="p">,</span> <span class="nv">%eax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jle</span> <span class="no">.L3</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">movl</span>    <span class="no">$0</span><span class="p">,</span> <span class="nv">%eax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#（不用在意类似 .file 的指令，它们是伪指令， 要从main看起）
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>两者相互比较一下我们可以发现，C 语言代码被处理成统一格式的汇编代码，在汇编代码中，第一个字符串叫做操作符，后面的是源和目的<code>寄存器</code>（这是一个大玩意😣）。操作和操作数明确，在下面我们会到不同的操作符分类分析（我想把RISC-V的加入作比较），记住一个条件，<code>读取</code>/<code>运算操作</code>是一个<strong>线性逐句逐次</strong>的操作，PC指令是有现态和次态之分。</p>
+<h2 id="处理器的工作">处理器的工作</h2>
+<p>在我们对操作指令分类讨论之前我们来认识处理器是怎么工作的，</p>
+<p><img src="https://s2.loli.net/2023/04/24/3isvAmjMY8E9IgP.jpg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="x86-64"
+	
+	
+></p>
+<p><img src="https://s2.loli.net/2023/04/24/Fzb3uHQBLTlqOgD.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="cs61c cpu"
+	
+	
+></p>
+<p>上面的图片(分别来自CSapp和CS61c)十分清楚的展示了处理器对于存放在主存里面的指令有着什么样的操作，主要的就两点<strong>存、读取值</strong>和<strong>计算</strong>。在x86-64里面还有一个叫作<strong>条件码</strong>的东东，我会在下面说到因为我也第一次看见这个。</p>
+<p>这是一个<strong>CPU到Memory</strong>的一个过程，具体的是一个处理器从内存某个地址取值（有数据和指令）拿到<strong>CPU</strong>里的<strong>寄存器</strong>通过<strong>ALU</strong>计算，再根据<strong>PC</strong>选择下一步。</p>
+<ul>
+<li>
+<p><strong>程序计数器</strong>(PC, Program counter) - 存着下一条指令的地址，在 x86-64 中称为 RIP。</p>
+</li>
+<li>
+<p><strong>寄存器</strong>(Register) - 用来存储数据以便操作。</p>
+</li>
+<li>
+<p><strong>条件代码</strong>(Codition codes) - 通常保存最近的算术或逻辑操作后的信息，用来做条件跳转的条件。</p>
+</li>
+</ul>
+<h2 id="什么是isa">什么是ISA</h2>
+<p><strong>Instruction Set Architecture</strong> (指令集框架) 是包含了针对某个特定处理器执行的基本操作码（<em>opcode</em>），里面是基本命令，在我们学习的<code>x86-64</code>、<code>RISC-V</code>都有不同的ISA。</p>
+<p>为了学习方便，我们一般要把ISA根据使用的方法不同进行不同的分类。</p>
+<ul>
+<li>资料处理与访问操作</li>
+<li>算术逻辑操作</li>
+<li>控制过程操作</li>
+</ul>
+<p>在下面我会一一分析。</p>
+<h2 id="ciscrisc区别">CISC&amp;RISC区别</h2>
+<p>CISC(<em>Complex instruction set computer</em>)</p>
+<blockquote>
+<p>兼容性性强，指令繁多，长度可变，由微程序实现。
+代表：x86-64</p>
+</blockquote>
+<p>RISC(<em>Reduced instruction set computer</em>)</p>
+<blockquote>
+<p>指令少，使用频率接近，主要是依靠硬件实现（通用寄存器、硬布线逻辑控制）。
+代表：RISC-V</p>
+</blockquote>
+<h1 id="开始快乐的汇编">开始快乐的汇编</h1>
+<h2 id="整型寄存器">整型寄存器</h2>
+<p><img src="https://s2.loli.net/2023/04/24/pYIjkJMEBKc413b.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Reg"
+	
+	
+></p>
+<p>在x86-64上有16个64位的<strong>通用寄存器</strong>；对于每个寄存器的低32、16和8位可以独立地通过其他不同指令名称访问，原则上，几乎任何寄存器都可以用于保存几乎任何逻辑和算术操作的操作数，但有些具有特殊或受限制的用途。</p>
+<p>一个寄存器有着64位、32位、16位、8位这可以对以前的低位程序向下兼容。</p>
+<p>按照惯例，%rsp被保留作为堆栈指针，并且因为一些指令（例如push、pop、call）隐含使用它。%rsp指向最低占用的堆栈位置（而不是下一个要使用的位置）。</p>
+<p>寄存器%rbp有时被用作帧指针，即当前堆栈帧的基址。指令计数器寄存器（％rip） 指向要执行的下一条命令; 程序员无法直接访问它, 但是大量地被用作基于位置无关代码寻址的基础。还有一些其他指令隐含地使用某些寄存器；例如，整数乘法和除法指令需要%rax和%rdx。</p>
+<h2 id="数据类型">数据类型</h2>
+<p>既然我们的寄存器有着不同位的表示，那就是说处理器在操作不同的数据时使用着不同位数的寄存器来提高速率。</p>
+<p>我们针对不同的数据类型使用不同的<strong>suffix</strong>和<strong>size</strong>：</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:center">Data type</th>
+<th style="text-align:center">suffix</th>
+<th style="text-align:center">size</th>
+<th style="text-align:center">word</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">char</td>
+<td style="text-align:center">b</td>
+<td style="text-align:center">1B</td>
+<td style="text-align:center">Byet</td>
+</tr>
+<tr>
+<td style="text-align:center">short</td>
+<td style="text-align:center">w</td>
+<td style="text-align:center">2B</td>
+<td style="text-align:center">1word</td>
+</tr>
+<tr>
+<td style="text-align:center">int</td>
+<td style="text-align:center">l</td>
+<td style="text-align:center">4B</td>
+<td style="text-align:center">2word</td>
+</tr>
+<tr>
+<td style="text-align:center">long</td>
+<td style="text-align:center">q</td>
+<td style="text-align:center">8B</td>
+<td style="text-align:center">4word</td>
+</tr>
+<tr>
+<td style="text-align:center">char*</td>
+<td style="text-align:center">q</td>
+<td style="text-align:center">8B</td>
+<td style="text-align:center">4word</td>
+</tr>
+<tr>
+<td style="text-align:center">float</td>
+<td style="text-align:center">s</td>
+<td style="text-align:center">4B</td>
+<td style="text-align:center">2word</td>
+</tr>
+<tr>
+<td style="text-align:center">double</td>
+<td style="text-align:center">l</td>
+<td style="text-align:center">8B</td>
+<td style="text-align:center">4word</td>
+</tr>
+</tbody>
+</table></div>
+<p>上面的<strong>suffix</strong>列显示了在 GNU 汇编程序用来指定适当大小的变体的字母指示。</p>
+<p>而一个新单位<strong>word</strong>是相等于2个字节的大小。</p>
+<h2 id="操作数指示符">操作数指示符</h2>
+<h3 id="操作数基本">操作数基本</h3>
+<p>以下的都是在操作数里面主要数值表达的意思：</p>
+<ul>
+<li><strong>Imm</strong>   refers to a constant value, e.g. 0x8048d8e or 48</li>
+<li><strong>r</strong>     refers to a register.  e.g. %rax or %edi</li>
+<li><strong>R[r]</strong>  refers to the value stored in register address r.</li>
+<li><strong>M[i]</strong>  refers to the value stored at memory address i .</li>
+</ul>
+<p>不同的格式表示不同的类型。</p>
+<h3 id="寻址">寻址</h3>
+<blockquote>
+<p>很重要！！！</p>
+</blockquote>
+<p>对于寻址来说，比较通用的格式是：<code>Imm(Rb, Ri, S) -&gt; M[R[Rb] + S*R[Ri]+ Imm]</code>，其中：</p>
+<ul>
+<li><strong>Imm</strong> - 常数偏移量</li>
+<li><strong>Rb</strong> - 基寄存器</li>
+<li><strong>Ri</strong> - 索引寄存器，不能是 %rsp</li>
+<li><strong>S</strong> - 系数</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/04/24/LPK7kRoNwmFVfi2.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="OperandSpecifiers"
+	
+	
+></p>
+<h2 id="指令">指令</h2>
+<p>接下来我们就来看看不同分类的指令格式，我按书上的顺序来说的，它也是按我们在平时使用的频率顺序来教的。</p>
+<p>大多数的指令都是使用上文提过的 <strong>suffix</strong> 来显示操作数的大小的。</p>
+<h3 id="数据移动指令">数据移动指令</h3>
+<p>对于 <strong>mov</strong> 指令来说，需要<strong>源操作数</strong>和<strong>目标操作数</strong>。指令的具体格式可以这样写 <code>mov? Src, Dest</code>，第一个是源操作数，第二个是目标操作数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">mov</span><span class="p">[</span><span class="no">b</span><span class="err">|</span><span class="no">w</span><span class="err">|</span><span class="no">l</span><span class="err">|</span><span class="no">q</span><span class="p">]</span> <span class="no">Src</span><span class="p">,</span> <span class="no">Dest</span>                             <span class="c1"># 将src移动到dest
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">movs</span><span class="p">[</span><span class="no">bw</span><span class="err">|</span><span class="no">bl</span><span class="err">|</span><span class="no">bq</span><span class="err">|</span><span class="no">wl</span><span class="err">|</span><span class="no">wq</span><span class="err">|</span><span class="no">lq</span><span class="p">]</span> <span class="no">Src</span><span class="p">,</span> <span class="no">Dest</span>                  <span class="c1"># 带符号扩展的移动
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">movz</span><span class="p">[</span><span class="no">bw</span><span class="err">|</span><span class="no">bl</span><span class="err">|</span><span class="no">bq</span><span class="err">|</span><span class="no">wl</span><span class="err">|</span><span class="no">wq</span><span class="p">]</span> <span class="no">Src</span><span class="p">,</span> <span class="no">Dest</span>                     <span class="c1"># 带零扩展的移动
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">movabsq</span> <span class="no">imm</span><span class="p">,</span> <span class="no">r</span>                                     <span class="c1"># 移动绝对四字（imm为64位）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">cltq</span> <span class="no">Src</span><span class="p">,</span> <span class="no">Dest</span>                                     <span class="c1"># 把%eax 符号扩展到%rax
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在使用 <strong>mov</strong> 指令的时候需要值得注意的是我们的源值和目的值的选址是有标准的, 源操作数可以是立即数、寄存器值或内存值的任意一种，但目标操作数只能是寄存器值或内存值</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:center">Src</th>
+<th style="text-align:center">Dest</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">imm</td>
+<td style="text-align:center">Rag</td>
+</tr>
+<tr>
+<td style="text-align:center">imm</td>
+<td style="text-align:center">Mem</td>
+</tr>
+<tr>
+<td style="text-align:center">Reg</td>
+<td style="text-align:center">Reg</td>
+</tr>
+<tr>
+<td style="text-align:center">Reg</td>
+<td style="text-align:center">Mem</td>
+</tr>
+<tr>
+<td style="text-align:center">Mem</td>
+<td style="text-align:center">Reg</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>只有这五种的选择 ， 如果要把Mem -&gt; Mem 的值移动，需要两步 Mem -&gt; Reg -&gt; Mem</p>
+</blockquote>
+<h3 id="程序栈指令">程序栈指令</h3>
+<p>这一部分就只有两个主要的指令，但是无比的重要。可以把数据压入程序栈中，以及在栈中弹出，程序栈在过程调用中起至关重要的作用。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">pushq</span>  <span class="no">Src</span>                    <span class="c1"># 将4word的数据压入栈，并把%rsp - 8 -&gt; %rsp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">popq</span>  <span class="no">Dest</span>                    <span class="c1"># 将4word的数据弹入栈，并把%rsp + 8 -&gt; %rsp
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>对于程序栈指令十分重要的一点是我们对内存的变化要注意。在程序员的眼里内存是一个有限的数组，我们在把寄存器里面的数据 <code>push</code> 进内存的时候栈指针（%rsp）要向着地址减小的方向移动，这就是 <code>%rsp - 8</code> 的原因。</p>
+<p>图片</p>
+<h3 id="算术与逻辑指令">算术与逻辑指令</h3>
+<p>对于算术指令我们想起CPU中最重要的部件 <code>ALU</code> 算术逻辑单元，基本上所有的这些指令通过
+ <code>opcode</code> 来在多路选择上 <code>指挥</code> ALU正确的使用算术。</p>
+<p> &gt; 注：下面的所有指令都可以根据数据类型加 suffix (b/w/l/q)</p>
+<h4 id="unary-operation一元操作">Unary Operation(一元操作)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">inc</span> <span class="no">Deat</span>         <span class="no">Deat</span><span class="err">+</span><span class="mi">1</span><span class="p">-</span><span class="err">&gt;</span><span class="no">Deat</span>           <span class="c1"># 按1递增
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">dec</span> <span class="no">Deat</span>         <span class="no">Deat-1-</span><span class="err">&gt;</span><span class="no">Deat</span>           <span class="c1"># 按1递减
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">neg</span> <span class="no">Deat</span>         <span class="p">-</span><span class="no">Deat-</span><span class="err">&gt;</span><span class="no">Deat</span>    <span class="p">(</span><span class="err">取反</span><span class="p">)</span>  <span class="c1"># 算术取反
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">not</span> <span class="no">Deat</span>         <span class="err">~</span><span class="no">Deat-1-</span><span class="err">&gt;</span><span class="no">Deat</span> <span class="err">（取补）</span> <span class="c1"># 按位取反
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>一元操作只有一个操作数，即做源也是目的。可以是<code>Reg or Mem</code> 。</p>
+<h4 id="binary-operation二元操作">Binary Operation(二元操作)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">leaq</span> <span class="no">S</span><span class="err">，</span><span class="no">D</span>      <span class="err">&amp;</span><span class="no">S</span> <span class="p">-</span><span class="err">&gt;</span> <span class="no">D</span>        <span class="c1"># 将源地址的有效地址加载到目标中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">add</span> <span class="no">S</span><span class="err">，</span><span class="no">D</span>      <span class="no">D</span> <span class="err">+</span> <span class="no">S</span> <span class="p">-</span><span class="err">&gt;</span> <span class="no">D</span>      <span class="c1"># 将源加到目标中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">sub</span> <span class="no">S</span><span class="err">，</span><span class="no">D</span>      <span class="no">D</span> <span class="p">-</span> <span class="no">S</span> <span class="p">-</span><span class="err">&gt;</span> <span class="no">D</span>      <span class="c1"># 将源从目标中减去
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">imul</span> <span class="no">S</span><span class="err">，</span><span class="no">D</span>     <span class="no">D</span> <span class="p">*</span> <span class="no">S</span> <span class="p">-</span><span class="err">&gt;</span> <span class="no">D</span>      <span class="c1"># 目标乘以源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">xor</span> <span class="no">S</span><span class="err">，</span><span class="no">D</span>      <span class="no">D</span> <span class="err">^</span> <span class="no">S</span> <span class="p">-</span><span class="err">&gt;</span> <span class="no">D</span>      <span class="c1"># 按位异或目标和来源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">or</span> <span class="no">S</span><span class="err">，</span><span class="no">D</span>       <span class="no">D</span> <span class="err">|</span> <span class="no">S</span> <span class="p">-</span><span class="err">&gt;</span> <span class="no">D</span>      <span class="c1"># 按位或目标和来源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">and</span> <span class="no">S</span><span class="p">,</span> <span class="no">D</span>      <span class="no">D</span> <span class="err">&amp;</span> <span class="no">S</span> <span class="p">-</span><span class="err">&gt;</span> <span class="no">D</span>      <span class="c1"># 按位与目标和来源
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>对于第二个到最后一个不需要再说了，都是字面意思。主要来说一说 <code>leaq</code> 这个指令。</p>
+<p>Load effective address(加载有效地址) , leaq 有两个作用：</p>
+<blockquote>
+<ul>
+<li>将其源操作数的有效地址（而不是该地址处的数据）加载到其目标寄存器中
+  在 C语言里面就是 <code>&amp;S</code> , 这样的好处是可以给下面的内存产生指针。</li>
+<li>也可用于执行与寻址无关的算术运算。（eg： <code>leaq (%rdi, %rsi, 4), %rax</code> 相同与 <code>x + 4*y </code> )</li>
+</ul>
+</blockquote>
+<h4 id="shift-operations移位操作">Shift Operations(移位操作)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">sal</span><span class="p">[</span><span class="no">b</span><span class="err">|</span><span class="no">w</span><span class="err">|</span><span class="no">l</span><span class="err">|</span><span class="no">q</span><span class="p">]</span> <span class="no">imm</span><span class="p">,</span><span class="no">d</span>   <span class="no">d</span> <span class="err">=</span> <span class="no">d</span> <span class="err">&lt;&lt;</span> <span class="no">imm</span>   <span class="c1"># 左移imm位
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">sar</span><span class="p">[</span><span class="no">b</span><span class="err">|</span><span class="no">w</span><span class="err">|</span><span class="no">l</span><span class="err">|</span><span class="no">q</span><span class="p">]</span> <span class="no">imm</span><span class="p">,</span><span class="no">d</span>   <span class="no">d</span> <span class="err">=</span> <span class="no">d</span> <span class="err">&gt;&gt;</span> <span class="no">imm</span>   <span class="c1"># 算术右移imm位
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">shr</span><span class="p">[</span><span class="no">b</span><span class="err">|</span><span class="no">w</span><span class="err">|</span><span class="no">l</span><span class="err">|</span><span class="no">q</span><span class="p">]</span> <span class="no">imm</span><span class="p">,</span><span class="no">d</span>   <span class="no">d</span> <span class="err">=</span> <span class="no">d</span> <span class="err">&gt;&gt;</span> <span class="no">imm</span>   <span class="c1"># 逻辑右移imm位
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="special-arithmetic-operations特殊算术操作">Special Arithmetic Operations(特殊算术操作)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">imulq</span> <span class="no">S</span>                  <span class="c1"># 有符号全乘法   四字到八字
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">mulq</span> <span class="no">S</span>                   <span class="c1"># 无符号全乘法   四字到八字
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">idivq</span> <span class="no">S</span>                  <span class="c1"># 有符号全除法   八字到四字
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">divq</span> <span class="no">S</span>                   <span class="c1"># 无符号全除法   八字到四字
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">cltd</span>                     <span class="c1"># sign extend %eax into %edx::%eax
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">cqto</span>                     <span class="c1"># sign extend %rax into %rdx::%rax
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在特殊算术里面，这样的设计是为了补码的乘除有扩展。由两个64位的到全128位的乘积和整数除法的截断。</p>
+<p>除法需要特殊的安排：<code>idiv（有符号）</code> 和 <code>div（无符号）</code> 操作在2n字节被除数和n字节除数上，产生一个n字节商和n字节余数。被除数总是存在于一对固定寄存器中（32位情况下为%edx和%eax；64位情况下为%rdx和%rax）；除数作为指令中的源操作数来指定。商放在％eax（resp. ％rax）中; 余数放在％edx（resp. ％rdx）中。对于有符号的除法，使用cltd（resp.ctqo）指令来准备％edx(resp.%rdx)，并将其与％eax(resp.%rax)的符号扩展配合使用。例如，如果a、b、c是保存四个字长的内存位置，则可以使用以下序列设置c = a / b：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl">    <span class="nf">movq</span> <span class="no">a</span><span class="p">(</span><span class="nv">%rip</span><span class="p">),</span> <span class="nv">%rax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ctqo</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">idivq</span> <span class="no">b</span><span class="p">(</span><span class="nv">%rip</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">movq</span> <span class="nv">%rax</span><span class="p">,</span> <span class="no">c</span><span class="p">(</span><span class="nv">%rip</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上文来自文档）</p>
+<h3 id="控制指令">控制指令</h3>
+<p>到目前为止，我们看到的都是顺序一条接着一条的操作的，但是在我们的c语言里面还有条件语句（if）、循环语句（while）、分支语句（switch）等，很明显都不是顺序的，要进行某种<strong>跳转</strong>，而这种跳转是由机器代码来实现的，根据测试数据值来判断机器此时是否改变控制流。</p>
+<h4 id="条件码">条件码</h4>
+<p>好了，到我们心心念的<strong>条件码</strong>了，条件码在CPU中是有单独的<strong>条件码寄存器</strong>，但是它只有单个位，它们描述的是距离最近的算术和逻辑操作的某些属性，CPU根据条件码寄存器来断定是否执行分支跳转。以下是四种条件码：</p>
+<ul>
+<li><strong>ZF</strong> result was Zero</li>
+<li><strong>CF</strong> result caused Carry out of most significant bit (unsigned)</li>
+<li><strong>SF</strong> result was negative (Sign bit was set)</li>
+<li><strong>OF</strong> result caused (<strong>signed</strong>) Overflow （negative overflow, positive overflow）</li>
+</ul>
+<blockquote>
+<p>leaq 指令不改变任何的条件码。而不是所有的指令都要改变，如<strong>xor</strong>对于CF、OF会设置为0。</p>
+</blockquote>
+<p>指令集中也有专门来设置条件码的指令，它们不会改变任何的其他寄存器，只会改变条件码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">cmp</span><span class="p">[</span><span class="no">b</span><span class="err">|</span><span class="no">w</span><span class="err">|</span><span class="no">l</span><span class="err">|</span><span class="no">q</span><span class="p">]</span>  <span class="no">s2</span><span class="p">,</span><span class="no">s1</span>                         <span class="c1"># 比较两个值，S1 - S2 用减法的方法来比较
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">test</span><span class="p">[</span><span class="no">b</span><span class="err">|</span><span class="no">w</span><span class="err">|</span><span class="no">l</span><span class="err">|</span><span class="no">q</span><span class="p">]</span> <span class="no">s2</span><span class="p">,</span><span class="no">s1</span>                         <span class="c1"># 测试两个值，S1 &amp; S2 可以来检查是负or正，也可以比较具体位的值
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>其实cmp和test有时是十分好用的测试指令，比如在对（x == 0）的时候，可以用 <code>cmpl %eax, %eax</code> 或者 <code>testl %eax, %eax</code> 来与自己比较来设置<strong>ZF</strong>条件码，也用来判断 <code>%eax</code> 是正数或负数。</p>
+<h4 id="访问条件码">访问条件码</h4>
+<p>条件码通常是不会直接读取的，在x86中采用三种使用方式：</p>
+<ul>
+<li>可以根据条件码的某种位逻辑组合，将一个字节设置为0 或1。</li>
+<li>可以条件跳转到程序的某个其他的部分。</li>
+<li>可以有条件地传送数据。</li>
+</ul>
+<blockquote>
+<p>这里会发现用了位的逻辑计算来确认大于或小于等情况。（需要好好看看第二章）</p>
+</blockquote>
+<ol>
+<li>第一点的实现 <strong>SET指令</strong></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">sete</span> <span class="err">/</span> <span class="no">setz</span>   <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">equal</span><span class="err">/</span><span class="no">zero</span>                               <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setne</span> <span class="err">/</span> <span class="no">setnz</span> <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">not</span> <span class="no">equal</span><span class="err">/</span><span class="no">nonzero</span>                      <span class="err">~</span> <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">sets</span>          <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">negative</span>                                 <span class="no">SF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setns</span>         <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">nonnegative</span>                            <span class="err">~</span> <span class="no">SF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setg</span> <span class="err">/</span> <span class="no">setnle</span> <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">greater</span> <span class="p">(</span><span class="no">signed</span><span class="p">)</span>                 <span class="err">~</span> <span class="p">(</span><span class="no">SF</span> <span class="err">^</span> <span class="mi">0</span><span class="no">F</span><span class="p">)</span><span class="err">&amp;</span> <span class="err">~</span> <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setge</span> <span class="err">/</span> <span class="no">setnl</span> <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">greater</span> <span class="no">or</span> <span class="no">equal</span> <span class="p">(</span><span class="no">signed</span><span class="p">)</span>           <span class="err">~</span> <span class="p">(</span><span class="no">SF</span> <span class="err">^</span> <span class="mi">0</span><span class="no">F</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setl</span> <span class="err">/</span> <span class="no">setnge</span> <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">less</span> <span class="p">(</span><span class="no">signed</span><span class="p">)</span>                           <span class="no">SF</span><span class="err">^</span><span class="mi">0</span><span class="no">F</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setle</span> <span class="err">/</span> <span class="no">setng</span> <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">less</span> <span class="no">or</span> <span class="no">equal</span>                       <span class="p">(</span><span class="no">SF</span> <span class="err">^</span> <span class="no">OF</span><span class="p">)</span><span class="err">|</span><span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">seta</span> <span class="err">/</span> <span class="no">setnbe</span> <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">above</span> <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>                     <span class="err">~</span> <span class="no">CF</span><span class="err">&amp;</span> <span class="err">~</span> <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setae</span> <span class="err">/</span> <span class="no">setnb</span> <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">above</span> <span class="no">or</span> <span class="no">equal</span> <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>              <span class="err">~</span> <span class="no">CF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setb</span> <span class="err">/</span> <span class="no">setnae</span> <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">below</span> <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>                         <span class="no">CF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setbe</span> <span class="err">/</span> <span class="no">setna</span> <span class="no">D</span>        <span class="no">Set</span> <span class="no">if</span> <span class="no">below</span> <span class="no">or</span> <span class="no">equal</span> <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>               <span class="no">CF</span><span class="err">|</span><span class="no">ZF</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>SET指令，每条指令根据条件码的各种组合将一个字节设置为 <strong>0或1</strong>。</p>
+<ol start="2">
+<li>第二点的实现 <strong>Jump指令</strong></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">jmp</span> <span class="no">Label</span>             <span class="no">Jump</span> <span class="no">to</span> <span class="no">label</span>                                   <span class="no">true</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jmp</span> <span class="p">*</span><span class="no">Operand</span>          <span class="no">Jump</span> <span class="no">to</span> <span class="no">specified</span> <span class="no">location</span>                      <span class="no">true</span>
+</span></span><span class="line"><span class="cl"><span class="nf">je</span> <span class="err">/</span> <span class="no">jz</span> <span class="no">Label</span>         <span class="no">Jump</span> <span class="no">if</span> <span class="no">equal</span><span class="err">/</span><span class="no">zero</span>                               <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jne</span> <span class="err">/</span> <span class="no">jnz</span> <span class="no">Label</span>       <span class="no">Jump</span> <span class="no">if</span> <span class="no">not</span> <span class="no">equal</span><span class="err">/</span><span class="no">nonzero</span>                       <span class="err">~</span> <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">js</span> <span class="no">Label</span>              <span class="no">Jump</span> <span class="no">if</span> <span class="no">negative</span>                                 <span class="no">SF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jns</span> <span class="no">Label</span>             <span class="no">Jump</span> <span class="no">if</span> <span class="no">nonnegative</span>                             <span class="err">~</span> <span class="no">SF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jg</span> <span class="err">/</span> <span class="no">jnle</span> <span class="no">Label</span>       <span class="no">Jump</span> <span class="no">if</span> <span class="no">greater</span> <span class="p">(</span><span class="no">signed</span><span class="p">)</span>                <span class="err">~</span> <span class="p">(</span><span class="no">SF</span> <span class="err">^</span> <span class="mi">0</span><span class="no">F</span><span class="p">)</span><span class="err">&amp;</span> <span class="err">~</span> <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jge</span> <span class="err">/</span> <span class="no">jnl</span> <span class="no">Label</span>       <span class="no">Jump</span> <span class="no">if</span> <span class="no">greater</span> <span class="no">or</span> <span class="no">equal</span> <span class="p">(</span><span class="no">signed</span><span class="p">)</span>           <span class="err">~</span> <span class="p">(</span><span class="no">SF</span> <span class="err">^</span> <span class="mi">0</span><span class="no">F</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jl</span> <span class="err">/</span> <span class="no">jnge</span> <span class="no">Label</span>       <span class="no">Jump</span> <span class="no">if</span> <span class="no">less</span> <span class="p">(</span><span class="no">signed</span><span class="p">)</span>                           <span class="no">SF</span><span class="err">^</span><span class="mi">0</span><span class="no">F</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jle</span> <span class="err">/</span> <span class="no">jng</span> <span class="no">Label</span>       <span class="no">Jump</span> <span class="no">if</span> <span class="no">less</span> <span class="no">or</span> <span class="no">equal</span>                       <span class="p">(</span><span class="no">SF</span> <span class="err">^</span> <span class="no">OF</span><span class="p">)</span><span class="err">|</span><span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">ja</span> <span class="err">/</span> <span class="no">jnbe</span> <span class="no">Label</span>       <span class="no">Jump</span> <span class="no">if</span> <span class="no">above</span> <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>                    <span class="err">~</span> <span class="no">CF</span><span class="err">&amp;</span> <span class="err">~</span> <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jae</span> <span class="err">/</span> <span class="no">jnb</span> <span class="no">Label</span>       <span class="no">Jump</span> <span class="no">if</span> <span class="no">above</span> <span class="no">or</span> <span class="no">equal</span> <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>               <span class="err">~</span> <span class="no">CF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jb</span> <span class="err">/</span> <span class="no">jnae</span> <span class="no">Label</span>       <span class="no">Jump</span> <span class="no">if</span> <span class="no">below</span> <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>                         <span class="no">CF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jbe</span> <span class="err">/</span> <span class="no">jna</span> <span class="no">Label</span>       <span class="no">Jump</span> <span class="no">if</span> <span class="no">below</span> <span class="no">or</span> <span class="no">equal</span> <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>              <span class="no">CF</span><span class="err">|</span><span class="no">ZF</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>跳转(jump) 指令会导致执行切换到程序中一个全新的位置。在汇编代码中，这些跳转的目的地通常用一个标号(<strong>Label</strong>) 指明。在下一个标题再继续深入jump指令。</p>
+<ol start="3">
+<li>第三点的实现 <strong>cmove指令</strong></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">cmove</span> <span class="err">/</span> <span class="no">cmovz</span>   <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">equal</span><span class="err">/</span><span class="no">zero</span>                               <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmovne</span> <span class="err">/</span> <span class="no">cmovnz</span> <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">not</span> <span class="no">equal</span><span class="err">/</span><span class="no">nonzero</span>                       <span class="err">~</span> <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmovs</span>           <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">negative</span>                                 <span class="no">SF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmovns</span>          <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">nonnegative</span>                             <span class="err">~</span> <span class="no">SF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmovg</span> <span class="err">/</span> <span class="no">cmovnle</span> <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">greater</span>                <span class="p">(</span><span class="no">signed</span><span class="p">)</span>    <span class="err">~</span> <span class="p">(</span><span class="no">SF</span> <span class="err">^</span> <span class="mi">0</span><span class="no">F</span><span class="p">)</span><span class="err">&amp;</span> <span class="err">~</span> <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmovge</span> <span class="err">/</span> <span class="no">cmovnl</span> <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">greater</span> <span class="no">or</span> <span class="no">equal</span>       <span class="p">(</span><span class="no">signed</span><span class="p">)</span>      <span class="err">~</span> <span class="p">(</span><span class="no">SF</span> <span class="err">^</span> <span class="mi">0</span><span class="no">F</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmovl</span> <span class="err">/</span> <span class="no">cmovnge</span> <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">less</span> <span class="p">(</span><span class="no">signed</span><span class="p">)</span>                           <span class="no">SF</span><span class="err">^</span><span class="mi">0</span><span class="no">F</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmovle</span> <span class="err">/</span> <span class="no">cmovng</span> <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">less</span> <span class="no">or</span> <span class="no">equal</span>                       <span class="p">(</span><span class="no">SF</span> <span class="err">^</span> <span class="no">OF</span><span class="p">)</span><span class="err">|</span><span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmova</span> <span class="err">/</span> <span class="no">cmovnbe</span> <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">above</span> <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>                     <span class="err">~</span> <span class="no">CF</span><span class="err">&amp;</span> <span class="err">~</span> <span class="no">ZF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmovae</span> <span class="err">/</span> <span class="no">cmovnb</span> <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">above</span> <span class="no">or</span> <span class="no">equal</span>        <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>        <span class="err">~</span> <span class="no">CF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmovb</span> <span class="err">/</span> <span class="no">cmovnae</span> <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">below</span>                 <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>         <span class="no">CF</span>
+</span></span><span class="line"><span class="cl"><span class="nf">cmovbe</span> <span class="err">/</span> <span class="no">cmovna</span> <span class="no">S</span><span class="p">,</span> <span class="no">D</span>   <span class="no">Move</span> <span class="no">if</span> <span class="no">below</span> <span class="no">or</span> <span class="no">equal</span>        <span class="p">(</span><span class="no">unsigned</span><span class="p">)</span>        <span class="no">CF</span><span class="err">|</span><span class="no">ZF</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>条件传送指令, 但传送条件满足的时候,指令把<code>S</code>复制到<code>D</code>中。</p>
+<h4 id="c语言中的条件分支">C语言中的条件分支</h4>
+<p>现在来进行对C语言中一些常见的分支跳转操作来看看翻译后的机器代码。</p>
+<h5 id="if-else">if-else</h5>
+<p>C 语言中的江-else 语旬的通用形式模板如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">test</span><span class="o">-</span><span class="n">expr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">then</span><span class="o">-</span><span class="n">statement</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl">    <span class="n">els</span><span class="o">-</span><span class="n">statement</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>汇编器工作是为 <code>then-statement</code> 和 <code>else-statement</code> 产生各自的代码块。它会插入条件和无条件分支，以保证能执行正确的代码块。</p>
+<p>看一个例子</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">absdiff</span><span class="p">(</span><span class="kt">long</span> <span class="n">x</span><span class="p">,</span> <span class="kt">long</span> <span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="n">y</span><span class="o">-</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">absdiff_es</span><span class="p">(</span><span class="kt">long</span> <span class="n">x</span><span class="p">,</span> <span class="kt">long</span> <span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="n">y</span><span class="o">-</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>分别产生的汇编代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="c1"># x in %rdi, y in %rai
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">absdiff</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">movq</span> <span class="nv">%rsi</span><span class="p">,</span> <span class="nv">%rax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">subq</span> <span class="nv">%rdi</span><span class="p">,</span> <span class="nv">%rax</span>          <span class="no">rval</span> <span class="err">=</span> <span class="no">y-x</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">movq</span> <span class="nv">%rdi</span><span class="p">,</span> <span class="nv">%rdx</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">subq</span> <span class="nv">%rsi</span><span class="p">,</span> <span class="nv">%rdx</span>          <span class="no">eval</span> <span class="err">=</span> <span class="no">x-y</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmpq</span> <span class="nv">%rsi</span><span class="p">,</span> <span class="nv">%rdi</span>          <span class="err">比较</span> <span class="no">x</span><span class="p">:</span><span class="no">y</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmovge</span> <span class="nv">%rdx</span><span class="p">,</span> <span class="nv">%rax</span>       <span class="no">If</span> <span class="err">&gt;=</span><span class="p">,</span> <span class="no">rval</span> <span class="err">=</span> <span class="no">eval</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>                      <span class="no">Return</span> <span class="no">tval</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">absdiff_es:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">cmpq</span>    <span class="nv">%rsi</span><span class="p">,</span> <span class="nv">%rdi</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jle</span>     <span class="no">.L4</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">movq</span>    <span class="nv">%rdi</span><span class="p">,</span> <span class="nv">%rax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">subq</span>    <span class="nv">%rsi</span><span class="p">,</span> <span class="nv">%rax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span><span class="line"><span class="cl"><span class="nl">.L4:</span>    <span class="c1"># x &lt;= y
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">movq</span>    <span class="nv">%rsi</span><span class="p">,</span> <span class="nv">%rax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">subq</span>    <span class="nv">%rdi</span><span class="p">,</span> <span class="nv">%rax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>[为什么基于条件数据传送(1)的代码会比基于条件控制转移(2)的代码性能要好？]</p>
+</blockquote>
+<h5 id="while">while</h5>
+<p>while 语句的通用形式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">while</span> <span class="p">(</span><span class="n">test</span><span class="o">-</span><span class="n">expr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">body</span><span class="o">-</span><span class="n">statement</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>例子</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">fact_while</span><span class="p">(</span><span class="kt">long</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">*=</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="do-while">do-while</h5>
+<p>do-while 语句的通用形式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="n">body</span><span class="o">-</span><span class="n">statement</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">test</span><span class="o">-</span><span class="n">expr</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>例子</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Do While 的 C 语言代码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">long</span> <span class="nf">pcount_do</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">+=</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="mh">0x1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>产生的汇编代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">movl</span>    <span class="no">$0</span><span class="p">,</span> <span class="nv">%eax</span>    <span class="c1"># result = 0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">.L2:</span>                    <span class="c1"># loop:
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">movq</span>    <span class="nv">%rdi</span><span class="p">,</span> <span class="nv">%rdx</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">andl</span>    <span class="no">$1</span><span class="p">,</span> <span class="nv">%edx</span>    <span class="c1"># t = x &amp; 0x1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">addq</span>    <span class="nv">%rdx</span><span class="p">,</span> <span class="nv">%rax</span>  <span class="c1"># result += t
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">shrq</span>    <span class="nv">%rdi</span>        <span class="c1"># x &gt;&gt;= 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">jne</span>     <span class="no">.L2</span>         <span class="c1"># if (x) goto loop
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="na">rep</span>                 <span class="c1"># ret
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="for">for</h5>
+<p>for 循环的通用形式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="n">init</span><span class="o">-</span><span class="n">expr</span><span class="p">;</span> <span class="n">test</span><span class="o">-</span><span class="n">expr</span><span class="p">;</span> <span class="n">update</span><span class="o">-</span><span class="n">expr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">body</span><span class="o">-</span><span class="n">statement</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="switch">switch</h4>
+<p>switch 循环的通用形式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">switch</span><span class="p">(</span><span class="n">n</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="n">test</span><span class="o">-</span><span class="nl">expr</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">body</span><span class="o">-</span><span class="n">statement</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="n">test</span><span class="o">-</span><span class="nl">expr</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">body</span><span class="o">-</span><span class="n">statement</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>对于C语言的这些语法我只是在这里举出例子来，最好看看书上的讲解。</p>
+<h3 id="分支跳转risc-v">分支跳转(RISC-V)</h3>
+<p>对于这个分类其实我分给了RISC-V， 主要是在x86-64中的控制指令和RISC-V的分支跳转其实是一回事，主要区别是否使用的条件码（其实在我看来RISC-V也用了条件码，但是是隐式的使用）。</p>
+<p>RISC-V的 <strong>Branch Instruction</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">（施工中🚧）</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="过程调用">过程调用</h2>
+<p>过程是软件中一种很重要的抽象。它提供了一种封装代码的方式，用一组指定的参数和一个可选的返回值实现了某种功能。然后，可以在程序中不同的地方调用这个函数。设计良好的软件用过程作为抽象机制，隐藏某个行为的具体实现，同时又提供清晰简洁的接口定义，说明要计算的是哪些值，过程会对程序状态产生什么样的影响。不同编程语言中，过程的形式多样：函数(function) 、方法(method) 、子例(subroutine) 、处理函数(handler) 等等，但是它们有一些共有的特性。</p>
+<p>过程调用主要有三个机制：</p>
+<ol>
+<li>
+<p><strong>控制传递</strong>。包括如何开始执行过程代码，以及如何返回到开始的地方。本质上是代码执行地址的改变和切换。</p>
+</li>
+<li>
+<p><strong>数据传递</strong>。调用函数时要传给函数一些参数，在返回函数时也可能会将一些函数计算结果以返回值形式返回给原函数。本质上是数据传入新过程，又传回原过程。</p>
+</li>
+<li>
+<p><strong>内存管理</strong>。在过程进行时，如何分配内存空间；在过程返回后，如何销毁内存中存储的局部变量。</p>
+</li>
+</ol>
+<p><img src="https://s2.loli.net/2023/05/07/iWSVILyRpxh63Dl.jpg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="callsk"
+	
+	
+></p>
+<h2 id="数据存储分配">数据存储分配</h2>
+<h2 id="外部链接">外部链接</h2>
+<p><a class="link" href="https://zh.wikipedia.org/wiki/%E6%91%A9%E5%B0%94%E5%AE%9A%E5%BE%8B"  target="_blank" rel="noopener"
+    >摩尔定律&mdash;Wiki</a></p>
+<p><a class="link" href="https://zh.wikipedia.org/wiki/%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8"  target="_blank" rel="noopener"
+    >微处理器&mdash;Wiki</a></p>
+<p><a class="link" href="https://zhuanlan.zhihu.com/p/511271401"  target="_blank" rel="noopener"
+    ><em>The 50 Year History of the Microprocessor</em></a></p>
+<p><a class="link" href="https://zhuanlan.zhihu.com/p/464721330"  target="_blank" rel="noopener"
+    >芯片相关&ndash; Cpu历史&ndash;AMD系列</a></p>
+<p><a class="link" href="https://zhuanlan.zhihu.com/p/464413953"  target="_blank" rel="noopener"
+    >芯片相关&ndash; Cpu历史&ndash;intel系列</a></p>
+<p><a class="link" href="https://wdxtub.com/csapp/thin-csapp-2/2016/04/16/"  target="_blank" rel="noopener"
+    >【读薄 CSAPP】贰 机器指令与程序优化</a></p>
+<p><a class="link" href="http://riscvbook.com/chinese/RISC-V-Reader-Chinese-v2p1.pdf"  target="_blank" rel="noopener"
+    >RISC-V手册</a></p>
+<p><a class="link" href="https://www.sunnychen.top/archives/riscvbasic"  target="_blank" rel="noopener"
+    >RISC-V基本指令集概述</a></p>
+<p><a class="link" href="https://segmentfault.com/a/1190000022161796"  target="_blank" rel="noopener"
+    >过程调用</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/zh-cn/tags/csapp/">CSAPP</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E4%B8%80.%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BAcsapp/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">一.数的表示(CSAPP)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E9%9B%B6.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcsapp/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">零.深入理解计算机系统(CSAPP)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的文件系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E6%95%B0%E7%BB%84go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">数组(Go语言实现)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E6%A0%88go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">栈(Go语言实现)</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Example Person. All rights reserved.
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.24.1">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+   
+  :root {
+    --article-font-family: "Merriweather", var(--base-font-family);
+  }
+</style>
+
+<script>
+  (function () {
+    const customFont = document.createElement("link")
+    customFont.href =
+      "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+
+    customFont.type = "text/css"
+    customFont.rel = "stylesheet"
+
+    document.head.appendChild(customFont)
+  })()
+</script>
+
+    </body>
+</html>

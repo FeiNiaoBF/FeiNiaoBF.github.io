@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="二进制系统的核心&mdash;bit 众所周知，在计算机里面的所以数据都是由bit表示的，可能这与我们日常使用的十进制来说是十分不方便的，而要想从现实世界的十进制到二进制的过程需要一点点的改变。\n">
+<title>一.数的表示(CSAPP)</title>
+
+<link rel='canonical' href='https://FeiNiaoBF.github.io/zh-cn/p/%E4%B8%80.%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BAcsapp/'>
+
+<link rel="stylesheet" href="/scss/style.min.d8118f156935b64eca93aca758476adca858d2c47354971654d9bd2933a0e45f.css"><meta property='og:title' content="一.数的表示(CSAPP)">
+<meta property='og:description' content="二进制系统的核心&mdash;bit 众所周知，在计算机里面的所以数据都是由bit表示的，可能这与我们日常使用的十进制来说是十分不方便的，而要想从现实世界的十进制到二进制的过程需要一点点的改变。\n">
+<meta property='og:url' content='https://FeiNiaoBF.github.io/zh-cn/p/%E4%B8%80.%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BAcsapp/'>
+<meta property='og:site_name' content='Yeelight の 小屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CSAPP' /><meta property='article:published_time' content='2023-03-19T20:13:06&#43;08:00'/><meta property='article:modified_time' content='2023-03-19T20:13:06&#43;08:00'/>
+<meta name="twitter:title" content="一.数的表示(CSAPP)">
+<meta name="twitter:description" content="二进制系统的核心&mdash;bit 众所周知，在计算机里面的所以数据都是由bit表示的，可能这与我们日常使用的十进制来说是十分不方便的，而要想从现实世界的十进制到二进制的过程需要一点点的改变。\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/zh-cn/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu22c762c923636fe3e0f29f976348b4e1_4912_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌞</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn">Yeelight の 小屋</a></h1>
+            <h2 class="site-description">简单是稳定的前提( •̀ ω •́ )✧</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/FeiNiaoBF'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/blog/' >
+                
+                
+                
+                    <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1710417924804" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2097" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 47.104c-253.952 0-460.8 184.32-460.8 409.6 0 186.368 141.312 346.112 333.824 393.216l126.976 126.976 126.976-126.976c192.512-49.152 333.824-206.848 333.824-393.216 0-225.28-206.848-409.6-460.8-409.6z m231.424 698.368c-43.008 26.624-90.112 47.104-143.36 57.344l-63.488 63.488-24.576 24.576-24.576-24.576-63.488-63.488c-53.248-10.24-100.352-30.72-143.36-57.344-102.4-63.488-167.936-169.984-167.936-288.768C112.64 260.096 290.816 102.4 512 102.4s399.36 159.744 399.36 354.304c0 118.784-67.584 225.28-167.936 288.768z" fill="#8a8a8a" p-id="2098"></path><path d="M733.184 460.8c-10.24 0-20.48 6.144-26.624 14.336-38.912 67.584-110.592 110.592-194.56 110.592-81.92 0-155.648-45.056-194.56-110.592-6.144-8.192-16.384-14.336-26.624-14.336-24.576 0-38.912 26.624-26.624 45.056 49.152 83.968 141.312 141.312 247.808 141.312 104.448 0 196.608-57.344 247.808-141.312 10.24-20.48-4.096-45.056-26.624-45.056z" fill="#8a8a8a" p-id="2099"></path></svg>
+                
+                <span>博客</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://FeiNiaoBF.github.io/en/" >English</option>
+                                
+                                    <option value="https://FeiNiaoBF.github.io/zh-cn/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#信息存储">信息存储</a>
+      <ol>
+        <li><a href="#二进制和十六进制">二进制和十六进制</a></li>
+        <li><a href="#位-字节-字bit-byte-word">位， 字节， 字（bit, Byte, word）</a></li>
+        <li><a href="#寻址和字节顺序">寻址和字节顺序</a></li>
+        <li><a href="#位的boolean-algebras">位的Boolean Algebras</a>
+          <ol>
+            <li><a href="#左移和右移的计算">左移和右移的计算</a></li>
+          </ol>
+        </li>
+        <li><a href="#c语言上的logic计算">C语言上的logic计算</a></li>
+      </ol>
+    </li>
+    <li><a href="#整数表示">整数表示</a>
+      <ol>
+        <li><a href="#无符号表示">无符号表示</a></li>
+        <li><a href="#补码表示">补码表示</a></li>
+      </ol>
+    </li>
+    <li><a href="#整数运算">整数运算</a>
+      <ol>
+        <li><a href="#加法">加法</a></li>
+        <li><a href="#乘法">乘法</a></li>
+        <li><a href="#溢出">溢出</a></li>
+        <li><a href="#类型转换">类型转换</a></li>
+      </ol>
+    </li>
+    <li><a href="#浮点数floating-point">浮点数（floating point）</a>
+      <ol>
+        <li><a href="#ieee-浮点表示">IEEE 浮点表示</a>
+          <ol>
+            <li><a href="#规格化的值">规格化的值</a></li>
+            <li><a href="#非规格化的值">非规格化的值</a></li>
+            <li><a href="#无穷大和nan">无穷大和NaN</a></li>
+            <li><a href="#练习">练习</a></li>
+          </ol>
+        </li>
+        <li><a href="#浮点数的舍入">浮点数的舍入</a></li>
+        <li><a href="#溢出-1">溢出</a></li>
+        <li><a href="#浮点数的加乘法">浮点数的加乘法</a></li>
+      </ol>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#外部链接">外部链接</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/zh-cn/categories/csapp/" >
+                CSAPP
+            </a>
+        
+            <a href="/zh-cn/categories/cs/" >
+                CS
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/p/%E4%B8%80.%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BAcsapp/">一.数的表示(CSAPP)</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 19, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 8 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="二进制系统的核心---bit">二进制系统的核心&mdash;bit</h1>
+<p>众所周知，在计算机里面的所以数据都是由<strong>bit</strong>表示的，可能这与我们日常使用的十进制来说是十分不方便的，而要想从现实世界的十进制到二进制的过程需要一点点的改变。</p>
+<p>正如我们所想的一样，bit的表示符合物理的形式，更加的底层，也与数学上的息息相关。当我们终究是要从程序员的看发来看bit的，对我们来说，计算机就是通过对<strong>bit</strong>进行不同方式的编码和描述，来完成和执行不同的任务。</p>
+<h2 id="信息存储">信息存储</h2>
+<h3 id="二进制和十六进制">二进制和十六进制</h3>
+<p>下面是各个进制的转换:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:center">二进制</th>
+<th style="text-align:center">十进制</th>
+<th style="text-align:center">十六进制</th>
+<th style="text-align:center">二进制</th>
+<th style="text-align:center">十进制</th>
+<th style="text-align:center">十六进制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0000</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1000</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">8</td>
+</tr>
+<tr>
+<td style="text-align:center">0001</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1001</td>
+<td style="text-align:center">9</td>
+<td style="text-align:center">9</td>
+</tr>
+<tr>
+<td style="text-align:center">0010</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">1010</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center">A</td>
+</tr>
+<tr>
+<td style="text-align:center">0011</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">1011</td>
+<td style="text-align:center">11</td>
+<td style="text-align:center">B</td>
+</tr>
+<tr>
+<td style="text-align:center">0100</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">1100</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">C</td>
+</tr>
+<tr>
+<td style="text-align:center">0101</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">1101</td>
+<td style="text-align:center">13</td>
+<td style="text-align:center">D</td>
+</tr>
+<tr>
+<td style="text-align:center">0110</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">1110</td>
+<td style="text-align:center">14</td>
+<td style="text-align:center">E</td>
+</tr>
+<tr>
+<td style="text-align:center">0111</td>
+<td style="text-align:center">7</td>
+<td style="text-align:center">7</td>
+<td style="text-align:center">1111</td>
+<td style="text-align:center">15</td>
+<td style="text-align:center">F</td>
+</tr>
+</tbody>
+</table></div>
+<p>这是一个十分重要的表格，我们要记得它。</p>
+<h3 id="位-字节-字bit-byte-word">位， 字节， 字（bit, Byte, word）</h3>
+<p>我们的一个位就是一bit， 一个字节就是8个bit， 一般32位字长机器一个字就是4个bit。</p>
+<p>如果你问我为什么要这么规定的话，我可以告诉你我也不知道，笑，可以去看看历史，我猜是这样的设计符合机器的一些特性。</p>
+<p>在C语言里面，所有的数据类型都有分配好的字节数，<code>char：1字节、short：2字节、int：4字节、long： 4字节、float：4字节、double：8字节</code>（均在32位机器上）等等。</p>
+<p>分配成这样：</p>
+<ul>
+<li>有规范，可以在不同的机器程序可以运行。</li>
+<li>机器没有无限大的内存。</li>
+</ul>
+<h3 id="寻址和字节顺序">寻址和字节顺序</h3>
+<p>在内存里，我们把它们抽象成一个一定大的数组块，为每一均匀分布的地址块编上编号(图片)，因此我们要知道多字节的存储顺序，这对于我们在进行网络数据的发送/接收格式，阅读反汇编的时候等等有关系。</p>
+<p>大小端的判定：</p>
+<p>以下是我使用书中的代码看我的电脑是大端还是小端：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">byte_pointer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">show_bytes</span><span class="p">(</span><span class="n">byte_pointer</span> <span class="n">start</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;%.2x &#34;</span><span class="p">,</span> <span class="n">start</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">show_int</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">show_bytes</span><span class="p">((</span><span class="n">byte_pointer</span><span class="p">)</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">short</span> <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">12345</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">ua</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;number = %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">show_int</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;number = %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">ua</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">show_int</span><span class="p">(</span><span class="n">ua</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">==========================&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="err">$</span> <span class="p">.</span><span class="o">/</span><span class="n">byte</span>
+</span></span><span class="line"><span class="cl"><span class="n">number</span> <span class="o">=</span> <span class="o">-</span><span class="mi">12345</span>
+</span></span><span class="line"><span class="cl"><span class="n">c7</span> <span class="n">cf</span> <span class="n">ff</span> <span class="n">ff</span>
+</span></span><span class="line"><span class="cl"><span class="n">number</span> <span class="o">=</span> <span class="mi">53191</span>
+</span></span><span class="line"><span class="cl"><span class="n">c7</span> <span class="n">cf</span> <span class="mo">00</span> <span class="mo">00</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 我的电脑是小端的
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 系统Linux: Alpine apk-tools 2.12.9, compiled for x86_64.
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="位的boolean-algebras">位的Boolean Algebras</h3>
+<p>位的布尔运算可以看我的<a class="link" href="https://clever-klepon-d14cb6.netlify.app/posts/bitsoperation/"  target="_blank" rel="noopener"
+    >这一篇</a></p>
+<h4 id="左移和右移的计算">左移和右移的计算</h4>
+<p>这里我想着重的记下来：
+对于左移<code>&lt;&lt;</code>&amp; 右移<code>&gt;&gt;</code> 是对于位的计算，相比于右移来说左移比较简单，在移动的同时往最低位右边补 0 即可。右移的话有两种类型，一种是<code>逻辑右移</code>（左边补 0），另一种是<code>算术右移</code>（左边补符号位）。为什么会有这两种，因为对应无符号数和有符号数的运算是不同的计算方法。</p>
+<h3 id="c语言上的logic计算">C语言上的logic计算</h3>
+<p>不必多言，做题：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// P76 练习题2.44
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="nf">foo</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">bar</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="n">ux</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="n">uy</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span>           <span class="o">=&gt;</span>    <span class="p">((</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ux</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="n">x</span>  <span class="o">&amp;</span> <span class="mi">7</span> <span class="o">==</span> <span class="mi">7</span>     <span class="o">=&gt;</span>    <span class="p">(</span><span class="n">x</span><span class="o">&lt;&lt;</span><span class="mi">30</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="n">ux</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span>           <span class="o">=&gt;</span>    <span class="o">-</span><span class="n">x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">y</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="整数表示">整数表示</h2>
+<h3 id="无符号表示">无符号表示</h3>
+<p>无符号数（unsigned），就是在<code>0~2[^w] - 1</code>范围的数，w是表示字长。有一个重要的特性，就是每个介于0~2[^w]-1 之间的数都有唯一的一个w位的值编码。</p>
+<ul>
+<li>UMin = 0;</li>
+<li>UMax = 2[^w]−1;</li>
+</ul>
+<h3 id="补码表示">补码表示</h3>
+<p>补码（Two&rsquo; s Complement）， 就是在<code>-2[^w-1] ~ 2[^w-1] - 1</code>范围的数，补码的出现使得数据的表示得到最好的利用，在运算上和我们的计算自觉一样了，只有一个0没正负之分。</p>
+<ul>
+<li>TMin = -2[^w-1]</li>
+<li>TMax = 2[^w-1] - 1</li>
+</ul>
+<p>我们可以从上面得到一些特性：</p>
+<ul>
+<li>|TMin|  = |TMax| + 1</li>
+<li>UMax = 2 <em>|TMax| + 1  = 2</em> |TMin| - 1</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/04/24/ZcUXbMrG2T4OJhP.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="B2Tx.png"
+	
+	
+></p>
+<h2 id="整数运算">整数运算</h2>
+<h3 id="加法">加法</h3>
+<p>考虑两个非负整数x 和y, 满足0 &lt; x, y &lt; 2[^w] 。每个数都能表示为w位无符号数字。然而，
+如果计算它们的和，我们就有一个可能的范围0 &lt; x+y &lt; 2[^w+1]-2 。我们需要<code>w+1</code>位</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:center">8</th>
+<th style="text-align:center">11</th>
+<th style="text-align:center">3（19）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1000</td>
+<td style="text-align:center">+  1011</td>
+<td style="text-align:center">= 10011</td>
+</tr>
+</tbody>
+</table></div>
+<p>我们来想想补码的形式，两个数x，y满足-2[^w-1] &lt; x, y &lt; 2[^w-1]-1,   计算它们的和，我们就有一个可能的范围-2[^w] &lt; x + y &lt; 2[^w-1]-2。</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:center">8</th>
+<th style="text-align:center">11</th>
+<th style="text-align:center">3（19）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1000</td>
+<td style="text-align:center">+  1011</td>
+<td style="text-align:center">= 10011</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="乘法">乘法</h3>
+<p>无符号数的乘法就是<code>UMul(x,y) = x * y mod 2[^w]</code></p>
+<p>补码的乘法<code>TMul(x,y) = U2T(x * y mod 2[^w])</code></p>
+<h3 id="溢出">溢出</h3>
+<p>在我们的运算中（特别是很大的数）不仅仅只考虑算不算的对，还要考虑有没有溢出，一旦我需要的位变成<code>w+1</code>的十分你要十分注意了。</p>
+<p>[<img src="https://s2.loli.net/2023/04/21/5iVANckMR9qseoZ.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Two"
+	
+	
+></p>
+<p>此时我们要用上扩展与截取：</p>
+<p>扩展：</p>
+<ul>
+<li>对于无符号数，用x位向量表示[xn-1,&hellip;,x0] -&gt;[0,0,0,0,xn-1,&hellip;,x0],用0把剩下的位补齐</li>
+<li>对于补码， 用x位向量表示[xn-1,&hellip;,x0] -&gt;[ xn-1,xn-1,xn-1,xn-1,&hellip;,x0],用<code>最高位xn-1</code>把剩下的位补齐
+截取：</li>
+<li>对于无符号数，UAdd(u,v) = u+v mod 2[^w], UMult(u,v)  = u * v mod 2[^w]</li>
+<li>对于补码，先把数转换成无符号数再模运算最后再转换补码， TAdd(u,v) = U2T(u+v mod 2[^w]), TMult(u,v)  = U2T(u * v mod 2[^w])</li>
+</ul>
+<h3 id="类型转换">类型转换</h3>
+<p>无符号数和补码的转换是对位的表示不同来达到转换的过程。</p>
+<h2 id="浮点数floating-point">浮点数（floating point）</h2>
+<p>关于浮点数，本质上就是我们如何使用二进制来表达一个很大或者很小的数 (类似科学计数法，但是编码上有显著的区别)。</p>
+<p>由于二进制的数值系统在表达能力上存在一定的限制 (位数的限制)，我们实际上没有办法表示所有的数，因此浮点数的设计需要认真的权衡和折中，既要考虑能够表达的范围，也要考虑表达的精度。</p>
+<p>浮点数是一种近似的数，和我们十进制中的小数（或分数）一样，比如：3/10 = 0.333！。所以浮点数在不论大小项目里面都是要十分小心的地方。</p>
+<h3 id="ieee-浮点表示">IEEE 浮点表示</h3>
+<p>IEEE 浮点标准用V=(-1)[^s] <em>M</em> 2[^E]的形式来表示一个数：</p>
+<ul>
+<li>符号(sign) s 决定这数是负数(s=1) 还是正数(s=0), 而对于数值0的符号位解释
+作为特殊情况处理(-0.0 = +0.0)。</li>
+<li>尾数(significand) M 是一个二进制小数，它的范围是1~2-£, 或者是0~1 - £。</li>
+<li>阶码(exponent) E 的作用是对浮点数加权，这个权重是2 的E 次幕（可能是负数） 。
+将浮点数的位表示划分为三个字段，分别对这些值进行编码：</li>
+<li>一个单独的符号位s 直接编码符号s 。</li>
+<li>k 位的阶码字段exp=ek - 1 … e1,e0 编码阶码E 。</li>
+<li>n 位小数字段frac= fn-1 &hellip; f1,f0 编码尾数M, 但是编码出来的值也依赖于阶码字
+段的值是否等千0 。</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/04/24/TYMtb2kBysG6maf.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="float.png"
+	
+	
+></p>
+<p>在开始时记住一些值的来源：E = exp - Bias；M = 1/0 + f</p>
+<h4 id="规格化的值">规格化的值</h4>
+<p>当阶数 <code>exp ≠ 000…0</code>和 <code>exp ≠ 111…1</code>时，表示的其实都是规范化的值，这里只需要大概知道因为实数轴上原来连续的值会被规范到有限的定值上并且这些定值之间的间距也是不一样的，具体可以通过后面给出的例子来理解。</p>
+<p>当 exp 的位模式既不全为0(数值0), 也不全为(32位的255，64位的2047)的时候，frac可以随意取值；</p>
+<ul>
+<li>E = exp - Bias(2[^w-1] - 1)</li>
+<li>M = 1 + f;</li>
+</ul>
+<p>例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">    12345 = 0b0011.0000.0011.1001 = 1.1000000111001 * 2[^13]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    E = 13 = exp - 127 -&gt; exp = 140;
+</span></span><span class="line"><span class="cl">    M = 1 + f = 1.1000000111001 -&gt; f = 1000000111001;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>s(1)</th>
+<th>exp(8)</th>
+<th>frac(23)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>10001100</td>
+<td>10000001110010000000000</td>
+</tr>
+</tbody>
+</table></div>
+<p><img src="https://s2.loli.net/2023/04/24/FvmEjJeDSVWkQtH.jpg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Normalized"
+	
+	
+></p>
+<h4 id="非规格化的值">非规格化的值</h4>
+<p>当exp每一位都为0的时候，可以想象到这时候的数无限的接近数值0，可画个数轴来看，此时的 <code>E = 1 - Bias</code>而且M没有隐含的1表示了，<code>M = f</code></p>
+<p>第一个功能就是表示0，0的时候exp位为0，frac位为0，符号位的不同使得-0/+0有相同的地方何不同的地方。</p>
+<p>非规格化数的另外一个功能是表示那些非常接近于0.0 的数。它们提供了一种属性，称为逐渐溢出(gradual underflow), 其中，可能的数值分布均匀地接近于0.0 。</p>
+<p><img src="https://s2.loli.net/2023/04/24/ZmftLThWNq5kD4p.jpg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Denormalized"
+	
+	
+></p>
+<h4 id="无穷大和nan">无穷大和NaN</h4>
+<p>最后一类数值是当指阶码全为1 的时候出现的。当小数域全为0时，得到的值表示无穷，当 s=O 时是 +∞ 或者是 s=1 时是 -∞ 。当我们把两个非常大的数相乘，或者除以零时，无穷能够表示溢出的结果。当小数域为非零时，结果值被称为&quot;NaN&quot;, 即“不是一个数(<strong>Not a Number</strong>)&quot; 的缩写。一些运算的结果不能是实数或无穷，就会返回这样的NaN值，比如当计算sqrt(-1)或 (∞-∞) 时。在某些应用中，表示未初始化的数据时，它们也很有用处。</p>
+<p><img src="https://s2.loli.net/2023/04/24/iYnoLHDCwqASEyg.jpg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="inf"
+	
+	
+>
+<img src="https://s2.loli.net/2023/04/24/15xlfajNMHpnrwG.jpg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="NaN"
+	
+	
+></p>
+<h4 id="练习">练习</h4>
+<p>假设一个基于IEEE 浮点格式的5 位浮点表示，有1 个符号位、2 个阶 码位(k=Z) 和两个小数位(n=2) 。阶码偏置量是2[2-1] - 1 = 1 。下表中列举了这个5 位浮点表示的全部非负取值范围。使用下面的条件，填写表格中的空白项：</p>
+<p>e: 假定阶码字段是一个无符号整数所表示的值。</p>
+<p>E: 偏置之后的阶码值。</p>
+<p>2[^E]: 阶码的权重。</p>
+<p>f: 小数值。</p>
+<p>M: 尾数的值。</p>
+<p>2[^E] * M: 该数（未归约的）小数值。</p>
+<p>V: 该数归约后的小数值。</p>
+<p>十进制：该数的十进制表示。</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>位</th>
+<th>e</th>
+<th>E</th>
+<th>2[^E]</th>
+<th>f</th>
+<th>M</th>
+<th>2[^E]*M</th>
+<th>V</th>
+<th>十进制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 00 00</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0/4</td>
+<td>0/4</td>
+<td>0/4</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>0 00 01</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1/4</td>
+<td>1/4</td>
+<td>1/4</td>
+<td>1/4</td>
+<td>0.25</td>
+</tr>
+<tr>
+<td>0 00 10</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>2/4</td>
+<td>2/4</td>
+<td>2/4</td>
+<td>1/2</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>0 00 11</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>3/4</td>
+<td>3/4</td>
+<td>3/4</td>
+<td>3/4</td>
+<td>0.75</td>
+</tr>
+<tr>
+<td>0 01 00</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0/4</td>
+<td>4/4</td>
+<td>4/4</td>
+<td>1</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>0 01 01</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1/4</td>
+<td>5/4</td>
+<td>5/4</td>
+<td>5/4</td>
+<td>1.25</td>
+</tr>
+<tr>
+<td>0 01 10</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>2/4</td>
+<td>6/4</td>
+<td>6/4</td>
+<td>3/2</td>
+<td>1.5</td>
+</tr>
+<tr>
+<td>0 01 11</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>3/4</td>
+<td>7/4</td>
+<td>7/4</td>
+<td>7/4</td>
+<td>1.75</td>
+</tr>
+<tr>
+<td>0 10 00</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>0/4</td>
+<td>4/4</td>
+<td>8/4</td>
+<td>2</td>
+<td>2.0</td>
+</tr>
+<tr>
+<td>0 10 01</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>1/4</td>
+<td>5/4</td>
+<td>10/4</td>
+<td>5/2</td>
+<td>2.5</td>
+</tr>
+<tr>
+<td>0 10 10</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>2/4</td>
+<td>6/4</td>
+<td>12/4</td>
+<td>3</td>
+<td>3.0</td>
+</tr>
+<tr>
+<td>0 10 11</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>3/4</td>
+<td>7/4</td>
+<td>14/4</td>
+<td>7/2</td>
+<td>3.5</td>
+</tr>
+<tr>
+<td>0 11 00</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>∞</td>
+<td>-</td>
+</tr>
+<tr>
+<td>0 11 01</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>NaN</td>
+<td>-</td>
+</tr>
+<tr>
+<td>0 11 10</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>NaN</td>
+<td>-</td>
+</tr>
+<tr>
+<td>0 11 11</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>NaN</td>
+<td>-</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="浮点数的舍入">浮点数的舍入</h3>
+<h3 id="溢出-1">溢出</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">printf</span><span class="p">(</span><span class="s">&#34;浮点数的溢出:</span><span class="se">\n\t</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">printf</span><span class="p">(</span><span class="s">&#34;(1e20 + (-1e20)) + 3.14 = %lf</span><span class="se">\n\t</span><span class="s">&#34;</span><span class="p">,</span> <span class="mf">1e20</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">1e20</span><span class="p">)</span> <span class="o">+</span> <span class="mf">3.14</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">printf</span><span class="p">(</span><span class="s">&#34;1e20 + (-1e20 + 3.14) = %lf</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mf">1e20</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">1e20</span> <span class="o">+</span> <span class="mf">3.14</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">   
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="浮点数的加乘法">浮点数的加乘法</h3>
+<p>浮点数的加乘法是和我们想的不一样的，它不满足结合律，交换律的，如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">y</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 编译器可能试图通过产生下列代码来省去一个浮点加法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">t</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">y</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">d</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 但是对x来说，这个计算可能会产生于原始值不同的值,因为它使用了加法运算的不同结合方式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">//浮点数的溢出:
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="p">(</span><span class="mf">1e20</span>  <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">1e20</span><span class="p">))</span> <span class="o">+</span> <span class="mf">3.14</span>  <span class="o">=</span>  <span class="mf">3.140000</span>
+</span></span><span class="line"><span class="cl">    <span class="mf">1e20</span>  <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">1e20</span>   <span class="o">+</span> <span class="mf">3.14</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.000000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结</h2>
+<p>这一章我们具体的学习了在机器上数的表示，我们用无符号数和补码来表示我的数值，用浮点数表示二进制的科学计数法，数与数的计算，它们是会有溢出的，用模运算来截断防止位溢出。
+大多数C 语言实现遵循的原则是底层的位模式不变。在补码机器上，对于一个w 位的值，这种行为是由函数T2Uw 和U2Tw来描述的。C 语言隐式的强制类型转换会出现许多程序员无法预计的结果，常常导致程序错误。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="kt">double</span><span class="p">)</span><span class="n">y</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我的建议是通读一遍课本，课本比我写的好很多，我想表达的写不出来那个<code>味道</code>，而后再去看看视频会更加的理解。</p>
+<h2 id="外部链接">外部链接</h2>
+<p><a class="link" href="https://en.wikipedia.org/wiki/IEEE_754"  target="_blank" rel="noopener"
+    >IEEE754&mdash;wiki</a>
+<a class="link" href="https://zh.wikipedia.org/wiki/%E6%B5%AE%E7%82%B9%E6%95%B0"  target="_blank" rel="noopener"
+    >浮点数&mdash;wiki</a></p>
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/zh-cn/tags/csapp/">CSAPP</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E4%BA%8C.%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BAcsapp/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">二.程序的机器级表示(CSAPP)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E9%9B%B6.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcsapp/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">零.深入理解计算机系统(CSAPP)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的文件系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E6%95%B0%E7%BB%84go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">数组(Go语言实现)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E6%A0%88go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">栈(Go语言实现)</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Example Person. All rights reserved.
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.24.1">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+   
+  :root {
+    --article-font-family: "Merriweather", var(--base-font-family);
+  }
+</style>
+
+<script>
+  (function () {
+    const customFont = document.createElement("link")
+    customFont.href =
+      "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+
+    customFont.type = "text/css"
+    customFont.rel = "stylesheet"
+
+    document.head.appendChild(customFont)
+  })()
+</script>
+
+    </body>
+</html>

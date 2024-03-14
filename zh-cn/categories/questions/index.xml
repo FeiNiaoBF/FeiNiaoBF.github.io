@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Questions on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/questions/</link>
+        <description>Recent content in Questions on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Mon, 24 Apr 2023 18:59:33 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/questions/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>问题集锦（计算机）</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/post/cs/99.problems/</link>
+        <pubDate>Mon, 24 Apr 2023 18:59:33 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/post/cs/99.problems/</guid>
+        <description>&lt;h1 id=&#34;问题集锦&#34;&gt;问题集锦&lt;/h1&gt;
+&lt;p&gt;这是一个我在学习计算机时遇到或我自己提出的问题的集合&lt;/p&gt;
+&lt;h2 id=&#34;计算机基础&#34;&gt;计算机基础&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;对于Java来说，new是一个创建对象的过程，它存放在那个内存位置&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;计算机体系结构&#34;&gt;计算机体系结构&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;为什么对于不同的计算机设计模式有着不一样的ISA？&lt;/li&gt;
+&lt;li&gt;为什么说ISA的数量是一个需要控制的量，不可过多也不可过少？&lt;/li&gt;
+&lt;li&gt;为什么指令集不能无限大？&lt;/li&gt;
+&lt;li&gt;什么是callee什么是caller，它们有什么区别？&lt;/li&gt;
+&lt;li&gt;为什么在编译语言中的跳转分支和测试是使用相反的条件来进行跳转代码会更有效率？&lt;/li&gt;
+&lt;li&gt;为什么基于条件数据传送的代码会比基于条件控制转移的代码性能要好？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;处理器通过使用流水线(pipelining)来获得高性能，在流水线中，一条指令的处理要经过一系列的阶段，每个阶段执行所需操作的一小部分。基于条件数据传送的代码没有跳转操作，而是通过条件运算符直接将结果赋值给目标变量，因此可以避免跳转带来的开销。虽然在某些情况下，条件数据传送可能会产生一些额外的开销，但通常情况下，它的性能要优于基于条件控制转移的代码。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol start=&#34;7&#34;&gt;
+&lt;li&gt;在x86只有在主存分配了地址，寄存器没有分配实际地址，是吗？&lt;/li&gt;
+&lt;li&gt;既然寄存器是快速的，为什么不能拥有很多个？&lt;/li&gt;
+&lt;li&gt;汇编代码不会记录程序值的类型，理解这点这很重要。&lt;/li&gt;
+&lt;li&gt;汇编器和编译器有什么不同？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;计算机网络&#34;&gt;计算机网络&lt;/h2&gt;
+&lt;h2 id=&#34;计算机学术词汇&#34;&gt;计算机学术词汇&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;vector：在计算机里面不应该单纯的是数学上的“向量”，它应该是一个对于一个进程（或线程）来说是“多指引”（SIMD) 的和scalar 相对应的。是吗？&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

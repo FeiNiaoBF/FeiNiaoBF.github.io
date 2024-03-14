@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="ls 去哪里了 中断硬件 中断对应的场景很简单，就是硬件（外设）想要得到操作系统的关注。当硬件设备需要处理器的注意时，它会发送一个中断信号，这会导致">
+<title>XV6 的中断</title>
+
+<link rel='canonical' href='https://FeiNiaoBF.github.io/zh-cn/p/xv6-%E7%9A%84%E4%B8%AD%E6%96%AD/'>
+
+<link rel="stylesheet" href="/scss/style.min.d8118f156935b64eca93aca758476adca858d2c47354971654d9bd2933a0e45f.css"><meta property='og:title' content="XV6 的中断">
+<meta property='og:description' content="ls 去哪里了 中断硬件 中断对应的场景很简单，就是硬件（外设）想要得到操作系统的关注。当硬件设备需要处理器的注意时，它会发送一个中断信号，这会导致">
+<meta property='og:url' content='https://FeiNiaoBF.github.io/zh-cn/p/xv6-%E7%9A%84%E4%B8%AD%E6%96%AD/'>
+<meta property='og:site_name' content='Yeelight の 小屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-03-10T16:36:08&#43;08:00'/><meta property='article:modified_time' content='2024-03-10T16:36:08&#43;08:00'/>
+<meta name="twitter:title" content="XV6 的中断">
+<meta name="twitter:description" content="ls 去哪里了 中断硬件 中断对应的场景很简单，就是硬件（外设）想要得到操作系统的关注。当硬件设备需要处理器的注意时，它会发送一个中断信号，这会导致">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/zh-cn/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu22c762c923636fe3e0f29f976348b4e1_4912_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌞</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn">Yeelight の 小屋</a></h1>
+            <h2 class="site-description">简单是稳定的前提( •̀ ω •́ )✧</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/FeiNiaoBF'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/blog/' >
+                
+                
+                
+                    <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1710417924804" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2097" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 47.104c-253.952 0-460.8 184.32-460.8 409.6 0 186.368 141.312 346.112 333.824 393.216l126.976 126.976 126.976-126.976c192.512-49.152 333.824-206.848 333.824-393.216 0-225.28-206.848-409.6-460.8-409.6z m231.424 698.368c-43.008 26.624-90.112 47.104-143.36 57.344l-63.488 63.488-24.576 24.576-24.576-24.576-63.488-63.488c-53.248-10.24-100.352-30.72-143.36-57.344-102.4-63.488-167.936-169.984-167.936-288.768C112.64 260.096 290.816 102.4 512 102.4s399.36 159.744 399.36 354.304c0 118.784-67.584 225.28-167.936 288.768z" fill="#8a8a8a" p-id="2098"></path><path d="M733.184 460.8c-10.24 0-20.48 6.144-26.624 14.336-38.912 67.584-110.592 110.592-194.56 110.592-81.92 0-155.648-45.056-194.56-110.592-6.144-8.192-16.384-14.336-26.624-14.336-24.576 0-38.912 26.624-26.624 45.056 49.152 83.968 141.312 141.312 247.808 141.312 104.448 0 196.608-57.344 247.808-141.312 10.24-20.48-4.096-45.056-26.624-45.056z" fill="#8a8a8a" p-id="2099"></path></svg>
+                
+                <span>博客</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://FeiNiaoBF.github.io/en/" >English</option>
+                                
+                                    <option value="https://FeiNiaoBF.github.io/zh-cn/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#中断硬件">中断硬件</a></li>
+    <li><a href="#设备驱动">设备驱动</a></li>
+    <li><a href="#xv6-中断例子">XV6 中断例子</a></li>
+    <li><a href="#来自-shell-程序的输出">来自 Shell 程序的输出</a>
+      <ol>
+        <li><a href="#top-部分">(top 部分)</a></li>
+        <li><a href="#bottom-部分">bottom 部分</a></li>
+      </ol>
+    </li>
+    <li><a href="#中断并行">中断并行</a></li>
+    <li><a href="#来自键盘的输出">来自键盘的输出</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/zh-cn/categories/interrupt/" >
+                Interrupt
+            </a>
+        
+            <a href="/zh-cn/categories/xv6/" >
+                Xv6
+            </a>
+        
+            <a href="/zh-cn/categories/os/" >
+                OS
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/p/xv6-%E7%9A%84%E4%B8%AD%E6%96%AD/">XV6 的中断</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 10, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 11 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p>ls 去哪里了</p>
+</blockquote>
+<h2 id="中断硬件">中断硬件</h2>
+<p>中断对应的场景很简单，就是硬件（外设）想要得到操作系统的关注。当硬件设备需要处理器的注意时，它会发送一个中断信号，这会导致处理器中断当前正在执行的任务，保存当前状态，并开始执行一个称为中断处理程序（interrupt handler）的特殊程序。中断处理程序会处理中断事件，然后恢复之前的任务状态，使得处理器可以继续执行被中断的任务。</p>
+<p>像系统调用，但有几点不一样：</p>
+<ul>
+<li><strong>异步 (asynchronous)</strong>：在硬件中断中 interrupt handler 并不在进程的 context 下，所以 cpu 是异步的。</li>
+<li><strong>并发 (concurrency)</strong>：对于中断来说，CPU 和生成中断的设备是并行的在运行。</li>
+<li><strong>程序设备 (program device)</strong> ：要为用到的硬件依据相关的文档编程。</li>
+</ul>
+<p>程序设备地址 mapping kernel
+<img src="https://s2.loli.net/2024/03/10/Q6eEPwmoN7DHZGh.webp"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Platform Level Interrupt Control.webp"
+	
+	
+></p>
+<p>设备都连接到处理器上，处理器上是通过 Platform Level Interrupt Control，简称 PLIC 来处理设备中断。
+<img src="https://s2.loli.net/2024/03/10/Q6eEPwmoN7DHZGh.webp"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Platform Level Interrupt Control.webp"
+	
+	
+>
+PLIC 会路由（像收费站）这些中断，提醒 CPU 有中断，有空的 CPU 核会 Claim 中断，之后接收、处理中断，提醒 PLIC 。</p>
+<h2 id="设备驱动">设备驱动</h2>
+<p>设备驱动是一种软件，用于允许操作系统与计算机硬件进行通信和交互。简单的讲：管理设备的代码称为驱动且所有的驱动都在内核中。</p>
+<p>大部分驱动都分为两个部分：</p>
+<ol>
+<li><strong>驱动程序（bottom）</strong>：驱动程序负责设备的控制和管理，包括设备的初始化、数据传输、状态监控等。驱动程序通常是由内核编写，并且运行在内核模式下，具有较高的权限。</li>
+<li><strong>设备程序（top）</strong>：设备设置程序通常是用户空间程序，用于配置和控制设备。这些程序通常不运行在内核模式下，具有较低的权限。设备设置程序可以通过系统调用与驱动程序进行交互，实现对设备的控制和管理。</li>
+</ol>
+<p>这种分层结构进行了隔离，两者的交互通过之间的<em>队列</em> 来实现。</p>
+<p>如何对设备进行编程。通常来说，编程是通过 memory mapped I/O 完成的。在一开始的时候，设备地址就规定出现在物理地址的特定区间内。在通过 <code>load</code> / <code>store</code> 指令就可以读写设备的控制寄存器。</p>
+<h2 id="xv6-中断例子">XV6 中断例子</h2>
+<p>当XV6启动时，Shell会输出提示符“<code>$</code> ”，如果我们在键盘上输入<code>ls</code>，最终可以看到<code>“$ ls”</code>。我们接下来通过研究Console是如何显示出<code>“$ ls”</code>，来看一下设备中断是如何工作的。</p>
+<p>实际上“<code>$</code> ”和“<code>ls</code>”还不太一样，“<code>$</code> ”是Shell程序的输出，而“<code>ls</code>”是用户通过键盘输入之后再显示出来的。</p>
+<p>RISC-V 有许多与中断相关的寄存器：</p>
+<ul>
+<li>
+<p>SIE（Supervisor Interrupt Enable）寄存器。这个寄存器中有一个bit（E）专门针对例如UART的外部设备的中断；有一个bit（S）专门针对软件中断，软件中断可能由一个CPU核触发给另一个CPU核；还有一个bit（T）专门针对定时器中断。我们这节课只关注外部设备的中断。</p>
+</li>
+<li>
+<p>SSTATUS（Supervisor Status）寄存器。这个寄存器中有一个bit来打开或者关闭中断。每一个CPU核都有独立的SIE和SSTATUS寄存器，除了通过SIE寄存器来单独控制特定的中断，还可以通过SSTATUS寄存器中的一个bit来控制所有的中断。</p>
+</li>
+<li>
+<p>SIP（Supervisor Interrupt Pending）寄存器。当发生中断时，处理器可以通过查看这个寄存器知道当前是什么类型的中断。</p>
+</li>
+<li>
+<p>SCAUSE寄存器，这个寄存器我们之前看过很多次。它会表明当前状态的原因是中断。</p>
+</li>
+<li>
+<p>STVEC 寄存器，它会保存当 trap，page fault 或者中断发生时，CPU 运行的用户程序的程序计数器，这样才能在稍后恢复程序的运行。</p>
+</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/12/23/uAEnQoZ5sdzXICk.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>这里首先初始化了锁，我们现在还不关心这个锁。然后调用了 uartinit，uartinit 函数位于 uart.c 文件。这个函数实际上就是配置好 UART 芯片使其可以被使用。</p>
+<p><img src="https://s2.loli.net/2023/12/23/4CsmZKpExjrnR2q.webp"
+	
+	
+	
+	loading="lazy"
+	
+	
+>
+这里的流程是先关闭中断，之后设置波特率，设置字符长度为8bit，重置FIFO，最后再重新打开中断。</p>
+<p>对于其中的 <code>WriteReg(IER, 0x00)</code> 就是把 <code>0x00</code> 写入到 IER register, 下同</p>
+<p>UART 中的寄存器</p>
+<p><img src="https://s2.loli.net/2023/12/23/IdOHv6JsNlzQyRm.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="https://s2.loli.net/2023/12/23/lDH3f7mJxdktWwq.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>运行完这个函数之后，原则上UART就可以生成中断了。但是因为我们还没有对PLIC编程，所以中断不能被CPU感知。最终，在main函数中，需要调用plicinit函数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">plicinit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// set desired IRQ priorities non-zero (otherwise disabled).
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="o">*</span><span class="p">(</span><span class="n">uint32</span><span class="o">*</span><span class="p">)(</span><span class="n">PLIC</span> <span class="o">+</span> <span class="n">UART0_IRQ</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>     <span class="c1">// 0x0c000000L + 10*4
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="o">*</span><span class="p">(</span><span class="n">uint32</span><span class="o">*</span><span class="p">)(</span><span class="n">PLIC</span> <span class="o">+</span> <span class="n">VIRTIO0_IRQ</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>   <span class="c1">// 0x0c000000L + 1*4
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>第一句是：设置 PLIC 会接收来自 <strong>UART</strong> 的中断
+第二句是：设置 PLIC 会接收来自 <strong>IO磁盘</strong> 的中断</p>
+<p>main 函数中，plicinit 之后就是 plicinithart 函数。plicinit 是由0号 CPU 运行，之后，每个 CPU 的核都需要调用 plicinithart 函数表明对于哪些外设中断感兴趣。所以在 plicinithart 函数中，每个 CPU 的核都表明自己对来自于 UART 和 VIRTIO 的中断感兴趣。因为我们忽略中断的优先级，所以我们将优先级设置为0。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">plicinithart</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">hart</span> <span class="o">=</span> <span class="nf">cpuid</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// set uart&#39;s enable bit for this hart&#39;s S-mode.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="o">*</span><span class="p">(</span><span class="n">uint32</span><span class="o">*</span><span class="p">)</span><span class="nf">PLIC_SENABLE</span><span class="p">(</span><span class="n">hart</span><span class="p">)</span><span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">UART0_IRQ</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">VIRTIO0_IRQ</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// set this hart&#39;s S-mode priority threshold to 0.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="o">*</span><span class="p">(</span><span class="n">uint32</span><span class="o">*</span><span class="p">)</span><span class="nf">PLIC_SPRIORITY</span><span class="p">(</span><span class="n">hart</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>到目前为止，我们有了生成中断的外部设备，我们有了 PLIC 可以传递中断到单个的 CPU。但是 CPU 自己还没有设置好接收中断，因为我们还没有设置好 SSTATUS 寄存器。
+在 main 函数的最后，程序调用了 scheduler 函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">scheduler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">proc</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">cpu</span> <span class="o">*</span><span class="n">c</span> <span class="o">=</span> <span class="nf">mycpu</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">c</span><span class="o">-&gt;</span><span class="n">proc</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span><span class="p">(;;){</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Avoid deadlock by ensuring that devices can interrupt.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">intr_on</span><span class="p">();</span>                  <span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="n">proc</span><span class="p">;</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="o">&amp;</span><span class="n">proc</span><span class="p">[</span><span class="n">NPROC</span><span class="p">];</span> <span class="n">p</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">==</span> <span class="n">RUNNABLE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Switch to chosen process.  It is the process&#39;s job
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// to release its lock and then reacquire it
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// before jumping back to us.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">p</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">=</span> <span class="n">RUNNING</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">c</span><span class="o">-&gt;</span><span class="n">proc</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">swtch</span><span class="p">(</span><span class="o">&amp;</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">context</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">context</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// Process is done running for now.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// It should have changed its p-&gt;state before coming back.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">c</span><span class="o">-&gt;</span><span class="n">proc</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="来自-shell-程序的输出">来自 Shell 程序的输出</h2>
+<h3 id="top-部分">(top 部分)</h3>
+<p>在上面 scheduler 函数其实蛮有趣的，它主要的功能就是为每个 CPU 进程调度程序。是无限循环的，为切换到所选进程，将进程 context switch  如： <code>swtch(&amp;c-&gt;context, &amp;p-&gt;context);</code></p>
+<p>在操作系统中，当内核完成所有的初始化操作后，会进入到第一个用户进程。这个用户进程通常是由 <code>init</code> 进程启动的，<code>init</code> 进程是所有进程的祖先进程，它是系统启动时自动创建的第一个用户进程。init 进程的 PID 为 1，它负责启动和管理其他用户进程，是系统中最后一个终止的进程。</p>
+<p>XV6 中的 <strong>init</strong> main 函数（user/init.c : main）</p>
+<p>首先这个进程的main函数创建了一个代表Console的设备。这里通过mknod操作创建了console设备。因为这是第一个打开的文件，所以这里的文件描述符0。之后通过dup创建stdout和stderr。这里实际上通过复制文件描述符0，得到了另外两个文件描述符1，2。最终文件描述符0，1，2都用来代表Console。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">  <span class="nf">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>  <span class="c1">// stdout        fd = 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nf">dup</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>  <span class="c1">// stderr        fd = 2
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>之后 <code>fork()</code> 子进程运行 <code>exec(&quot;sh&quot;, argv)</code> ，来到 <code>sh.c : main</code> 。Shell程序首先打开文件描述符0，1，2。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">main</span><span class="err">：</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Ensure that three file descriptors are open.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">while</span><span class="p">((</span><span class="n">fd</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="s">&#34;console&#34;</span><span class="p">,</span> <span class="n">O_RDWR</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">fd</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>之后Shell向文件描述符2打印提示符“$ ”。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="nf">getcmd</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nbuf</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">fprintf</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#34;$ &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">memset</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nbuf</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">gets</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">nbuf</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span><span class="p">(</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// EOF
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>值得一提的是：在 Unix 系统中，设备是由文件表示。
+因此，shell 只是向 fd = 2 的 <strong><code>文件</code></strong> 写了 <code>$</code> ，也就是说，fprintf () 函数用到了中断，而且是 write() 系统调用。所以由 Shell 输出的每一个字符都会触发一个 write 系统调用。最终来到 filewrite 函数(file.c) 。</p>
+<p>在 filewrite 函数中首先会判断文件描述符的类型。mknod 函数生成的文件描述符属于设备（FD_DEVICE = 3），而对于设备类型的文件描述符，我们会为这个特定的设备执行设备相应的 write 函数。因为我们现在的设备是 Console，所以我们知道这里会调用 console.c 中的 consolewrite 函数。</p>
+<p>这里先通过either_copyin将字符拷入，之后调用uartputc函数。uartputc函数将字符写入给UART设备，所以你可以认为consolewrite是一个UART驱动的top部分。uart.c文件中的uartputc函数会实际的打印字符。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">uartputc</span><span class="p">(</span><span class="kt">int</span> <span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uart_tx_lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span><span class="p">(</span><span class="n">panicked</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span><span class="p">(;;)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">uart_tx_w</span> <span class="o">==</span> <span class="n">uart_tx_r</span> <span class="o">+</span> <span class="n">UART_TX_BUF_SIZE</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// buffer is full.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// wait for uartstart() to open up space in the buffer.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nf">sleep</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uart_tx_r</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">uart_tx_lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">uart_tx_buf</span><span class="p">[</span><span class="n">uart_tx_w</span> <span class="o">%</span> <span class="n">UART_TX_BUF_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">uart_tx_w</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">uartstart</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uart_tx_lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>uartputc 函数会稍微有趣一些。在 UART 的内部会有一个 buffer 用来发送数据，buffer 的大小是32个字符。同时还有一个为 consumer 提供的读指针和为 producer 提供的写指针，来构建一个环形的 buffer（注，或者可以认为是环形队列）。</p>
+<p>在函数中第一件事情是判断环形 buffer 是否已经满了。如果读写指针相同，那么 buffer 是空的，如果写指针加1等于读指针，那么 buffer 满了。当 buffer 是满的时候，向其写入数据是没有意义的，所以这里会 sleep 一段时间，将 CPU 让出给其他进程。当然，对于我们来说，buffer 必然不是满的，因为提示符“$”是我们送出的第一个字符。所以代码会走到 else，字符会被送到 buffer 中，更新写指针，之后再调用 uartstart 函数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">uartstart</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">uart_tx_w</span> <span class="o">==</span> <span class="n">uart_tx_r</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// transmit buffer is empty.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">((</span><span class="nf">ReadReg</span><span class="p">(</span><span class="n">LSR</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">LSR_TX_IDLE</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// the UART transmit holding register is full,
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// so we cannot give it another byte.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// it will interrupt when it&#39;s ready for a new byte.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">uart_tx_buf</span><span class="p">[</span><span class="n">uart_tx_r</span> <span class="o">%</span> <span class="n">UART_TX_BUF_SIZE</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uart_tx_r</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// maybe uartputc() is waiting for space in the buffer.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">wakeup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uart_tx_r</span><span class="p">);</span>   <span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">WriteReg</span><span class="p">(</span><span class="n">THR</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>     <span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>uartstart就是通知设备执行操作。首先是检查当前设备是否空闲，如果空闲的话，我们会从buffer中读出数据，然后将数据写入到THR（Transmission Holding Register）发送寄存器。这里相当于告诉设备，我这里有一个字节需要你来发送。一旦数据送到了设备，系统调用会返回，用户应用程序Shell就可以继续执行。这里从内核返回到用户空间的机制与trap机制是一样的。</p>
+<h3 id="bottom-部分">bottom 部分</h3>
+<p>在我们向 Console 输出字符时，如果发生了中断，RISC-V 会做什么操作。
+我们之前已经在 SSTATUS 寄存器中打开了中断，所以处理器会被中断。假设键盘生成了一个中断并且发向了 PLIC，PLIC 会将中断路由给一个特定的 CPU 核，并且如果这个 CPU 核设置了 SIE 寄存器的 E bit（注，针对外部中断的 bit 位），那么会发生以下事情：</p>
+<ol>
+<li>会清除 SIE 寄存器相应的 bit，这样可以阻止 CPU 核被其他中断打扰，该 CPU 核可以专心处理当前中断。处理完成之后，可以再次恢复 SIE 寄存器相应的 bit。</li>
+<li>会设置 SEPC 寄存器为当前的程序计数器。我们假设 Shell 正在用户空间运行，突然来了一个中断，那么当前 Shell 的程序计数器会被保存。</li>
+<li>要保存当前的 mode。在我们的例子里面，因为当前运行的是 Shell 程序，所以会记录 user mode。</li>
+<li>再将 mode 设置为 Supervisor mode。</li>
+<li>最后将程序计数器的值设置成 STVEC 的值。</li>
+</ol>
+<p>在 trap.c 中有可以判断中断的部分：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">usertrap</span><span class="err">：</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="n">which_dev</span> <span class="o">=</span> <span class="nf">devintr</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ok
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 trap.c 的 devintr 函数中，首先会通过 SCAUSE 寄存器判断当前中断是否是来自于外设的中断。如果是的话，再调用 plic_claim 函数来获取中断。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// ask the PLIC what interrupt we should serve.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="nf">plic_claim</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">hart</span> <span class="o">=</span> <span class="nf">cpuid</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">irq</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">uint32</span><span class="o">*</span><span class="p">)</span><span class="nf">PLIC_SCLAIM</span><span class="p">(</span><span class="n">hart</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">irq</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>plic_claim 函数位于 plic.c 文件中。在这个函数中，当前 CPU 核会告知 PLIC，自己要处理中断，PLIC_SCLAIM 会将中断号返回，对于 UART 来说，返回的中断号是10。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nl">devintr</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">irq</span> <span class="o">==</span> <span class="n">UART0_IRQ</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">uartintr</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>当 <code>irq</code> 为 10 的时候，就调用 <code>uartintr()</code> 函数，向 UART 发送数据，但现在没有输入数据，UART 的寄存器为空。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">uartintr</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// read and process incoming characters.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="nf">uartgetc</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">consoleintr</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// send buffered characters.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nf">acquire</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uart_tx_lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">uartstart</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">release</span><span class="p">(</span><span class="o">&amp;</span><span class="n">uart_tx_lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个函数会将 Shell 存储在 buffer 中的任意字符送出。实际上在提示符 <code>&quot;$&quot;</code> 之后，Shell 还会输出一个空格字符，write 系统调用可以在 UART 发送提示符 <code>&quot;$”</code> 的同时，并发的将空格字符写入到 buffer 中。所以 UART 的发送中断触发时，可以发现在 buffer 中还有一个空格字符，之后会将这个空格字符送出。</p>
+<h2 id="中断并行">中断并行</h2>
+<p>驱动的 top 和 bottom 部分是并行运行的。例如，Shell 会在传输完提示符“$”之后再调用 write 系统调用传输空格字符，代码会走到 UART 驱动的 top 部分（注，uartputc 函数），将空格写入到 buffer 中。但是同时在另一个 CPU 核，可能会收到来自于 UART 的中断，进而执行 UART 驱动的 bottom 部分，查看相同的 buffer。（buffer 是对于 top 和 bottom 的公有队列，对于 CPU 也一样）所以一个驱动的 top 和 bottom 部分可以并行的在不同的 CPU 上运行。</p>
+<p>我们在之前的代码中出现了许多 <code>lock</code> ，这是来管理并行。我们想要的是 <code>buffer</code> 只可以在同一时间被唯一个 CPU 使用。</p>
+<p>在 UART 中producer/consumser并发：</p>
+<p>producer （shell）可以一直写入数据，直到<strong>写指针 + 1等于读指针</strong>，因为这时，buffer 已经满了。当 buffer 满了的时候，producer 必须停止运行。我们之前在 uartputc 函数中看过，如果 buffer 满了，代码会 <code>sleep</code>，暂时搁置 Shell 并运行其他的进程。</p>
+<p>Interrupt handler，也就是 uartintr 函数，在这个场景下是 consumer ，每当有一个中断，并且读指针落后于写指针，uartintr 函数就会从读指针中读取一个字符再通过 UART 设备发送，并且将读指针加1。当读指针追上写指针，也就是两个指针相等的时候，buffer 为空，这时就不用做任何操作。</p>
+<h2 id="来自键盘的输出">来自键盘的输出</h2>
+<p>Shell 会通过调用 <code>read 函数</code> 从键盘中读取字符，而接着调用 <code>fileread 函数</code>，因为是外设中断，之后调用 <code>consoleread 函数</code> 和写类似。
+但是在这个场景下 Shell 变成了 <code>consumser</code>，因为 Shell 是从 buffer 中读取数据。而键盘是 <code>producer</code>，它将数据写入到 buffer 中。</p>
+<p>输入一个字符的：</p>
+<ol>
+<li>检测读指针和写指针是否一样，判断 buffer 是否为空，进程是否会 sleep。</li>
+<li>在 Shell 在打印完 <code>“$ ”</code> 之后，如果键盘没有输入，Shell 进程会 sleep，直到键盘有一个字符输入。</li>
+<li>所以在某个时间点，假设用户通过键盘输入了 <code>“l”</code>，这会导致“l”被发送到主板上的 UART 芯片，产生中断之后再被 PLIC 路由到某个 CPU 核，之后会触发 <code>devintr 函数</code>，<code>devintr</code> 可以发现这是一个 UART 中断，然后通过 <code>uartgetc 函数</code> 获取到相应的字符，之后再将字符传递给 <code>consoleintr 函数</code>。这里面有对 ASCII 码的应用（<code>#define C(x)  ((x)-'@')</code>  Control-x）。</li>
+</ol>
+<p>默认情况下，字符会通过 consputc，输出到 console 上给用户查看。之后，字符被存放在 buffer 中。在遇到换行符的时候，唤醒之前 sleep 的进程，也就是 Shell，再从 buffer 中将数据读出。</p>
+<p>所以这里也是通过buffer将consumer和producer之间解耦，这样它们才能按照自己的速度，独立的并行运行。如果某一个运行的过快了，那么buffer要么是满的要么是空的，consumer和producer其中一个会sleep并等待另一个追上来。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的文件系统</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的进程和线程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E9%94%81%E5%92%8C%E5%B9%B6%E8%A1%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的锁和并行</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6-%E4%B8%AD%E7%9A%84-trap/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6 中的 trap</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的内存虚拟化</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Example Person. All rights reserved.
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.24.1">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+   
+  :root {
+    --article-font-family: "Merriweather", var(--base-font-family);
+  }
+</style>
+
+<script>
+  (function () {
+    const customFont = document.createElement("link")
+    customFont.href =
+      "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+
+    customFont.type = "text/css"
+    customFont.rel = "stylesheet"
+
+    document.head.appendChild(customFont)
+  })()
+</script>
+
+    </body>
+</html>

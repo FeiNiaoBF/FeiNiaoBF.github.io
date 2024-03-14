@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="启动 xv6 当我们输入 make qeum 之后它会初始化自己并运行一个存储在只读内存中的引导加载程序（boot），CPU 从内存地址 0x80000000 （程序的起始位置）开始的: 1 2">
+<title>XV6的源码解析</title>
+
+<link rel='canonical' href='https://FeiNiaoBF.github.io/zh-cn/p/xv6%E7%9A%84%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/'>
+
+<link rel="stylesheet" href="/scss/style.min.d8118f156935b64eca93aca758476adca858d2c47354971654d9bd2933a0e45f.css"><meta property='og:title' content="XV6的源码解析">
+<meta property='og:description' content="启动 xv6 当我们输入 make qeum 之后它会初始化自己并运行一个存储在只读内存中的引导加载程序（boot），CPU 从内存地址 0x80000000 （程序的起始位置）开始的: 1 2">
+<meta property='og:url' content='https://FeiNiaoBF.github.io/zh-cn/p/xv6%E7%9A%84%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/'>
+<meta property='og:site_name' content='Yeelight の 小屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-03-10T16:35:17&#43;08:00'/><meta property='article:modified_time' content='2024-03-10T16:35:17&#43;08:00'/>
+<meta name="twitter:title" content="XV6的源码解析">
+<meta name="twitter:description" content="启动 xv6 当我们输入 make qeum 之后它会初始化自己并运行一个存储在只读内存中的引导加载程序（boot），CPU 从内存地址 0x80000000 （程序的起始位置）开始的: 1 2">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/zh-cn/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu22c762c923636fe3e0f29f976348b4e1_4912_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌞</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn">Yeelight の 小屋</a></h1>
+            <h2 class="site-description">简单是稳定的前提( •̀ ω •́ )✧</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/FeiNiaoBF'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/blog/' >
+                
+                
+                
+                    <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1710417924804" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2097" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 47.104c-253.952 0-460.8 184.32-460.8 409.6 0 186.368 141.312 346.112 333.824 393.216l126.976 126.976 126.976-126.976c192.512-49.152 333.824-206.848 333.824-393.216 0-225.28-206.848-409.6-460.8-409.6z m231.424 698.368c-43.008 26.624-90.112 47.104-143.36 57.344l-63.488 63.488-24.576 24.576-24.576-24.576-63.488-63.488c-53.248-10.24-100.352-30.72-143.36-57.344-102.4-63.488-167.936-169.984-167.936-288.768C112.64 260.096 290.816 102.4 512 102.4s399.36 159.744 399.36 354.304c0 118.784-67.584 225.28-167.936 288.768z" fill="#8a8a8a" p-id="2098"></path><path d="M733.184 460.8c-10.24 0-20.48 6.144-26.624 14.336-38.912 67.584-110.592 110.592-194.56 110.592-81.92 0-155.648-45.056-194.56-110.592-6.144-8.192-16.384-14.336-26.624-14.336-24.576 0-38.912 26.624-26.624 45.056 49.152 83.968 141.312 141.312 247.808 141.312 104.448 0 196.608-57.344 247.808-141.312 10.24-20.48-4.096-45.056-26.624-45.056z" fill="#8a8a8a" p-id="2099"></path></svg>
+                
+                <span>博客</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://FeiNiaoBF.github.io/en/" >English</option>
+                                
+                                    <option value="https://FeiNiaoBF.github.io/zh-cn/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#启动-xv6">启动 xv6</a></li>
+    <li><a href="#启动第一个进程">启动第一个进程</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/zh-cn/categories/linux/" >
+                Linux
+            </a>
+        
+            <a href="/zh-cn/categories/os/" >
+                OS
+            </a>
+        
+            <a href="/zh-cn/categories/xv6/" >
+                Xv6
+            </a>
+        
+            <a href="/zh-cn/categories/learning/" >
+                Learning
+            </a>
+        
+            <a href="/zh-cn/categories/source-code/" >
+                Source Code
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/p/xv6%E7%9A%84%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">XV6的源码解析</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 10, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 3 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="启动-xv6">启动 xv6</h2>
+<p>当我们输入 <code>make qeum</code> 之后它会初始化自己并运行一个存储在只读内存中的引导加载程序（boot），CPU 从内存地址 <code>0x80000000</code> （程序的起始位置）开始的:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nl">_entry</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="cp"># set up a stack for C.
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="cp"># stack0 is declared in start.c,
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="cp"># with a 4096-byte stack per CPU.
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="cp"># sp = stack0 + (hartid * 4096)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="n">la</span> <span class="n">sp</span><span class="p">,</span> <span class="n">stack0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">li</span> <span class="n">a0</span><span class="p">,</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">4</span>
+</span></span><span class="line"><span class="cl">    <span class="n">csrr</span> <span class="n">a1</span><span class="p">,</span> <span class="n">mhartid</span>
+</span></span><span class="line"><span class="cl">        <span class="n">addi</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">mul</span> <span class="n">a0</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">a1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">add</span> <span class="n">sp</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">a0</span>
+</span></span><span class="line"><span class="cl">    <span class="cp"># jump to start() in start.c
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="n">call</span> <span class="n">start</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>_entry</code> 的指令设置了一个栈区 (stack 0)，这样 xv6就可以运行 C 代码。Xv6在 <em>start. c</em>   文件中为初始栈  <code>stack0</code> 声明了空间。由于 RISC-V 上的栈是向下扩展的，所以 <code>_entry</code> 的代码将栈顶地址 <code>stack0+4096</code> 加载到栈顶指针寄存器 <code>sp</code> 中。现在内核有了栈区，<code>_entry</code> 便调用 C 代码 <code>start</code> 。在其中 <code>csrr a1, mhartid</code> 在地址0x8000000a 上，读取了控制系统寄存器（Control System Register）mhartid，并将结果加载到了 a1寄存器。我认为是在确定几号 CPU 在设置 stack。</p>
+<p>在 entry. S 中没有内存分页，没有中断，没有隔离等等一切都是那么的  <code>原始</code>   ，在 <code>start ()</code> 中其实就是在 M-mod (machine mode) 进行基础配置，它在寄存器 <code>mstatus</code> 中将先前的运行模式改为管理模式，并通过将 <code>main()</code> 函数的地址写入寄存器 <code>mepc</code> 将返回地址设为 <code>main</code>，它通过向页表寄存器 <code>satp</code> 写入0来在管理模式下禁用虚拟地址转换，并将所有的中断和异常委托给管理模式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">start</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// set M Previous Privilege mode to Supervisor, for mret.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">x</span> <span class="o">=</span> <span class="nf">r_mstatus</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">x</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">MSTATUS_MPP_MASK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">x</span> <span class="o">|=</span> <span class="n">MSTATUS_MPP_S</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">w_mstatus</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// set M Exception Program Counter to main, for mret.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// requires gcc -mcmodel=medany
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nf">w_mepc</span><span class="p">((</span><span class="n">uint64</span><span class="p">)</span><span class="n">main</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// disable paging for now.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nf">w_satp</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">......</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后，当做完这一切后，<code>mepc</code> 返回 main，并中断计时器，PC 改为 main 。
+在 <code>main()</code> 中执行一系列的初始化</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span><span class="p">(</span><span class="nf">cpuid</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">consoleinit</span><span class="p">();</span>  <span class="c1">// 初始化控制台
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">printfinit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;xv6 kernel is booting</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">kinit</span><span class="p">();</span>         <span class="c1">// 物理页面分配器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">kvminit</span><span class="p">();</span>       <span class="c1">// 内核页表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">kvminithart</span><span class="p">();</span>   <span class="c1">// 开启分页机制
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">procinit</span><span class="p">();</span>      <span class="c1">// 进程表初始化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">trapinit</span><span class="p">();</span>      <span class="c1">// trap向量表初始化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">trapinithart</span><span class="p">();</span>  <span class="c1">// 安装内核trap向量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">plicinit</span><span class="p">();</span>      <span class="c1">// 设置中断控制器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">plicinithart</span><span class="p">();</span>  <span class="c1">// 向 PLIC 询问设备中断
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">binit</span><span class="p">();</span>         <span class="c1">// buffer cache
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">iinit</span><span class="p">();</span>         <span class="c1">// inode table
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">fileinit</span><span class="p">();</span>      <span class="c1">// file table
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">virtio_disk_init</span><span class="p">();</span> <span class="c1">// emulated hard disk
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">userinit</span><span class="p">();</span>      <span class="c1">// first user process
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>   
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>初始化函数的调用顺序重要吗？
+重要，有些函数需要其他函数作为前置</p>
+</blockquote>
+<h2 id="启动第一个进程">启动第一个进程</h2>
+<p>着重说明 <code>userinit()</code> 他是利用了 <code>initcode. S</code> 来通过调用 <code>exec(init, argv)</code> 以达到一个用户进程的实现</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># exec(init, argv)
+</span></span><span class="line"><span class="cl">.globl start
+</span></span><span class="line"><span class="cl">start:
+</span></span><span class="line"><span class="cl">        la a0, init        # 第一个参数
+</span></span><span class="line"><span class="cl">        la a1, argv        # 第二个参数
+</span></span><span class="line"><span class="cl">        li a7, SYS_exec
+</span></span><span class="line"><span class="cl">        ecall              # 交给操作系统
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接着进入到 <code>syscall()</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">syscall</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">proc</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="nf">myproc</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">num</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">trapframe</span><span class="o">-&gt;</span><span class="n">a7</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span><span class="p">(</span><span class="n">num</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="nf">NELEM</span><span class="p">(</span><span class="n">syscalls</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">syscalls</span><span class="p">[</span><span class="n">num</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p</span><span class="o">-&gt;</span><span class="n">trapframe</span><span class="o">-&gt;</span><span class="n">a0</span> <span class="o">=</span> <span class="n">syscalls</span><span class="p">[</span><span class="n">num</span><span class="p">]();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">make</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">uint32</span><span class="p">)</span><span class="n">num</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;%d: syscall %s -&gt; %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">pid</span><span class="p">,</span> <span class="n">sys_name</span><span class="p">[</span><span class="n">num</span><span class="p">],</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">trapframe</span><span class="o">-&gt;</span><span class="n">a0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;%d %s: unknown sys call %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">p</span><span class="o">-&gt;</span><span class="n">pid</span><span class="p">,</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p</span><span class="o">-&gt;</span><span class="n">trapframe</span><span class="o">-&gt;</span><span class="n">a0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>syscalls[num]()</code> 是函数指针·数组，它去找 exec 的系统函数 <code>sys_exec</code> 从 exec 进入 init 函数，<code>init</code> 为用户内存设置好一些东西，如 console、标准输入、标准输出和利用子进程打开 <em>sh</em> 。ok，结束了。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的进程和线程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E9%94%81%E5%92%8C%E5%B9%B6%E8%A1%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的锁和并行</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6-%E4%B8%AD%E7%9A%84-trap/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6 中的 trap</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的内存虚拟化</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E9%80%9A%E8%BF%87-xv6-%E6%9D%A5%E5%AD%A6%E4%B9%A0%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fostep/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">通过 XV6 来学习操作系统(OSTEP)</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Example Person. All rights reserved.
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.24.1">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+   
+  :root {
+    --article-font-family: "Merriweather", var(--base-font-family);
+  }
+</style>
+
+<script>
+  (function () {
+    const customFont = document.createElement("link")
+    customFont.href =
+      "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+
+    customFont.type = "text/css"
+    customFont.rel = "stylesheet"
+
+    document.head.appendChild(customFont)
+  })()
+</script>
+
+    </body>
+</html>

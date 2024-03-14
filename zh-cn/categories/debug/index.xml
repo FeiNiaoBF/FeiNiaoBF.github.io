@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Debug on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/debug/</link>
+        <description>Recent content in Debug on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Sun, 10 Mar 2024 16:35:00 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/debug/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>XV6 的 gdb调试</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/xv6-%E7%9A%84-gdb%E8%B0%83%E8%AF%95/</link>
+        <pubDate>Sun, 10 Mar 2024 16:35:00 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/xv6-%E7%9A%84-gdb%E8%B0%83%E8%AF%95/</guid>
+        <description>&lt;h2 id=&#34;基础&#34;&gt;基础&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;利用 &lt;code&gt;tmux&lt;/code&gt; 来实现两个终端的同时运行，具体的学习可以&lt;a class=&#34;link&#34; href=&#34;https://101.lug.ustc.edu.cn/Ch04/#tmux&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;看这里&lt;/a&gt; 。&lt;/li&gt;
+&lt;li&gt;需要准备的工具。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-zsh&#34; data-lang=&#34;zsh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt-get update &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt-get upgrade
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt-get install git build-essential gdb-multiarch qemu-system-misc        &lt;span class=&#34;se&#34;&gt;\ &lt;/span&gt;       gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;在自己的 xv 6 目录下工作。&lt;/li&gt;
+&lt;li&gt;练习 GDB 的基本学习 &amp;ndash;&amp;gt; &lt;a class=&#34;link&#34; href=&#34;https://linuxtools-rst.readthedocs.io/zh-cn/latest/tool/gdb.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;这里&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;步骤&#34;&gt;步骤&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;进入 xv6 的工作目录  (对于我的)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-zsh&#34; data-lang=&#34;zsh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; ~/workspace/xv6-labs-2021
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;如下：
+&lt;img src=&#34;https://s2.loli.net/2023/11/29/CWyA7BolcYTSjwN.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34; xv6 的工作目录&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;用 &lt;code&gt;tmux&lt;/code&gt; 进入环境，分两个屏&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/12/02/UenKoWS8h2CIGAj.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+第一个输入 &lt;code&gt;make qemu-gdb&lt;/code&gt;  第二个输入 &lt;code&gt;gdb-multiarch&lt;/code&gt;
+&lt;img src=&#34;https://s2.loli.net/2023/12/02/pPy8eNamC9VgRB7.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+&lt;img src=&#34;https://s2.loli.net/2023/12/02/5SIylXBwPn2qYdc.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在第二中输入执行 &lt;code&gt;set architecture riscv:rv64&lt;/code&gt; 以调试 RISCV 架构，然后执行 &lt;code&gt;target remote localhost:26000&lt;/code&gt;（这里端口号要看 &lt;code&gt;make qemu-gdb&lt;/code&gt; 的输出）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/12/02/ZIw6R5UrmA4JWMo.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;(未做完)&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

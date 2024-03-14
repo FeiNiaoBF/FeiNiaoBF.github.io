@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="失败是成功之母 陷阱指令和系统调用 CPU 在运行中强利将控制权交给特殊的系统代码叫陷阱（trap），其中有三种用到了： 系统调用：syscall 当程序">
+<title>XV6 中的 trap</title>
+
+<link rel='canonical' href='https://FeiNiaoBF.github.io/zh-cn/p/xv6-%E4%B8%AD%E7%9A%84-trap/'>
+
+<link rel="stylesheet" href="/scss/style.min.d8118f156935b64eca93aca758476adca858d2c47354971654d9bd2933a0e45f.css"><meta property='og:title' content="XV6 中的 trap">
+<meta property='og:description' content="失败是成功之母 陷阱指令和系统调用 CPU 在运行中强利将控制权交给特殊的系统代码叫陷阱（trap），其中有三种用到了： 系统调用：syscall 当程序">
+<meta property='og:url' content='https://FeiNiaoBF.github.io/zh-cn/p/xv6-%E4%B8%AD%E7%9A%84-trap/'>
+<meta property='og:site_name' content='Yeelight の 小屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-03-10T16:35:36&#43;08:00'/><meta property='article:modified_time' content='2024-03-10T16:35:36&#43;08:00'/>
+<meta name="twitter:title" content="XV6 中的 trap">
+<meta name="twitter:description" content="失败是成功之母 陷阱指令和系统调用 CPU 在运行中强利将控制权交给特殊的系统代码叫陷阱（trap），其中有三种用到了： 系统调用：syscall 当程序">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/zh-cn/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu22c762c923636fe3e0f29f976348b4e1_4912_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌞</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn">Yeelight の 小屋</a></h1>
+            <h2 class="site-description">简单是稳定的前提( •̀ ω •́ )✧</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/FeiNiaoBF'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/blog/' >
+                
+                
+                
+                    <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1710417924804" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2097" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 47.104c-253.952 0-460.8 184.32-460.8 409.6 0 186.368 141.312 346.112 333.824 393.216l126.976 126.976 126.976-126.976c192.512-49.152 333.824-206.848 333.824-393.216 0-225.28-206.848-409.6-460.8-409.6z m231.424 698.368c-43.008 26.624-90.112 47.104-143.36 57.344l-63.488 63.488-24.576 24.576-24.576-24.576-63.488-63.488c-53.248-10.24-100.352-30.72-143.36-57.344-102.4-63.488-167.936-169.984-167.936-288.768C112.64 260.096 290.816 102.4 512 102.4s399.36 159.744 399.36 354.304c0 118.784-67.584 225.28-167.936 288.768z" fill="#8a8a8a" p-id="2098"></path><path d="M733.184 460.8c-10.24 0-20.48 6.144-26.624 14.336-38.912 67.584-110.592 110.592-194.56 110.592-81.92 0-155.648-45.056-194.56-110.592-6.144-8.192-16.384-14.336-26.624-14.336-24.576 0-38.912 26.624-26.624 45.056 49.152 83.968 141.312 141.312 247.808 141.312 104.448 0 196.608-57.344 247.808-141.312 10.24-20.48-4.096-45.056-26.624-45.056z" fill="#8a8a8a" p-id="2099"></path></svg>
+                
+                <span>博客</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://FeiNiaoBF.github.io/en/" >English</option>
+                                
+                                    <option value="https://FeiNiaoBF.github.io/zh-cn/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#陷阱指令和系统调用">陷阱指令和系统调用</a>
+      <ol>
+        <li><a href="#risc--v-trup-机利">RISC -V trup 机利</a></li>
+      </ol>
+    </li>
+    <li><a href="#ecall-指令">ECALL 指令</a>
+      <ol>
+        <li><a href="#总结">总结</a></li>
+      </ol>
+    </li>
+    <li><a href="#uservec-指令">USERVEC 指令</a></li>
+    <li><a href="#usertrap-函数">USERTRAP 函数</a></li>
+    <li><a href="#usertrapret-函数">USERTRAPRET 函数</a></li>
+    <li><a href="#userret-函数">USERRET 函数</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/zh-cn/categories/linux/" >
+                Linux
+            </a>
+        
+            <a href="/zh-cn/categories/os/" >
+                OS
+            </a>
+        
+            <a href="/zh-cn/categories/xv6/" >
+                Xv6
+            </a>
+        
+            <a href="/zh-cn/categories/learning/" >
+                Learning
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/p/xv6-%E4%B8%AD%E7%9A%84-trap/">XV6 中的 trap</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 10, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 5 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p>失败是成功之母</p>
+</blockquote>
+<h2 id="陷阱指令和系统调用">陷阱指令和系统调用</h2>
+<p>CPU 在运行中强利将控制权交给特殊的系统代码叫陷阱（trap），其中有三种用到了：</p>
+<ol>
+<li>系统调用：<strong>syscall</strong> 当程序执行 <strong>ecall</strong> 时。</li>
+<li>异常：指令做了非法。如除0。</li>
+<li>设备中断系统进行1设备 <strong>I/O</strong>。</li>
+</ol>
+<p>我们希望陷阱是透明的，在程序中中断是难以预料的
+一般的顺序：</p>
+<ol>
+<li>trap 强制控制权交予内核。</li>
+<li>内核保护寄存器、内存等其它。</li>
+<li>内核处理中断程序。</li>
+<li>内核恢复之前保存的状态。</li>
+<li>返回并重新恢复代码。</li>
+</ol>
+<p><img src="https://s2.loli.net/2023/12/24/c45jWnMR1Xs2xH7.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<blockquote>
+<p>注：陷阱是由 CPU 上运行的当前进程导致的（其实不够准确），中断是由外部设备导致的。</p>
+</blockquote>
+<h3 id="risc--v-trup-机利">RISC -V trup 机利</h3>
+<p>用户态转到内核态
+<img src="https://s2.loli.net/2023/12/24/9S7tflqZ5JGpjMg.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>其中 <code>vm.c</code> 的工作是：<img src="https://s2.loli.net/2023/12/24/9S7tflqZ5JGpjMg.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="9S7tflqZ5JGpjMg.png"
+	
+	
+></p>
+<h2 id="ecall-指令">ECALL 指令</h2>
+<p>首先应该知道的是：</p>
+<ul>
+<li>ecall 指令并不会<strong>切换 page table</strong>。</li>
+<li>将控制权交到<strong>内核 mode</strong>。</li>
+<li>将 PC 走到 <strong><code>trampoline page</code> 的地址</strong>（STVEC）。</li>
+<li>将 PC 原来的值存到 <strong>SEPC 寄存器</strong>。</li>
+<li><code>ecall</code> 会跳转到 <strong>STVEC 寄存器</strong> 指向的指令。</li>
+</ul>
+<p>之后待处理的事情：</p>
+<ul>
+<li>目前还在 user page table.需要到 Kernel</li>
+<li>保（小心）保存32个用户寄存器</li>
+<li>需要 kernel stack</li>
+<li>跳转到内核中合理的 C 代码位置</li>
+</ul>
+<h3 id="总结">总结</h3>
+<blockquote>
+<p>ecall 就是陷入 trap 陷阱的入口</p>
+</blockquote>
+<p>注意：至少在 XV6中，有以下几个寄存器需要注意：</p>
+<blockquote>
+<p>仅在 trap 中有用的寄存器。（待勘误）</p>
+</blockquote>
+<ul>
+<li><strong>stvec</strong> ：保存 trap 处理程序的地址。</li>
+<li><strong>sepc</strong> ： 保存进入 trap 之前的 PC。 <code>sret</code> 在之后返还给 PC。</li>
+<li><strong>scause</strong> ：描述进入 trap 类型（原因）的（数字）数据。</li>
+<li><strong>sscratch</strong> ：保存 <code>trapframe page</code> 的地址值。</li>
+<li><strong>sstatus</strong> ： trap 的位控制信息，其中有 <code>SIE</code>、<code>SPP</code> 等信息。</li>
+</ul>
+<h2 id="uservec-指令">USERVEC 指令</h2>
+<p>在 ecall 指令之后，代码的地址由 <strong>user process</strong> 到 <strong>trampoline pages</strong> 地址 <code>PC &lt;--- stvec</code>。</p>
+<p>由于 RISC-V 硬件在 trap 中不会切换页表，所以在 <code>User page table</code> 中存在 <code>trampoline page</code> 的虚拟地址（在 page table 的后面），而 <code>Kernal page table</code> 也是一样的 <code>mapping</code>。</p>
+<p>为了保存 <strong>32个用户寄存器</strong>，我们必须需要足够的内存空间。</p>
+<ol>
+<li>
+<p>不可以使用用户空间！
+因为我们不确定用户进程是否使用了栈，是否有足够的页表来可以用。是否有足够的空间来保存。</p>
+</li>
+<li>
+<p>不可以使用内核空间！（有使用的机器）:
+因为我们在 trap 开始时不清楚 <code>kernel page table</code> 的地址，而且我们需要使用 <strong>SATP 寄存器</strong> 指向内核页表，这需要空闲寄存器（如： a0）。但是在此时，用户进程再用 a0 等寄存器。</p>
+</li>
+</ol>
+<p>因此，我们需要一个特定的 page — <strong>trapframe page</strong></p>
+<p>在之前内核就为每个用户页表 mapping 了这个 page。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">// 每个用户空间都有的
+</span></span><span class="line"><span class="cl">Ox3FFFFFE000      // TRAPFRAME
+</span></span><span class="line"><span class="cl">0x3FFFFFF000      // TRAPOLINE
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>trapframe page</code> 有许多有趣的数据：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="err">0</span>  <span class="err">------</span> <span class="nf">Kernel_satp</span>         <span class="c1">// kemnel page table
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">8</span>  <span class="err">------</span> <span class="nf">kernel_sp</span>           <span class="c1">// top of process＇s kennel stack
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">16</span> <span class="err">------</span> <span class="nf">kernel_trap</span>         <span class="c1">// usertrap（）address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">24</span> <span class="err">------</span> <span class="nf">epc</span>                 <span class="c1">// saved user program counter
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">32</span> <span class="err">------</span> <span class="nf">kernel_hartid</span>       <span class="c1">// saved kernel tp
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>RISC-V 利用 <code>csrrw</code>（可 sawp 指令）将 sscratch（存有 <code>trapframe page</code> 地址）和 <strong>a0 寄存器</strong> 交换，接下来就是根据 <code>a0+offset</code> 来 <code>sb rd, offset(a0)</code>  完成用户寄存器的保存。
+接下是使用 <code>t0</code> 来保存 <code>a0</code>。</p>
+<p>然后，uservec 做完大部分的任务了，接下来是取出前5个（不一定都要）数据调用 <code>usertrup()</code> 。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">ld</span> <span class="no">sp</span><span class="err">，</span><span class="mi">8</span><span class="p">(</span><span class="no">a0</span><span class="p">)</span>            <span class="err">＃</span><span class="mi">0x3fffffc000</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 将内核的SP出，取出，指向kernel stack最顶端
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">ld</span> <span class="no">tp</span><span class="err">，</span><span class="mi">32</span><span class="p">(</span><span class="no">a0</span><span class="p">)</span>           <span class="err">＃</span> <span class="no">OxO</span> <span class="p">(</span><span class="err">单核</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 将当前运行进程的CPU核编号取出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">ld</span> <span class="no">t0</span><span class="err">，</span><span class="mi">16</span><span class="p">(</span><span class="no">ao</span><span class="p">)</span>           <span class="c1"># usererap()
+</span></span></span><span class="line"><span class="cl"><span class="c1"># 将 usertrap() 函数的地址写入 t0 寄存器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">ld</span> <span class="no">t1</span><span class="err">，</span><span class="mi">0</span><span class="p">(</span><span class="no">a0</span><span class="p">)</span>            <span class="c1"># kernel page table
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">＃</span> <span class="err">将</span> <span class="nf">kernel</span> <span class="no">page</span> <span class="no">table</span> <span class="err">地址写入</span> <span class="no">t1</span> <span class="err">寄存器</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">csrw</span> <span class="no">satp</span><span class="err">，</span><span class="no">t1</span>           <span class="err">＃</span> <span class="err">注意是单向交换</span> <span class="no">sutp</span> <span class="err">&lt;</span><span class="p">-</span> <span class="no">t1</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 将 SATP 和 t1 交换, 接下来的地址是为于 Kernel page table 中映射的。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">sfence.vma</span> <span class="no">zero</span><span class="err">，</span><span class="no">zero</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 清空TLB
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">jr</span> <span class="no">t0</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 跳到usertrap（），执行usertrop（）
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>注：trampoline page 的地址映射在用户和内核的映射是相同</p>
+</blockquote>
+<p>小结：
+使用汇编的 <strong>uservec 函数</strong> 可以 <strong>更细粒度的控制</strong> 和 <strong>更高的性能</strong>、寄存器是粒度的，需要精确控制；利用映射相同可以“<strong><em>无痕</em></strong>”完成转化换页表。</p>
+<h2 id="usertrap-函数">USERTRAP 函数</h2>
+<p>OK。
+我们正式进入 trap，这个 C 函数的主要功能是确定进程进入 trap 的原因，并以确定相应的处理方式</p>
+<ol>
+<li>
+<p>更改 <code>stvec</code> 寄存器。
+这一做法取决于 trap 是由用户空间还是内核空间陷入的，将 <code>stvec</code> 指向内核页表，确保 trap 在内核中处理（如果 kernel 使用 trap，那就一直在内核页表，不必做多余操作，但有其他操作）。</p>
+</li>
+<li>
+<p>找到当前的进程。
+根据此时 CPU 核（tp 寄存器）来找当前在 tp 上运行的进程。</p>
+</li>
+<li>
+<p>保存用户程序计数器（之前存在 <code>sepc</code> 中）。
+这么做的原因是，trap 在执行中可能切换到另一个进程，然后可能再调用 <strong>ecall</strong> 导致 <code>sepc</code> 寄存器被覆盖。</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">p</span><span class="o">-&gt;</span><span class="n">traptrame</span><span class="o">-&gt;</span><span class="n">epc</span> <span class="o">=</span> <span class="n">r</span><span class="o">-</span><span class="nf">sepc</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>知道 trap 的原因。
+根据触发 trap 的原因，<code>scause寄存器</code> 会有不同的数字如果值为 <code>8</code>，则是 <code>“systsm call”</code>，然后进入过系统调用的有关操作。</li>
+</ol>
+<blockquote>
+<ol>
+<li>检查是否有其他进程 <code>Kill</code> 当前进程</li>
+<li>对于保存在 <code>epc</code>的用户 PC+4</li>
+<li>打开中断，为系统调用作中断</li>
+<li>调用 syscallc ()</li>
+</ol>
+</blockquote>
+<p>syscall 函数从表单中寻找系统调用编号，保护在 trap 里 a7中，（a0, a1, a2&hellip; &hellip;为参数, a0 一般是返回值）。最后返回，调用 <code>usertrapret</code> 。</p>
+<h2 id="usertrapret-函数">USERTRAPRET 函数</h2>
+<p>在返回内用户空间之前，内核需要做的工作：此时，我们的 <code>stvec</code> 指向内核空间 trap 的处理代码。现在关闭中断，并更新 <code>stvec</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">w_stvec</span><span class="p">(</span><span class="n">TRAMPOLINE</span> <span class="o">+</span> <span class="p">(</span><span class="n">uservec</span><span class="o">-</span><span class="n">trampoline</span><span class="p">));</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最终执行 sret 指令在再重新打开中断。之后，填入 <code>trapframe</code> 内容（前4个）为之后用户下一次转到内核做准备。</p>
+<p>设置sstatus寄存器，控制寄存器</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>bit</th>
+<th>0</th>
+<th>1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPP</td>
+<td>sret 返回 user</td>
+<td>sret 返回supervisor</td>
+</tr>
+<tr>
+<td>SPIE</td>
+<td>不打开中断</td>
+<td>打开中断</td>
+</tr>
+</tbody>
+</table></div>
+<p>将 <code>epc-&gt;sepc</code>，设置成用户 PC 的值</p>
+<p>生成userret函数的参数和地址</p>
+<p><strong>fn</strong> :    trampeline 基础址 + 偏移量
+<strong>a0</strong> :   trapframe 基址
+<strong>a1</strong> :   user page table 基址</p>
+<h2 id="userret-函数">USERRET 函数</h2>
+<p>返回用户汇编代码</p>
+<ol>
+<li>
+<p>切换用户 page table.
+将参数 <code>a1</code> 传给 <code>satp</code>。（不出问题是因为trap映射一样）</p>
+</li>
+<li>
+<p>根据 <code>trapframe</code>（a0参数）恢复寄存器。将 <code>trapframe</code> 传给 <code>t0</code> 再传给 <code>sscratch</code> 。</p>
+</li>
+<li>
+<p>将 <code>trapframe</code> 中 <code>a0</code>（保存着系统调用的返回值）传给 <code>a0</code> 寄存器。</p>
+</li>
+<li>
+<p><strong>sret</strong>
+切换回 <strong>user mode</strong>，PC 拷贝 SEPC（之前 PC+4），重新打开中断。</p>
+</li>
+</ol>
+<p>总结：
+trap 的系统调用为了保持隔离性，做得十分复杂。有些操作为了追求精细化用了汇编语言。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的进程和线程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E9%94%81%E5%92%8C%E5%B9%B6%E8%A1%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的锁和并行</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的内存虚拟化</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的源码解析</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/%E9%80%9A%E8%BF%87-xv6-%E6%9D%A5%E5%AD%A6%E4%B9%A0%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fostep/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">通过 XV6 来学习操作系统(OSTEP)</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Example Person. All rights reserved.
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.24.1">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+   
+  :root {
+    --article-font-family: "Merriweather", var(--base-font-family);
+  }
+</style>
+
+<script>
+  (function () {
+    const customFont = document.createElement("link")
+    customFont.href =
+      "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+
+    customFont.type = "text/css"
+    customFont.rel = "stylesheet"
+
+    document.head.appendChild(customFont)
+  })()
+</script>
+
+    </body>
+</html>

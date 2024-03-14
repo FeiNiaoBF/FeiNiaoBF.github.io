@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="该笔记以OSTEP 为主体 操作系统有以下四个主要的主题（来自 OSTEP），我将从四个主题慢慢钻研 CPU 虚拟化 内存虚拟化 并发 持久性 CPU 虚拟化 什么是进程">
+<title>通过 XV6 来学习操作系统(OSTEP)</title>
+
+<link rel='canonical' href='https://FeiNiaoBF.github.io/zh-cn/p/%E9%80%9A%E8%BF%87-xv6-%E6%9D%A5%E5%AD%A6%E4%B9%A0%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fostep/'>
+
+<link rel="stylesheet" href="/scss/style.min.d8118f156935b64eca93aca758476adca858d2c47354971654d9bd2933a0e45f.css"><meta property='og:title' content="通过 XV6 来学习操作系统(OSTEP)">
+<meta property='og:description' content="该笔记以OSTEP 为主体 操作系统有以下四个主要的主题（来自 OSTEP），我将从四个主题慢慢钻研 CPU 虚拟化 内存虚拟化 并发 持久性 CPU 虚拟化 什么是进程">
+<meta property='og:url' content='https://FeiNiaoBF.github.io/zh-cn/p/%E9%80%9A%E8%BF%87-xv6-%E6%9D%A5%E5%AD%A6%E4%B9%A0%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fostep/'>
+<meta property='og:site_name' content='Yeelight の 小屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-03-10T16:34:46&#43;08:00'/><meta property='article:modified_time' content='2024-03-10T16:34:46&#43;08:00'/>
+<meta name="twitter:title" content="通过 XV6 来学习操作系统(OSTEP)">
+<meta name="twitter:description" content="该笔记以OSTEP 为主体 操作系统有以下四个主要的主题（来自 OSTEP），我将从四个主题慢慢钻研 CPU 虚拟化 内存虚拟化 并发 持久性 CPU 虚拟化 什么是进程">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/zh-cn/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu22c762c923636fe3e0f29f976348b4e1_4912_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌞</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn">Yeelight の 小屋</a></h1>
+            <h2 class="site-description">简单是稳定的前提( •̀ ω •́ )✧</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/FeiNiaoBF'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/blog/' >
+                
+                
+                
+                    <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1710417924804" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2097" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 47.104c-253.952 0-460.8 184.32-460.8 409.6 0 186.368 141.312 346.112 333.824 393.216l126.976 126.976 126.976-126.976c192.512-49.152 333.824-206.848 333.824-393.216 0-225.28-206.848-409.6-460.8-409.6z m231.424 698.368c-43.008 26.624-90.112 47.104-143.36 57.344l-63.488 63.488-24.576 24.576-24.576-24.576-63.488-63.488c-53.248-10.24-100.352-30.72-143.36-57.344-102.4-63.488-167.936-169.984-167.936-288.768C112.64 260.096 290.816 102.4 512 102.4s399.36 159.744 399.36 354.304c0 118.784-67.584 225.28-167.936 288.768z" fill="#8a8a8a" p-id="2098"></path><path d="M733.184 460.8c-10.24 0-20.48 6.144-26.624 14.336-38.912 67.584-110.592 110.592-194.56 110.592-81.92 0-155.648-45.056-194.56-110.592-6.144-8.192-16.384-14.336-26.624-14.336-24.576 0-38.912 26.624-26.624 45.056 49.152 83.968 141.312 141.312 247.808 141.312 104.448 0 196.608-57.344 247.808-141.312 10.24-20.48-4.096-45.056-26.624-45.056z" fill="#8a8a8a" p-id="2099"></path></svg>
+                
+                <span>博客</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://FeiNiaoBF.github.io/en/" >English</option>
+                                
+                                    <option value="https://FeiNiaoBF.github.io/zh-cn/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#什么是进程">什么是进程?</a>
+      <ol>
+        <li><a href="#进程的一般函数">进程的一般函数</a></li>
+      </ol>
+    </li>
+    <li><a href="#操作系统的机制">操作系统的机制</a></li>
+    <li><a href="#进程加载">进程加载</a></li>
+    <li><a href="#进程状态">进程状态</a></li>
+    <li><a href="#进程-api">进程 API</a></li>
+    <li><a href="#操作系统隔离性isolation">操作系统隔离性（isolation）</a>
+      <ol>
+        <li><a href="#userkernel-mode-切换">User/Kernel mode 切换</a></li>
+      </ol>
+    </li>
+    <li><a href="#调度算法">调度算法</a>
+      <ol>
+        <li><a href="#fifo">FIFO</a></li>
+        <li><a href="#sjf">SJF</a></li>
+        <li><a href="#stcf">STCF</a></li>
+        <li><a href="#轮转-rr">轮转 RR</a></li>
+        <li><a href="#多级反馈队列-mlfq">多级反馈队列 MLFQ</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#地址空间">地址空间</a>
+      <ol>
+        <li><a href="#内存操作-api">内存操作 API</a></li>
+        <li><a href="#分段">分段</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#threads">Threads</a>
+          <ol>
+            <li><a href="#critical-section">Critical section</a></li>
+            <li><a href="#原子性">原子性</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/zh-cn/categories/linux/" >
+                Linux
+            </a>
+        
+            <a href="/zh-cn/categories/os/" >
+                OS
+            </a>
+        
+            <a href="/zh-cn/categories/xv6/" >
+                Xv6
+            </a>
+        
+            <a href="/zh-cn/categories/learning/" >
+                Learning
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/p/%E9%80%9A%E8%BF%87-xv6-%E6%9D%A5%E5%AD%A6%E4%B9%A0%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fostep/">通过 XV6 来学习操作系统(OSTEP)</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 10, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 5 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>该笔记以OSTEP 为主体</p>
+<p>操作系统有以下四个主要的主题（来自 OSTEP），我将从四个主题慢慢钻研</p>
+<ul>
+<li>CPU 虚拟化</li>
+<li>内存虚拟化</li>
+<li>并发</li>
+<li>持久性</li>
+</ul>
+<h1 id="cpu-虚拟化">CPU 虚拟化</h1>
+<h2 id="什么是进程">什么是进程?</h2>
+<p>非正式（我认为）的说，<code>Process</code> 是指正在 CPU 中进行执行操作的程序，其中又包括着该程序需要的资源，即：内存、堆栈、读写的数据等。</p>
+<blockquote>
+<p>为什么需要进程？</p>
+</blockquote>
+<p>人们常常希望计算机可以同时运行多个程序。比如：在使用计算机或者笔记本的时候，我们会同时运行浏览器、邮件、游戏、音乐播放器等等。实际上，一个正常的系统可能会有上百个进程同时在运行。如果能实现这样的系统，人们就不需要考虑这个时候哪一个 CPU 是可用的，使用起来非常简单。因此我们需要解决的问题是：怎么实现同时运行？</p>
+<h3 id="进程的一般函数">进程的一般函数</h3>
+<p>[[fork() 函数]]</p>
+<h2 id="操作系统的机制">操作系统的机制</h2>
+<p>机制是指在操作系统中的一些低级方法或协议来实现所需的功能。例如：context switch （上下文切换），这是一种分时机制（time sharing）。</p>
+<p>还有一种是高级智能称作策略，是对操作系统内做出某种决定的算法。</p>
+<h2 id="进程加载">进程加载</h2>
+<p>在早期的（或简单的）操作系统中，加载过程尽早（eagerly）完成，即在运行程序之前全部完成。现代操作系统惰性（lazily）执行该过程，即仅在程序执行期间需要加载的代码或数据片段，才会加载。</p>
+<h2 id="进程状态">进程状态</h2>
+<ul>
+<li><strong>运行（running）</strong>：在运行状态下，进程正在处理器上运行。这意味着它正在执行指令。</li>
+<li><strong>就绪（ready）</strong>：在就绪状态下，进程已准备好运行，但由于某种原因，操作系统选择不在此时运行。</li>
+<li><strong>阻塞（blocked）</strong>：在阻塞状态下，一个进程执行了某种操作，直到发生其他事件时才会准备运行。一个常见的例子是，当进程向磁盘发起 I/O 请求时，它会被阻塞，因此其他进程可以使用处理器。</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/07/09/auLEzkS2MKBCmp4.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="process"
+	
+	
+></p>
+<h2 id="进程-api">进程 API</h2>
+<p>在现代的操作系统上，都为开发者或使用者提供了以下五类的 API</p>
+<ul>
+<li><strong>创建（create）</strong>：操作系统必须包含一些创建新进程的方法。在 shell 中键入命令或双击应用程序图标时，会调用操作系统来创建新进程，运行指定的程序。</li>
+<li><strong>销毁（destroy</strong>）：由于存在创建进程的接口，因此系统还提供了一个强制销毁进程的接口。当然，很多进程会在运行完成后自行退出。但是，如果它们不退出，用户可能希望终止它们，因此停止失控进程的接口非常有用。</li>
+<li><strong>等待（wait）</strong>：有时等待进程停止运行是有用的，因此经常提供某种等待接口。</li>
+<li><strong>其他控制（miscellaneous control）</strong>：除了杀死或等待进程外，有时还可能有其他控制。例如，大多数操作系统提供某种方法来暂停进程（停止运行一段时间），然后恢复（继续运行）。</li>
+<li><strong>状态（statu）</strong>：通常也有一些接口可以获得有关进程的状态信息，例如运行了多长时间，或者处于什么状态。</li>
+</ul>
+<h2 id="操作系统隔离性isolation">操作系统隔离性（isolation）</h2>
+<ol>
+<li>进程本身不是 CPU，但是它们对应了 CPU，它们使得你可以在 CPU 上运行计算任务。所以你懂的，<strong>应用程序不能直接与 CPU 交互，只能与进程交互</strong>。</li>
+</ol>
+<blockquote>
+<p>CPU 一个核运行一个进程并运行一段时间，后换另一个进程再运行一段时间</p>
+</blockquote>
+<ol start="2">
+<li>
+<p>exec 抽象了内存，使得应用程序可以在有限且“封闭”的空间运行。</p>
+</li>
+<li>
+<p>Files 基本上来说抽象了磁盘，利用 File 数据结构来对 dick 中的块进行的读写操作</p>
+</li>
+</ol>
+<p>Q.在权限切换的时候，如果设置那个 bit 位的指令必须是特殊权限指令，但是因为应用程序不应该能够设置那个 bit 到 kernel mode（即‘0’），应用程序不可以运行各种特殊权限指令了。所以那个 bit 是被保护的。
+我的问题：那么，当应用程序正在使用 user mode 的时候这时会将控制权限从 user mode 切换到 kernel mode，是谁在将 bit 切换到 0（即 kernel mode）?
+A.我认为：在这个过程中，控制权从用户模式切换到内核模式，而这是由 CPU 内部的特权级 (machine mode???  BIOS??？)机制来控制的。</p>
+<p><img src="https://s2.loli.net/2023/12/02/t3qMXbhoLym165E.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Hi"
+	
+	
+></p>
+<blockquote>
+<p>举个例子，不论是 Shell 还是其他的应用程序，当它在用户空间执行 fork 时，它并不是直接调用操作系统中对应的函数，而是调用 ECALL 指令，并将 fork 对应的数字作为参数传给 ECALL。之后再通过 ECALL 跳转到内核。</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">user.frok() ---&gt;&gt; ECALL syscall() ---&gt;&gt; kernel.frok()
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Q.在 Linux 中的 root 有全部的特权吗？
+A.不会，只有特定的特权, 比一般的 user 多。</p>
+<h3 id="userkernel-mode-切换">User/Kernel mode 切换</h3>
+<p>我们可以认为 user/kernel mode 是分隔用户空间和内核空间的边界，用户空间运行的程序运行在 user mode，内核空间的程序运行在 kernel mode。操作系统位于内核空间</p>
+<h2 id="调度算法">调度算法</h2>
+<blockquote>
+<p>鱼与熊掌不可兼得</p>
+</blockquote>
+<p>当我们在工作时间段的时候，我通常要进行资源和时间等的<strong>合理分配</strong>这是一个在现实生活中常见的管理模式，对于操作系统来说，如何管理 CPU 的资源分配是主要目的。</p>
+<p>我们了解了 <strong>context</strong> 的作用，即再：将要切换正在运行 CPU 上的进程时，必须先从寄存器存储目前进程的状态（内存、寄存器、指令、PC 等等）存出来内存中，再将欲执行的进程之状态读回 CPU，把进程的使用空间存来寄存器中。</p>
+<h3 id="fifo">FIFO</h3>
+<p>先进先出的模式，对这个模式有个前提“进程进来的时间相同和运行时间相同”，</p>
+<h3 id="sjf">SJF</h3>
+<h3 id="stcf">STCF</h3>
+<h3 id="轮转-rr">轮转 RR</h3>
+<h3 id="多级反馈队列-mlfq">多级反馈队列 MLFQ</h3>
+<p><a class="link" href="https://www.zhihu.com/question/313869609"  target="_blank" rel="noopener"
+    >批处理计算与流处理计算的区别是什么</a></p>
+<p>[[并发和并行]]</p>
+<h1 id="内存虚拟化">内存虚拟化</h1>
+<blockquote>
+<p>它们是“隐形”的</p>
+</blockquote>
+<h2 id="地址空间">地址空间</h2>
+<h3 id="内存操作-api">内存操作 API</h3>
+<blockquote>
+<p>一些在 c 语言中常见的 API</p>
+</blockquote>
+<ul>
+<li><code>malloc(size_t)</code></li>
+<li><code>free(void*)</code></li>
+<li><code>calloc()</code></li>
+<li><code>realloc()</code></li>
+</ul>
+<p><em><strong>忘记释放内存</strong></em>
+这是一个很糟糕的情况</p>
+<p><em><strong>使用自己的内存</strong></em></p>
+<h3 id="分段">分段</h3>
+<blockquote>
+<p>怎样支持大地址空间？</p>
+</blockquote>
+<h1 id="线程虚拟化">线程虚拟化</h1>
+<p>并发是指多个任务在同一时间段内交替执行，这些任务之间可能会有时间上的重叠，但并不一定是同时执行的。
+在并发中，任务之间可能会通过时间片轮转或者事件驱动的方式来实现交替执行。</p>
+<p>并行是指多个任务在同一时刻同时执行，通常需要多个处理单元（比如多核处理器或者多个计算节点）来实现。
+在并行中，多个任务可以同时进行，互相之间不会有时间上的重叠。</p>
+<h3 id="threads">Threads</h3>
+<p>一个工人做所有工作和两个（或多个）工人做所有工作的区别。安排时间表，轮班工作</p>
+<h4 id="critical-section">Critical section</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl">    <span class="err">11</span><span class="nl">dd:</span>   <span class="err">8</span><span class="nf">b</span> <span class="mi">05</span> <span class="mi">31</span> <span class="mi">2</span><span class="no">e</span> <span class="mi">00</span> <span class="mi">00</span>       <span class="no">mov</span>    <span class="mi">0x2e31</span><span class="p">(</span><span class="nv">%rip</span><span class="p">),</span><span class="nv">%eax</span>    
+</span></span><span class="line"><span class="cl">    <span class="mi">11</span><span class="no">e3</span><span class="p">:</span>   <span class="mi">83</span> <span class="no">c0</span> <span class="mi">01</span>                <span class="no">add</span>    <span class="no">$0x1</span><span class="p">,</span><span class="nv">%eax</span>
+</span></span><span class="line"><span class="cl">    <span class="err">11</span><span class="nl">e6:</span>   <span class="err">89</span> <span class="err">05</span> <span class="err">28</span> <span class="err">2</span><span class="nf">e</span> <span class="mi">00</span> <span class="mi">00</span>       <span class="no">mov</span>    <span class="nv">%eax</span><span class="p">,</span><span class="mi">0x2e28</span><span class="p">(</span><span class="nv">%rip</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="原子性">原子性</h4>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的进程和线程</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E9%94%81%E5%92%8C%E5%B9%B6%E8%A1%8C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的锁和并行</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6-%E4%B8%AD%E7%9A%84-trap/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6 中的 trap</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的内存虚拟化</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/zh-cn/p/xv6%E7%9A%84%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">XV6的源码解析</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Example Person. All rights reserved.
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.24.1">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+   
+  :root {
+    --article-font-family: "Merriweather", var(--base-font-family);
+  }
+</style>
+
+<script>
+  (function () {
+    const customFont = document.createElement("link")
+    customFont.href =
+      "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+
+    customFont.type = "text/css"
+    customFont.rel = "stylesheet"
+
+    document.head.appendChild(customFont)
+  })()
+</script>
+
+    </body>
+</html>

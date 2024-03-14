@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Tags on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/tags/</link>
+        <description>Recent content in Tags on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Thu, 14 Mar 2024 21:48:19 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>CSAPP</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/tags/csapp/</link>
+        <pubDate>Thu, 14 Mar 2024 21:48:19 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/tags/csapp/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Internet</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/tags/internet/</link>
+        <pubDate>Fri, 10 Mar 2023 21:08:35 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/tags/internet/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Bit</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/tags/bit/</link>
+        <pubDate>Thu, 10 Nov 2022 21:04:43 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/tags/bit/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
+</rss>

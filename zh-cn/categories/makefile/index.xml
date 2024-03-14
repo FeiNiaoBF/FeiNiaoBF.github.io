@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>MakeFile on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/makefile/</link>
+        <description>Recent content in MakeFile on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Mon, 24 Apr 2023 19:08:45 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/makefile/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>MakeFile使用笔记</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/makefile%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Mon, 24 Apr 2023 19:08:45 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/makefile%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;h1 id=&#34;makefile的编译和连接&#34;&gt;MakeFile的编译和连接&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;对于大量的c语言文件一个很好的自动化工具,其实可以用到任何语言&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;makefile的一般使用&#34;&gt;MakeFile的一般使用&lt;/h2&gt;
+&lt;h3 id=&#34;使用规则&#34;&gt;使用规则&lt;/h3&gt;
+&lt;p&gt;既然要用MakeFile，那就要知道它是怎么使用的；主要还是&lt;code&gt;编译&lt;/code&gt;&amp;amp;&lt;code&gt;链接&lt;/code&gt;，将大量的文件，通过直接或间接的方式来一键编译，就不必像&lt;code&gt;gcc -g -o pro1.c pro2.c pro3.c... filename&lt;/code&gt;如此这般麻烦的编译了。&lt;/p&gt;
+&lt;p&gt;写入Make的文件的规则:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;如果这个工程没有编译过，那么我们的所有c文件都要编译并被链接。&lt;/li&gt;
+&lt;li&gt;如果这个工程之中的某几个c文件被修改，那么我们只编译被修改的c文件，并链接目标程序。&lt;/li&gt;
+&lt;li&gt;如果这个工程的头文件被改变了，那么我们需要编译引用了这几个头文件的c文件，并链接目标程序。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;对makefile的书写规则：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;target ... &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;prerequisites&lt;/span&gt; ...
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;command&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ...
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;target:&lt;/strong&gt; 这个是的目标文件，也可以是一个执行文件，还可以是一个标签（label）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;prerequisites:&lt;/strong&gt; 这个是一个依赖文件，是对&lt;code&gt;target&lt;/code&gt;文件的输入。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;command:&lt;/strong&gt; 这个是对文件的命令具体操作。&lt;code&gt;eg：cc -o file.h&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;简而言之，target这一个或多个的目标文件依赖于prerequisites中的文件，其生成规则定义在command中。&lt;/p&gt;
+&lt;h3 id=&#34;make的使用技巧&#34;&gt;make的使用技巧&lt;/h3&gt;
+&lt;h4 id=&#34;变量的使用&#34;&gt;变量的使用&lt;/h4&gt;
+&lt;p&gt;在makefile里面也是可以使用变量的，但是这是不可变的(是不是有点矛盾),它更像是c语言里面的宏(#define)。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;object&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;boo&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这样的好处是我们可以简化我们的make文件，是它不是这么的杂乱无章。&lt;/p&gt;
+&lt;h2 id=&#34;书写规则&#34;&gt;书写规则&lt;/h2&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

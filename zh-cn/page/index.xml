@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Pages on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/page/</link>
+        <description>Recent content in Pages on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Mon, 12 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>归档</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/archives/</link>
+        <pubDate>Mon, 12 Jun 2023 00:00:00 +0000</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/archives/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>关于我</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/</link>
+        <pubDate>Tue, 28 Feb 2023 00:00:00 +0000</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/</guid>
+        <description>&lt;h2 id=&#34;介绍自己&#34;&gt;介绍自己&lt;/h2&gt;
+&lt;p&gt;我是一个大二在校学生，专业是CS；爱好打游戏,主要是一些模拟类游戏笑；在学习日语和英语（不会😥）；&lt;/p&gt;
+&lt;p&gt;我喜欢计算机的高效和开源自由，我希望能结交到一些志同道合的小伙伴和前辈们；&lt;/p&gt;
+&lt;p&gt;私たちの未来はみんなでつくる&lt;/p&gt;
+&lt;h2 id=&#34;第三个博客&#34;&gt;第三个博客&lt;/h2&gt;
+&lt;p&gt;这个博客我将不定期的更新，想要做一名程序员，因为我是个新人，目标是星辰大海（bushi），还有在我进行自学的同时，我会把一些我的问题和心得分享出来，也希望看到的小伙伴能指点和讨论。&lt;/p&gt;
+&lt;h2 id=&#34;最后&#34;&gt;最后&lt;/h2&gt;
+&lt;p&gt;我不知道的是这个博客能维持多久，但是我会在力所能及的精力上来完成它，希望几年过后可以看到不一样的风采。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我知道刚开始说这种话是不好的，但所谓计划赶不上变化罢了&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title>Blog</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/blog/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/blog/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Links</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/links/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/links/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>搜索</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/search/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/search/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
+</rss>

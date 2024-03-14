@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Linux on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/post/cs/3.os/linuxlearn/</link>
+        <description>Recent content in Linux on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Thu, 14 Mar 2024 22:49:04 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/post/cs/3.os/linuxlearn/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Pipe</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/pipe/</link>
+        <pubDate>Thu, 14 Mar 2024 23:07:09 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/pipe/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>文件描述符</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6/</link>
+        <pubDate>Sun, 10 Mar 2024 16:39:03 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6/</guid>
+        <description>&lt;h2 id=&#34;抽象表述&#34;&gt;抽象表述&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;文件描述符是一个非零整数&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在操作系统中去让机器认识：（不同的）文件、socket、外部 I/O 资源等等是不简单的事情，但是机器认识数字，那我们就可以利用这个特性，抽象的描述以上的这些资源，因此&lt;strong&gt;文件描述符&lt;/strong&gt; 就是来表述资源的，为了不打乱资源的使用，系统中对有着一张全局的&lt;em&gt;表&lt;/em&gt; 、而每个进程也有自己的&lt;em&gt;表&lt;/em&gt; 。当进程打开一个文件时，操作系统在全局文件描述符表和进程文件描述符表中都会有一个对应的条目，它们保持同步。&lt;/p&gt;
+&lt;p&gt;通俗来说，每个进程在启动时都会自动打开三个标准文件描述符：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;文件描述符0（stdin）：标准输入，通常是键盘输入。&lt;/li&gt;
+&lt;li&gt;文件描述符1（stdout）：标准输出，通常是屏幕上的文本输出。&lt;/li&gt;
+&lt;li&gt;文件描述符 2（stderr）：标准错误输出，通常也是屏幕上的文本输出，但通常用于显示错误消息。
+而在之后的操作中：进程打开或创建一个&lt;em&gt;文件&lt;/em&gt;时，操作系统就为这个文件标识一个文件描述符，它写入表中作为其中的一个索引，为接下来的 read 和 write 作准备。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;使用&#34;&gt;使用&lt;/h2&gt;
+&lt;p&gt;既然文件描述符是操作系统提供的一种&lt;em&gt;资源抽象&lt;/em&gt;，那它就可以允许（系统）程序通过一个数字来访问文件和 I/O 资源，而无需关心机器底层的具体实现细节。&lt;/p&gt;
+&lt;p&gt;在 Unix/类 Unix 的系统中调用 &lt;code&gt;read()&lt;/code&gt; 和 &lt;code&gt;write()&lt;/code&gt; 从文件描述符所指的文件中读或者写 n 个字节，如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;buf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;512&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;read&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;buf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;sizeof&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;buf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;buf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;sizeof&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;buf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;而且它们的返回的是实际读或写的字节数，那么 &lt;code&gt;n&lt;/code&gt; 小于 0 的时候就发生了错误。&lt;/p&gt;
+&lt;p&gt;那么这就有新的问题了，我这里用的是标准输入和标准输出，之前说了，当文件打开或创建的时候有标识文件描述符，而且系统是按顺序来标识的，直到最大（），也就是说，有新文件打开，它文件描述符是 &lt;code&gt;3&lt;/code&gt; 那么我怎么用 read 和 write 对 &lt;code&gt;3&lt;/code&gt; 操作，这里就有一个 Unix 伟大的设计了&amp;mdash; I/O 重定向&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// cat &amp;lt; input.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;argv&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;argv&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;cat&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;### argv[1] = 0;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;fork&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;input.txt&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;O_RDONLY&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;exec&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;cat&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;argv&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;以上的操作是：fork 一个子进程（它有父进程的表和一切），用 &lt;code&gt;close&lt;/code&gt; 把标准输入关闭，用 &lt;code&gt;open&lt;/code&gt; 打开新文件 &amp;mdash; input.txt ，系统是顺序标识的，所以 &lt;code&gt;input.txt&lt;/code&gt; 在子进程中是 &lt;code&gt;0&lt;/code&gt; 而 &lt;code&gt;cat&lt;/code&gt; 是指向标准输入的，即，代码将 &lt;code&gt;input.txt&lt;/code&gt; 输入到 cat，再输出到 shell 中。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>命令行的魅力</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E9%AD%85%E5%8A%9B/</link>
+        <pubDate>Sun, 10 Mar 2024 16:38:17 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E9%AD%85%E5%8A%9B/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/jlevy/the-art-of-command-line/blob/master/README-zh.md&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;命令行的艺术&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://missing.csail.mit.edu/2020/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Missing-Semester&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://missing-semester-cn.github.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;计算机教育中缺失的一课&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;基础&#34;&gt;基础&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 学习 &lt;code&gt;Vim&lt;/code&gt;  。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 学会如何使用 &lt;code&gt;man&lt;/code&gt; 命令去阅读文档。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;code&gt;man bash&lt;/code&gt;  [[Bash]]&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 学会使用 &lt;code&gt;apropos&lt;/code&gt; 去查找文档&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 知道有些命令并不对应可执行文件，而是在 Bash 内置好的，此时可以使用 &lt;code&gt;help&lt;/code&gt; 和 &lt;code&gt;help -d&lt;/code&gt; 命令获取帮助信息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 你可以用 &lt;code&gt;type 命令&lt;/code&gt; 来判断这个命令到底是可执行文件、shell 内置命令还是别名。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 学会重定向&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 了解标准输出 stdout 和标准错误 stderr。&lt;/li&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 使用 &lt;code&gt;&amp;gt;&lt;/code&gt; 和 &lt;code&gt;&amp;lt;&lt;/code&gt; 来重定向输出和输入。&lt;/li&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 学会使用 &lt;code&gt;|&lt;/code&gt; 来重定向管道。明白 &lt;code&gt;&amp;gt;&lt;/code&gt; 会覆盖了输出文件而 &lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 是在文件末添加。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 学会使用 &lt;code&gt;ssh&lt;/code&gt; 进行远程命令行登录。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 熟悉 Bash 中的任务管理工具。
+&lt;code&gt;&amp;amp;&lt;/code&gt;，&lt;strong&gt;ctrl-z&lt;/strong&gt;，&lt;strong&gt;ctrl-c&lt;/strong&gt;，&lt;code&gt;jobs&lt;/code&gt;，&lt;code&gt;fg&lt;/code&gt;，&lt;code&gt;bg&lt;/code&gt;，&lt;code&gt;kill&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 学会使用特定符。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;通配符 &lt;code&gt;*&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 学会基本的文件管理工具&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 熟悉正则表达式
+[[正则表达式]]&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 学会使用 &lt;code&gt;apt-get&lt;/code&gt;，&lt;code&gt;yum&lt;/code&gt;，&lt;code&gt;dnf&lt;/code&gt; 或 &lt;code&gt;pacman&lt;/code&gt; 等来查找和安装软件包。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>操作系统的具体学习</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%85%B7%E4%BD%93%E5%AD%A6%E4%B9%A0/</link>
+        <pubDate>Sun, 10 Mar 2024 16:34:18 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%85%B7%E4%BD%93%E5%AD%A6%E4%B9%A0/</guid>
+        <description>&lt;h2 id=&#34;通过-xv6-了解操作系统&#34;&gt;通过 XV6 了解操作系统&lt;/h2&gt;
+&lt;p&gt;我希望通过 6. S081 的学习来学习操作系统的强大，以下的是我在学习中的笔记：
+&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/p/%E9%80%9A%E8%BF%87-xv6-%E6%9D%A5%E5%AD%A6%E4%B9%A0%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fostep/&#34; &gt;通过 XV6 来学习操作系统(OSTEP)&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/p/xv6-%E7%9A%84-gdb%E8%B0%83%E8%AF%95/&#34; &gt;XV6的gdb调试&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/p/xv6%E7%9A%84%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/&#34; &gt;XV6的源码解析&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- - [XV6的内存虚拟化](/zh-cn/p/xv6%E7%9A%84%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/) --&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/p/xv6-%E4%B8%AD%E7%9A%84-trap/&#34; &gt;XV6中的trap&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/p/xv6-%E7%9A%84%E4%B8%AD%E6%96%AD/&#34; &gt;XV6的中断&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/p/xv6%E7%9A%84%E9%94%81%E5%92%8C%E5%B9%B6%E8%A1%8C/&#34; &gt;XV6的锁和并行&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/p/xv6%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/&#34; &gt;XV6的进程和线程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/p/xv6%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/&#34; &gt;XV6的文件系统&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;个人-linux-的学习&#34;&gt;个人 Linux 的学习&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Linux个人学习记录&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/p/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E9%AD%85%E5%8A%9B/&#34; &gt;命令行的魅力&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;分类&#34;&gt;分类&lt;/h3&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/p/%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6/&#34; &gt;文件描述符&lt;/a&gt;&lt;/p&gt;
+&lt;!-- [管道](/zh-cn/p/pipe/) --&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;进程（Process）和 线程（Thread）&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;在-xv-6-中-syscall-函数&#34;&gt;在 XV 6 中 Syscall 函数&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;系统调用&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;描述&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int fork()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;创建一个进程，返回子进程的PID&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int exit(int status)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;终止当前进程，并将状态报告给wait()函数。无返回&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int wait(int *status)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;等待一个子进程退出; 将退出状态存入 &lt;code&gt;*status&lt;/code&gt;; 返回子进程 PID。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int kill(int pid)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;终止对应PID的进程，返回0，或返回-1表示错误&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int getpid()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;返回当前进程的PID&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int sleep(int n)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;暂停n个时钟节拍&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int exec(char *file, char *argv[])&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;加载一个文件并使用参数执行它; 只有在出错时才返回&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;char *sbrk(int n)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;按n 字节增长进程的内存。返回新内存的开始&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int open(char *file, int flags)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;打开一个文件；flags表示read/write；返回一个fd（文件描述符）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int write(int fd, char *buf, int n)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;从buf 写n 个字节到文件描述符fd; 返回n&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int read(int fd, char *buf, int n)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;将n 个字节读入buf；返回读取的字节数；如果文件结束，返回0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int close(int fd)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;释放打开的文件fd&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int dup(int fd)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;返回一个新的文件描述符，指向与fd 相同的文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int pipe(int p[])&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;创建一个管道，把read/write文件描述符放在p[0]和p[1]中&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int chdir(char *dir)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;改变当前的工作目录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int mkdir(char *dir)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;创建一个新目录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int mknod(char *file, int, int)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;创建一个设备文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int fstat(int fd, struct stat *st)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;将打开文件fd的信息放入*st&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int stat(char *file, struct stat *st)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;将指定名称的文件信息放入*st&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int link(char *file1, char *file2)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;为文件file1创建另一个名称(file2)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int unlink(char *file)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;删除一个文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;​ 来自表1.2：xv6系统调用（除非另外声明，这些系统调用返回0表示无误，返回-1表示出错）&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;fork() 函数&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;exec() 函数&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;exit() 函数&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;课程教材&#34;&gt;课程教材&lt;/h2&gt;
+&lt;p&gt;book-riscv-rev2&lt;/p&gt;
+&lt;p&gt;操作系统-三个简单的部分-ostep&lt;/p&gt;
+&lt;p&gt;鸟哥的Linux私房菜 基础学习篇 第四版 (鸟哥)&lt;/p&gt;
+&lt;h2 id=&#34;mit6s081-的实验记录&#34;&gt;MIT6.S081 的实验记录&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;MIT6.S081 的实验问题&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
