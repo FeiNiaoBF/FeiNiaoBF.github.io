@@ -26,6 +26,22 @@
     <loc>https://FeiNiaoBF.github.io/zh-cn/p/%E4%BA%8C.%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BAcsapp/</loc>
     <lastmod>2023-04-09T20:13:06+08:00</lastmod>
   </url><url>
+    <loc>https://FeiNiaoBF.github.io/zh-cn/post/</loc>
+    <lastmod>2024-03-14T23:07:09+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://FeiNiaoBF.github.io/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://FeiNiaoBF.github.io/zh-cn/post/"
+                />
+  </url><url>
+    <loc>https://FeiNiaoBF.github.io/zh-cn/p/pipe/</loc>
+    <lastmod>2024-03-14T23:07:09+08:00</lastmod>
+  </url><url>
     <loc>https://FeiNiaoBF.github.io/zh-cn/</loc>
     <lastmod>2024-03-14T23:07:09+08:00</lastmod>
     <xhtml:link
@@ -38,12 +54,6 @@
                 hreflang="zh-cn"
                 href="https://FeiNiaoBF.github.io/zh-cn/"
                 />
-  </url><url>
-    <loc>https://FeiNiaoBF.github.io/zh-cn/p/pipe/</loc>
-    <lastmod>2024-03-14T23:07:09+08:00</lastmod>
-  </url><url>
-    <loc>https://FeiNiaoBF.github.io/zh-cn/post/</loc>
-    <lastmod>2024-03-14T23:07:09+08:00</lastmod>
   </url><url>
     <loc>https://FeiNiaoBF.github.io/zh-cn/categories/</loc>
     <lastmod>2024-03-14T22:49:04+08:00</lastmod>
@@ -246,6 +256,9 @@
   </url><url>
     <loc>https://FeiNiaoBF.github.io/zh-cn/p/%E9%9B%B6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AF%BC%E8%AF%BB/</loc>
     <lastmod>2023-03-08T21:08:30+08:00</lastmod>
+  </url><url>
+    <loc>https://FeiNiaoBF.github.io/zh-cn/categories/update/</loc>
+    <lastmod>2023-03-08T19:56:58+08:00</lastmod>
   </url><url>
     <loc>https://FeiNiaoBF.github.io/zh-cn/%E5%85%B3%E4%BA%8E%E6%88%91/</loc>
     <lastmod>2023-02-28T00:00:00+00:00</lastmod>
