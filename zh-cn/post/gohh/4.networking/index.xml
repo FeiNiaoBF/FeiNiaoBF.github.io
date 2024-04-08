@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>4.Networking on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/post/gohh/4.networking/</link>
+        <description>Recent content in 4.Networking on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Thu, 14 Mar 2024 21:56:37 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/post/gohh/4.networking/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>一.Network &amp; Internet</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E4%B8%80.network-internet/</link>
+        <pubDate>Fri, 10 Mar 2023 21:08:35 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E4%B8%80.network-internet/</guid>
+        <description>&lt;h2 id=&#34;什么是internet&#34;&gt;什么是Internet&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;网络中的网络&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;因特网是一个覆盖数以万计个计算设备的网络，它们是由无数的端系统通过通信链路和分组交换机连接在一起的，我们的网络设备是充当网络中的端系统（网络边缘），而现在比较常见的路由器和链路层交换机是我们的网络核心，而一些链路等物理设备是我们的物理媒体。&lt;/p&gt;
+&lt;p&gt;我喜欢在学习一个新知识的时候运用类比则比较方便快速的了解：
+在现代城市里面高速公路并不少见，某天小明要从家到市图书馆借书，他从家出来发现他家和其他房子共用一道小点的道路，刚走出街口时道路随之变宽了，途中经历了几个红绿灯，公路也越来越宽，等到达图书馆的时候需要一个身份证明最后才能进入，最后借好书根据原路返回了。&lt;/p&gt;
+&lt;p&gt;这就是一个网络的路径，而文中的&lt;code&gt;身份证明&lt;/code&gt;在网络中叫作&lt;code&gt;协议&lt;/code&gt;，在后面的学习中我们就是要学习网络协议。&lt;/p&gt;
+&lt;h3 id=&#34;什么是协议&#34;&gt;什么是协议&lt;/h3&gt;
+&lt;p&gt;简单讲就是网络自己的规定，它是有着自己的判定标准，比如：我们人类之间的聊天就是在进行自己的标准，我们会依据他人的问题作出反馈，但是对一些故意找茬的主动屏蔽。网络的协议是：对两个及其以上的通信设备之间互换报文告知网络核心格式和顺序以及接收发送等动作。&lt;/p&gt;
+&lt;h3 id=&#34;从服务角度&#34;&gt;从服务角度&lt;/h3&gt;
+&lt;p&gt;我们的电脑要怎么和远距离的设备进行发送数据？
+它们是使用着通信设施的分布式应用，通过分布的方法和其他端设备连接，而端系统有着一套规则集合&lt;code&gt;套接字接口&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;网络边缘&#34;&gt;网络边缘&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;可以连接互联网的都是端系统&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;不知道你是否使用过&lt;code&gt;git&lt;/code&gt;吗？这是一个好用的工具在学习中，他的原理简单讲就是把设备看作主机，既然是主机就有一切的修改。我需要知道的是主机就是网络中的端系统，在我们的抽象里面它们位于边缘，也就是网络边缘。主分两种：客户端 &amp;amp; 服务器。一般服务器管理多个客户端。看看一些互联网大公司里面的服务器，都是成千上万的数量级。&lt;/p&gt;
+&lt;h3 id=&#34;连接服务&#34;&gt;连接服务&lt;/h3&gt;
+&lt;h4 id=&#34;tcp&#34;&gt;TCP&lt;/h4&gt;
+&lt;p&gt;这么多的数量要怎么控制，协议TCP(Transmission Control Protocol),这是一个十分基础的协议将控制消息的接收和发送，是一个可靠的，还能控制流量。&lt;/p&gt;
+&lt;h4 id=&#34;udp&#34;&gt;UDP&lt;/h4&gt;
+&lt;p&gt;User Datagram Protocol 用户数据协议，一种无连接的服务，之和端系统有关和核心没关，一般用在流媒体上。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>零.计算机网络导读</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E9%9B%B6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AF%BC%E8%AF%BB/</link>
+        <pubDate>Wed, 08 Mar 2023 21:08:30 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E9%9B%B6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AF%BC%E8%AF%BB/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;这是一个根据《计算机网络：自顶向下方法》为主要课本的个人学习笔记。&lt;/p&gt;
+&lt;h2 id=&#34;导读&#34;&gt;导读&lt;/h2&gt;
+&lt;p&gt;在学习计算机的时候不可避免的是网络这个和我们现代生活息息相关的部分。其实在我之前看来，网络是一种我们看不见的东西，它无处不在，你看看你手边的手机，现在眼前的电脑&amp;hellip;&amp;hellip;他们之间有一种莫名的联系，有无形的线使它们链接起来&lt;/p&gt;
+&lt;p&gt;当今世界，计算机网络已经成为了人们生活中不可或缺的一部分，它的影响不仅仅只 限于信息交流领域，还涉及到了商业、政治、文化等各个方面。作为一个十分复杂的系统，计算机网络的出现极大地改变了社会的基本交流规律。通过数以万计的网络连接，世界各地的人或物之间得以深度联系，信息的交流、共享和传递变得更加快捷和方便。&lt;/p&gt;
+&lt;p&gt;网络的连接也让人们之间的思想交流变得更加广泛、自由与便捷。在这个信息化的时代，网络已经成为了人们相互交流、了解世界的重要途径之一，它让人们能够更加深入地了解各种文化、传统和观点，从而更好地认识自己和他人，增进人类之间的理解和和谐。&lt;/p&gt;
+&lt;p&gt;然而，与此同时，网络连接也带来了许多不稳定的因素，例如网络病毒、黑客攻击、网络诈骗等等。这些不利因素威胁着人们信息的安全和隐私，使得网络世界变得更加复杂和危险。因此，在使用网络的过程中，我们必须注意保护自己的信息安全，提高自我保护意识，防范网络风险。&lt;/p&gt;
+&lt;p&gt;在我学习计算机网络的过程，《自顶向下》是一本十分优秀的教材，它通过逐层递进的方式，深入浅出地讲解了计算机网络的基本概念和原理，帮助读者快速入门，并逐渐提高自己的网络知识水平。通过学习这本书，可以让我们更好地了解网络的繁星点点，理解计算机网络的运作方式和工作原理，从而更好地掌握网络知识，提高我们的网络应用能力。&lt;/p&gt;
+&lt;h2 id=&#34;外部链接&#34;&gt;外部链接&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.bilibili.com/video/BV1JV411t7ow/?p=1&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;中科大郑烇、杨坚全套《计算机网络（自顶向下方法 第7版》&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
