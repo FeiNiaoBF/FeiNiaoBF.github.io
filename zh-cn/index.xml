@@ -8,12 +8,32 @@
         <language>zh-cn</language>
         <copyright>Example Person. All rights reserved.</copyright>
         <lastBuildDate>Thu, 14 Mar 2024 23:07:09 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>博客搭建更新日记✨</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%9B%B4%E6%96%B0%E6%97%A5%E8%AE%B0/</link>
+        <pubDate>Wed, 08 Mar 2023 19:56:58 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%9B%B4%E6%96%B0%E6%97%A5%E8%AE%B0/</guid>
+        <description>&lt;img src="https://FeiNiaoBF.github.io/zh-cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%9B%B4%E6%96%B0%E6%97%A5%E8%AE%B0/pexels-andreea-ch-1166643.jpg" alt="Featured image of post 博客搭建更新日记✨" /&gt;&lt;h2 id=&#34;hello&#34;&gt;Hello&lt;/h2&gt;
+&lt;p&gt;你好，这是，这里面是记录我对自己的博客 web 更新的日记。&lt;/p&gt;
+&lt;h2 id=&#34;march-102023&#34;&gt;March 10，2023&lt;/h2&gt;
+&lt;p&gt;博客使用 hugo 了&lt;/p&gt;
+&lt;h2 id=&#34;april-20-2023&#34;&gt;April 20, 2023&lt;/h2&gt;
+&lt;p&gt;我使用了图床，蛮好用的 😁&lt;/p&gt;
+&lt;h2 id=&#34;april-25-2023&#34;&gt;April 25, 2023&lt;/h2&gt;
+&lt;p&gt;我更新了一些社交方式&lt;/p&gt;
+&lt;p&gt;更新一下我的博客的配置&lt;/p&gt;
+&lt;h2 id=&#34;mar-102024&#34;&gt;Mar 10，2024&lt;/h2&gt;
+&lt;p&gt;好久不见了，这一次我把近一年的笔记进行一个整理，然后更新到了博客上。
+也做了许多的计划和之后的规划&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>CS学习计划</title>
         <link>https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/</link>
         <pubDate>Sun, 10 Mar 2024 15:58:41 +0800</pubDate>
         
         <guid>https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/</guid>
-        <description>&lt;img src="https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post CS学习计划" /&gt;&lt;h2 id=&#34;计算机语言基础&#34;&gt;计算机语言基础&lt;/h2&gt;
+        <description>&lt;img src="https://FeiNiaoBF.github.io/zh-cn/p/cs%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/photo_2024-04-08_20-31-47.jpg" alt="Featured image of post CS学习计划" /&gt;&lt;h2 id=&#34;计算机语言基础&#34;&gt;计算机语言基础&lt;/h2&gt;
 &lt;h3 id=&#34;c-语言&#34;&gt;C 语言&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;项目练习&lt;/strong&gt;&lt;/p&gt;
 &lt;h3 id=&#34;go-语言&#34;&gt;Go 语言&lt;/h3&gt;
@@ -172,7 +192,7 @@ _
 &lt;h3 id=&#34;有志有识有恒则断无不成之事&#34;&gt;有志，有识，有恒，则断无不成之事&lt;/h3&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;我自己在2022年学习过&lt;code&gt;CS61c&lt;/code&gt;，这门课主要是讲解了计算机的体系结构，终于踏入了计算机的门槛。计算机体系结构，这是一个计算机十分难啃的一门知识，内容之多、范围之广，无论里面的&lt;code&gt;数的表示、编译原理、CPU的基本架构、内存、虚拟内存、流水线、线程级并行、I/O、OS、网络等等&lt;/code&gt;，每个方面都可以单独拎出来成为一门课程。而想要精通这些知识需要耗费大量的时间和精力，即使学习十年也不嫌少。哈哈哈。&lt;/p&gt;
-&lt;p&gt;我对计算机的热爱促使我非正式地学习了&lt;code&gt;CS61c&lt;/code&gt;（我也不是伯克利的学子，我就小二本的）过后，我发现，它给我的是课堂上没有的一些思想，比如：为什么？通过已经有的事实发出提问（即存在有缘由，而不是想当然的存在即真理）。&lt;/p&gt;
+&lt;p&gt;我对计算机的热爱促使我非正式地学习了 &lt;code&gt;CS61c&lt;/code&gt;（可惜我不是伯克利的学子）过后，我发现，它给我的是课堂上没有的一些思想，比如：为什么？通过已经有的事实发出提问（即存在有缘由，而不是想当然的存在即真理）。&lt;/p&gt;
 &lt;p&gt;在我上大学的时候我就知道一本&lt;code&gt;神书&lt;/code&gt;《深入理解计算机系统》（即：&lt;em&gt;&lt;strong&gt;《Computer Systems: A Programmer’s Perspective》&lt;/strong&gt;&lt;/em&gt;），可是一直没有机会读一读（也看不懂 😂 ，也正是在有CS61c的基础上我想去好好的通读一遍它。&lt;/p&gt;
 &lt;p&gt;这本书好在哪里？它是一本以程序员的视角来看计算机的底层机制，不需要你对物理，电子层面有多么高的水准来看计算机，如果有的话更好的（在这里就不得不吐槽国内的教学了）。它里面的内容也是十分的丰富，结合了计算机组成与体系结构，链接与装载，程序优化，内存存储层次，操作系统，网络等基础知识。&lt;/p&gt;
 &lt;p&gt;好的，说那么多，我也想把我在学习的过程写下来这也不失成为我的一场回忆。&lt;/p&gt;
@@ -1910,6 +1930,14 @@ _
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://segmentfault.com/a/1190000022161796&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;过程调用&lt;/a&gt;&lt;/p&gt;
 </description>
+        </item>
+        <item>
+        <title>三.处理器设计(CSAPP)</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E4%B8%89.%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1csapp/</link>
+        <pubDate>Sun, 09 Apr 2023 20:13:06 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E4%B8%89.%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1csapp/</guid>
+        <description></description>
         </item>
         <item>
         <title>Pipe</title>
