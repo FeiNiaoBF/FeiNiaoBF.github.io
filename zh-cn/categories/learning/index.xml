@@ -21,15 +21,13 @@
 &lt;p&gt;&lt;strong&gt;项目练习&lt;/strong&gt;&lt;/p&gt;
 &lt;h3 id=&#34;python-语言&#34;&gt;python 语言&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;项目练习&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;TG_bot&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
+&lt;!-- 1. [TG_bot]() --&gt;
 &lt;h2 id=&#34;数据结构&#34;&gt;数据结构&lt;/h2&gt;
 &lt;p&gt;数据结构是对计算机高级语言最能体现打基础的学习，目前有许多常见的数据结构，我喜欢分类来处理。&lt;/p&gt;
-&lt;h3 id=&#34;基础结构&#34;&gt;基础结构&lt;/h3&gt;
+&lt;h3 id=&#34;基础结构hahahugoshortcode41s2hbhb&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/post/gohh/2.datastructures_algorithms/golangds/&#34; &gt;基础结构&lt;/a&gt;&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;数组&lt;/a&gt;&lt;/strong&gt;：是一种线性表数据结构，用于存储相同类型的数据元素。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;数组&lt;/strong&gt;：是一种线性表数据结构，用于存储相同类型的数据元素。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;二分搜索&lt;/em&gt;&lt;/li&gt;
 &lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;冒泡排序&lt;/em&gt;&lt;/li&gt;
@@ -38,7 +36,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;链表&lt;/a&gt;&lt;/strong&gt;：由一系列节点组成的数据结构，每个节点包含数据和指向下一个节点的指针。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;链表&lt;/strong&gt;：由一系列节点组成的数据结构，每个节点包含数据和指向下一个节点的指针。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;反转链表&lt;/em&gt;&lt;/li&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;环形链表&lt;/em&gt;&lt;/li&gt;
@@ -120,25 +118,27 @@
 &lt;p&gt;算法是计算机科学的核心，它们不仅仅是问题求解的工具，也是构建复杂系统和应对实际挑战的基础。深入理解和熟练运用各种算法，有助于提高问题解决和计算机科学建模的能力。&lt;/p&gt;
 &lt;h2 id=&#34;体系结构&#34;&gt;体系结构&lt;/h2&gt;
 &lt;h2 id=&#34;操作系统&#34;&gt;操作系统&lt;/h2&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;操作系统的具体学习目录&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/post/gohh/4.os/s6.081/&#34; &gt;操作系统的具体学习目录&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;计算机网络&#34;&gt;计算机网络&lt;/h2&gt;
 &lt;h2 id=&#34;cs-后续学习路径&#34;&gt;CS 后续学习路径&lt;/h2&gt;
-&lt;p&gt;为自身打造的路径
-_
-目标：人工智能&lt;strong&gt;Artificial intelligence&lt;/strong&gt;
+&lt;p&gt;为自身打造的路径&lt;/p&gt;
+&lt;p&gt;目标：人工智能&lt;strong&gt;Artificial intelligence&lt;/strong&gt;
 数学
-&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Search &amp;mdash; Graph theory&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Knowledge &amp;mdash; Boolean logic&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Uncertainty &amp;mdash; Probability&lt;/a&gt;&lt;/p&gt;
+&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Search&amp;mdash;GraphTheory&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Knowledge&amp;mdash;BooleanLogic&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Uncertainty&amp;mdash;Probability&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;目标：应用程序开发&lt;strong&gt;Application Developer&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Full Stack&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;目标：计算机图形学&lt;strong&gt;Computer graphics&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;目标：软件工程&lt;strong&gt;Software engineering&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;leetcode&#34;&gt;LeetCode&lt;/h2&gt;
-&lt;p&gt;每日任务
-&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;合并两个有序数组&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;移除元素&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;删除有序数组中的重复项&lt;/a&gt;&lt;/p&gt;
+&lt;!-- ## LeetCode
+
+每日任务
+[合并两个有序数组]()
+
+[移除元素]()
+
+[删除有序数组中的重复项]() --&gt;
 </description>
         </item>
         <item>

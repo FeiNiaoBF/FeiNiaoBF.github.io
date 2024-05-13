@@ -8,801 +8,6 @@
         <language>zh-cn</language>
         <copyright>Example Person. All rights reserved.</copyright>
         <lastBuildDate>Thu, 14 Mar 2024 21:48:19 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/post/gohh/3.architecture/csapp/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>零.深入理解计算机系统(CSAPP)</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E9%9B%B6.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcsapp/</link>
-        <pubDate>Sun, 12 Mar 2023 21:46:39 +0800</pubDate>
-        
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E9%9B%B6.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcsapp/</guid>
-        <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;h3 id=&#34;有志有识有恒则断无不成之事&#34;&gt;有志，有识，有恒，则断无不成之事&lt;/h3&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;我自己在2022年学习过&lt;code&gt;CS61c&lt;/code&gt;，这门课主要是讲解了计算机的体系结构，终于踏入了计算机的门槛。计算机体系结构，这是一个计算机十分难啃的一门知识，内容之多、范围之广，无论里面的&lt;code&gt;数的表示、编译原理、CPU的基本架构、内存、虚拟内存、流水线、线程级并行、I/O、OS、网络等等&lt;/code&gt;，每个方面都可以单独拎出来成为一门课程。而想要精通这些知识需要耗费大量的时间和精力，即使学习十年也不嫌少。哈哈哈。&lt;/p&gt;
-&lt;p&gt;我对计算机的热爱促使我非正式地学习了 &lt;code&gt;CS61c&lt;/code&gt;（可惜我不是伯克利的学子）过后，我发现，它给我的是课堂上没有的一些思想，比如：为什么？通过已经有的事实发出提问（即存在有缘由，而不是想当然的存在即真理）。&lt;/p&gt;
-&lt;p&gt;在我上大学的时候我就知道一本&lt;code&gt;神书&lt;/code&gt;《深入理解计算机系统》（即：&lt;em&gt;&lt;strong&gt;《Computer Systems: A Programmer’s Perspective》&lt;/strong&gt;&lt;/em&gt;），可是一直没有机会读一读（也看不懂 😂 ，也正是在有CS61c的基础上我想去好好的通读一遍它。&lt;/p&gt;
-&lt;p&gt;这本书好在哪里？它是一本以程序员的视角来看计算机的底层机制，不需要你对物理，电子层面有多么高的水准来看计算机，如果有的话更好的（在这里就不得不吐槽国内的教学了）。它里面的内容也是十分的丰富，结合了计算机组成与体系结构，链接与装载，程序优化，内存存储层次，操作系统，网络等基础知识。&lt;/p&gt;
-&lt;p&gt;好的，说那么多，我也想把我在学习的过程写下来这也不失成为我的一场回忆。&lt;/p&gt;
-&lt;h2 id=&#34;学习目的&#34;&gt;学习目的&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;知其然而不知其所以然&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;在看这本书的时候问问自己，这本书可以给我带来什么？我为什么要学习这本书？正如上面的这句话一样，况且我也不想做一个”代码的搬运工“。&lt;/p&gt;
-&lt;h3 id=&#34;学到什么&#34;&gt;学到什么？&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;可以对计算机底层系统有一个更加全面且深入的认识。&lt;/li&gt;
-&lt;li&gt;系统的理解计算机系统底层的工作原理。&lt;/li&gt;
-&lt;li&gt;写出更加健壮的、安全的代码。&lt;/li&gt;
-&lt;li&gt;走向现实层面的计算机。&lt;/li&gt;
-&lt;li&gt;打下编译原理、操作系统的基础。&lt;/li&gt;
-&lt;li&gt;等等&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;学习是要你静下心来，认真思考，积极动手的，用我的话来说就是：事无巨细&lt;/p&gt;
-&lt;h2 id=&#34;计算机系统漫游&#34;&gt;计算机系统漫游&lt;/h2&gt;
-&lt;p&gt;接下来就看看我们要学什么。&lt;/p&gt;
-&lt;h3 id=&#34;信息bit化&#34;&gt;信息&lt;code&gt;bit&lt;/code&gt;化&lt;/h3&gt;
-&lt;p&gt;人类与机器交互最大的问题是&lt;code&gt;语言不通&lt;/code&gt;。让我们回到五六十年代，那时没有像现在这样方便的手机、iPad和电脑操作方式。那个&amp;quot;古老时代&amp;quot;没有图像、键盘或字符，只有打孔器、巨型电子管和满屋子的电线&amp;hellip;&amp;hellip;我们唯一能与计算机交流的方法就是通过电流和“疯狂”的思维。&lt;/p&gt;
-&lt;p&gt;而随着物理学和数学的发展，计算机得以快速发展，并且我们开始使用二进制来与机器进行交互，这比以前好多了。&lt;/p&gt;
-&lt;p&gt;但仍然存在一个问题：“为什么要使用二进制？”因为它适用于我们的电路（高/低电压）和逻辑门（0/1），似乎所有事情都变成了二进制。 我们在这里已经迈出了很大的步伐。&lt;/p&gt;
-&lt;p&gt;在计算机领域里面，我们叫一个可以正常显示0/1的位叫&lt;code&gt;bit&lt;/code&gt;，而后续的研究证明了一次性对8bit进行操作是十分成功的，因此&lt;strong&gt;1 Byte = 8 bit&lt;/strong&gt;(注意大小写)，在后面我们的位越来越多，我们使用了&lt;code&gt;十六进制&lt;/code&gt;。由此来看，人类是很富有想象力的种族。&lt;/p&gt;
-&lt;p&gt;在后面的学习中，数值的表示是很重要的知识点，计算机就是为精准，快速计算这些数值，特别是浮点数（float）的计算而发展的。&lt;/p&gt;
-&lt;h3 id=&#34;编译系统&#34;&gt;编译系统&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Hello World&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;上面是一个简单的C语言程序，打印一个&amp;quot;Hello World&amp;quot;(并且换行)，但是，它要经过好几个步骤才能打印在你的屏幕上，分别是：编译(Compiler)，汇编(Assembler)，装载器(Loader)，链接器(Linker)。&lt;/p&gt;
-&lt;p&gt;我们在这一部分将要学到从 &lt;code&gt;高级语言 --&amp;gt; 汇编语言 --&amp;gt; 机器语言&lt;/code&gt; 这一过程的具体实现，这使我们能够更深入地了解系统的底层。。&lt;/p&gt;
-&lt;h3 id=&#34;cpu基本结构&#34;&gt;CPU基本结构&lt;/h3&gt;
-&lt;p&gt;CPU（中央处理器），可以说是本世纪最伟大的发明了，一个小小的芯片装载着人类的智慧，这一部分我们要了解 CPU 的内部构造，下面是一张 CPU 的大致图片：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/07/24/sU86Dw3jgNBOoV2.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;cpu8085.png&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;这是一个复杂但十分有趣的部分，相信我，你会体会它的魅力的。&lt;/p&gt;
-&lt;h3 id=&#34;操作系统&#34;&gt;操作系统&lt;/h3&gt;
-&lt;p&gt;操作系统(&lt;em&gt;&lt;strong&gt;Operating System&lt;/strong&gt;&lt;/em&gt;)，是来控制电脑的执行硬件、软件资源，控制&lt;strong&gt;I/O&lt;/strong&gt;操作，提供基本的用户互动等。&lt;/p&gt;
-&lt;p&gt;它也负责加载程序、处理服务（如网络堆栈和文件系统）以及为多个程序复用资源，但它实际上是要负责隔离各个程序，使得一个给定的程序不会干扰另一个程序的内存或执行。&lt;/p&gt;
-&lt;h3 id=&#34;网络通信&#34;&gt;网络通信&lt;/h3&gt;
-&lt;p&gt;这一部分我也写了自己的&lt;a class=&#34;link&#34; href=&#34;https://clever-klepon-d14cb6.netlify.app/posts/internet-0/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;学习笔记&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;外部链接&#34;&gt;外部链接&lt;/h2&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.bottomupcs.com/index.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Computer Science from the Bottom Up&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://wdxtub.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;小土刀博主的『读薄』&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://fengmuzi2003.gitbook.io/csapp3e/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;fengmuzi2003up主的计算机系统漫游&lt;/a&gt;&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title>一.数的表示(CSAPP)</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E4%B8%80.%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BAcsapp/</link>
-        <pubDate>Sun, 19 Mar 2023 20:13:06 +0800</pubDate>
-        
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E4%B8%80.%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BAcsapp/</guid>
-        <description>&lt;h1 id=&#34;二进制系统的核心---bit&#34;&gt;二进制系统的核心&amp;mdash;bit&lt;/h1&gt;
-&lt;p&gt;众所周知，在计算机里面的所以数据都是由&lt;strong&gt;bit&lt;/strong&gt;表示的，可能这与我们日常使用的十进制来说是十分不方便的，而要想从现实世界的十进制到二进制的过程需要一点点的改变。&lt;/p&gt;
-&lt;p&gt;正如我们所想的一样，bit的表示符合物理的形式，更加的底层，也与数学上的息息相关。当我们终究是要从程序员的看发来看bit的，对我们来说，计算机就是通过对&lt;strong&gt;bit&lt;/strong&gt;进行不同方式的编码和描述，来完成和执行不同的任务。&lt;/p&gt;
-&lt;h2 id=&#34;信息存储&#34;&gt;信息存储&lt;/h2&gt;
-&lt;h3 id=&#34;二进制和十六进制&#34;&gt;二进制和十六进制&lt;/h3&gt;
-&lt;p&gt;下面是各个进制的转换:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;二进制&lt;/th&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;十进制&lt;/th&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;十六进制&lt;/th&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;二进制&lt;/th&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;十进制&lt;/th&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;十六进制&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;0000&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1000&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;8&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;8&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;0001&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1001&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;9&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;9&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;0010&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;2&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;2&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1010&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;10&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;A&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;0011&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;3&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;3&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1011&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;11&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;B&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;0100&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;4&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;4&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1100&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;12&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;C&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;0101&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;5&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;5&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1101&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;13&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;D&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;0110&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;6&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;6&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1110&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;14&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;E&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;0111&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;7&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;7&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1111&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;15&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;F&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;这是一个十分重要的表格，我们要记得它。&lt;/p&gt;
-&lt;h3 id=&#34;位-字节-字bit-byte-word&#34;&gt;位， 字节， 字（bit, Byte, word）&lt;/h3&gt;
-&lt;p&gt;我们的一个位就是一bit， 一个字节就是8个bit， 一般32位字长机器一个字就是4个bit。&lt;/p&gt;
-&lt;p&gt;如果你问我为什么要这么规定的话，我可以告诉你我也不知道，笑，可以去看看历史，我猜是这样的设计符合机器的一些特性。&lt;/p&gt;
-&lt;p&gt;在C语言里面，所有的数据类型都有分配好的字节数，&lt;code&gt;char：1字节、short：2字节、int：4字节、long： 4字节、float：4字节、double：8字节&lt;/code&gt;（均在32位机器上）等等。&lt;/p&gt;
-&lt;p&gt;分配成这样：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;有规范，可以在不同的机器程序可以运行。&lt;/li&gt;
-&lt;li&gt;机器没有无限大的内存。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;寻址和字节顺序&#34;&gt;寻址和字节顺序&lt;/h3&gt;
-&lt;p&gt;在内存里，我们把它们抽象成一个一定大的数组块，为每一均匀分布的地址块编上编号(图片)，因此我们要知道多字节的存储顺序，这对于我们在进行网络数据的发送/接收格式，阅读反汇编的时候等等有关系。&lt;/p&gt;
-&lt;p&gt;大小端的判定：&lt;/p&gt;
-&lt;p&gt;以下是我使用书中的代码看我的电脑是大端还是小端：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;byte_pointer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;show_bytes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;byte_pointer&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;size_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;size_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;size_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;%.2x &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;show_int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;show_bytes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;byte_pointer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;sizeof&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;argc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;argv&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[])&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;short&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12345&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;short&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ua&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;number = %d&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;show_int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;number = %d&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ua&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;show_int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ua&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;==========================&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;$&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;byte&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;number&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12345&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;c7&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cf&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;number&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;53191&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;c7&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cf&lt;/span&gt; &lt;span class=&#34;mo&#34;&gt;00&lt;/span&gt; &lt;span class=&#34;mo&#34;&gt;00&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 我的电脑是小端的
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 系统Linux: Alpine apk-tools 2.12.9, compiled for x86_64.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;位的boolean-algebras&#34;&gt;位的Boolean Algebras&lt;/h3&gt;
-&lt;p&gt;位的布尔运算可以看我的&lt;a class=&#34;link&#34; href=&#34;https://clever-klepon-d14cb6.netlify.app/posts/bitsoperation/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;这一篇&lt;/a&gt;&lt;/p&gt;
-&lt;h4 id=&#34;左移和右移的计算&#34;&gt;左移和右移的计算&lt;/h4&gt;
-&lt;p&gt;这里我想着重的记下来：
-对于左移&lt;code&gt;&amp;lt;&amp;lt;&lt;/code&gt;&amp;amp; 右移&lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 是对于位的计算，相比于右移来说左移比较简单，在移动的同时往最低位右边补 0 即可。右移的话有两种类型，一种是&lt;code&gt;逻辑右移&lt;/code&gt;（左边补 0），另一种是&lt;code&gt;算术右移&lt;/code&gt;（左边补符号位）。为什么会有这两种，因为对应无符号数和有符号数的运算是不同的计算方法。&lt;/p&gt;
-&lt;h3 id=&#34;c语言上的logic计算&#34;&gt;C语言上的logic计算&lt;/h3&gt;
-&lt;p&gt;不必多言，做题：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// P76 练习题2.44
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;foo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;bar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ux&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uy&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;           &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ux&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;7&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;7&lt;/span&gt;     &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ux&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;           &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;整数表示&#34;&gt;整数表示&lt;/h2&gt;
-&lt;h3 id=&#34;无符号表示&#34;&gt;无符号表示&lt;/h3&gt;
-&lt;p&gt;无符号数（unsigned），就是在&lt;code&gt;0~2[^w] - 1&lt;/code&gt;范围的数，w是表示字长。有一个重要的特性，就是每个介于0~2[^w]-1 之间的数都有唯一的一个w位的值编码。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;UMin = 0;&lt;/li&gt;
-&lt;li&gt;UMax = 2[^w]−1;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;补码表示&#34;&gt;补码表示&lt;/h3&gt;
-&lt;p&gt;补码（Two&amp;rsquo; s Complement）， 就是在&lt;code&gt;-2[^w-1] ~ 2[^w-1] - 1&lt;/code&gt;范围的数，补码的出现使得数据的表示得到最好的利用，在运算上和我们的计算自觉一样了，只有一个0没正负之分。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;TMin = -2[^w-1]&lt;/li&gt;
-&lt;li&gt;TMax = 2[^w-1] - 1&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;我们可以从上面得到一些特性：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;|TMin|  = |TMax| + 1&lt;/li&gt;
-&lt;li&gt;UMax = 2 &lt;em&gt;|TMax| + 1  = 2&lt;/em&gt; |TMin| - 1&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/ZcUXbMrG2T4OJhP.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;B2Tx.png&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;h2 id=&#34;整数运算&#34;&gt;整数运算&lt;/h2&gt;
-&lt;h3 id=&#34;加法&#34;&gt;加法&lt;/h3&gt;
-&lt;p&gt;考虑两个非负整数x 和y, 满足0 &amp;lt; x, y &amp;lt; 2[^w] 。每个数都能表示为w位无符号数字。然而，
-如果计算它们的和，我们就有一个可能的范围0 &amp;lt; x+y &amp;lt; 2[^w+1]-2 。我们需要&lt;code&gt;w+1&lt;/code&gt;位&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;8&lt;/th&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;11&lt;/th&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;3（19）&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1000&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;+  1011&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;= 10011&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;我们来想想补码的形式，两个数x，y满足-2[^w-1] &amp;lt; x, y &amp;lt; 2[^w-1]-1,   计算它们的和，我们就有一个可能的范围-2[^w] &amp;lt; x + y &amp;lt; 2[^w-1]-2。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;8&lt;/th&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;11&lt;/th&gt;
-&lt;th style=&#34;text-align:center&#34;&gt;3（19）&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;1000&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;+  1011&lt;/td&gt;
-&lt;td style=&#34;text-align:center&#34;&gt;= 10011&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;乘法&#34;&gt;乘法&lt;/h3&gt;
-&lt;p&gt;无符号数的乘法就是&lt;code&gt;UMul(x,y) = x * y mod 2[^w]&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;补码的乘法&lt;code&gt;TMul(x,y) = U2T(x * y mod 2[^w])&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;溢出&#34;&gt;溢出&lt;/h3&gt;
-&lt;p&gt;在我们的运算中（特别是很大的数）不仅仅只考虑算不算的对，还要考虑有没有溢出，一旦我需要的位变成&lt;code&gt;w+1&lt;/code&gt;的十分你要十分注意了。&lt;/p&gt;
-&lt;p&gt;[&lt;img src=&#34;https://s2.loli.net/2023/04/21/5iVANckMR9qseoZ.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;Two&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;此时我们要用上扩展与截取：&lt;/p&gt;
-&lt;p&gt;扩展：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;对于无符号数，用x位向量表示[xn-1,&amp;hellip;,x0] -&amp;gt;[0,0,0,0,xn-1,&amp;hellip;,x0],用0把剩下的位补齐&lt;/li&gt;
-&lt;li&gt;对于补码， 用x位向量表示[xn-1,&amp;hellip;,x0] -&amp;gt;[ xn-1,xn-1,xn-1,xn-1,&amp;hellip;,x0],用&lt;code&gt;最高位xn-1&lt;/code&gt;把剩下的位补齐
-截取：&lt;/li&gt;
-&lt;li&gt;对于无符号数，UAdd(u,v) = u+v mod 2[^w], UMult(u,v)  = u * v mod 2[^w]&lt;/li&gt;
-&lt;li&gt;对于补码，先把数转换成无符号数再模运算最后再转换补码， TAdd(u,v) = U2T(u+v mod 2[^w]), TMult(u,v)  = U2T(u * v mod 2[^w])&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;类型转换&#34;&gt;类型转换&lt;/h3&gt;
-&lt;p&gt;无符号数和补码的转换是对位的表示不同来达到转换的过程。&lt;/p&gt;
-&lt;h2 id=&#34;浮点数floating-point&#34;&gt;浮点数（floating point）&lt;/h2&gt;
-&lt;p&gt;关于浮点数，本质上就是我们如何使用二进制来表达一个很大或者很小的数 (类似科学计数法，但是编码上有显著的区别)。&lt;/p&gt;
-&lt;p&gt;由于二进制的数值系统在表达能力上存在一定的限制 (位数的限制)，我们实际上没有办法表示所有的数，因此浮点数的设计需要认真的权衡和折中，既要考虑能够表达的范围，也要考虑表达的精度。&lt;/p&gt;
-&lt;p&gt;浮点数是一种近似的数，和我们十进制中的小数（或分数）一样，比如：3/10 = 0.333！。所以浮点数在不论大小项目里面都是要十分小心的地方。&lt;/p&gt;
-&lt;h3 id=&#34;ieee-浮点表示&#34;&gt;IEEE 浮点表示&lt;/h3&gt;
-&lt;p&gt;IEEE 浮点标准用V=(-1)[^s] &lt;em&gt;M&lt;/em&gt; 2[^E]的形式来表示一个数：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;符号(sign) s 决定这数是负数(s=1) 还是正数(s=0), 而对于数值0的符号位解释
-作为特殊情况处理(-0.0 = +0.0)。&lt;/li&gt;
-&lt;li&gt;尾数(significand) M 是一个二进制小数，它的范围是1~2-£, 或者是0~1 - £。&lt;/li&gt;
-&lt;li&gt;阶码(exponent) E 的作用是对浮点数加权，这个权重是2 的E 次幕（可能是负数） 。
-将浮点数的位表示划分为三个字段，分别对这些值进行编码：&lt;/li&gt;
-&lt;li&gt;一个单独的符号位s 直接编码符号s 。&lt;/li&gt;
-&lt;li&gt;k 位的阶码字段exp=ek - 1 … e1,e0 编码阶码E 。&lt;/li&gt;
-&lt;li&gt;n 位小数字段frac= fn-1 &amp;hellip; f1,f0 编码尾数M, 但是编码出来的值也依赖于阶码字
-段的值是否等千0 。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/TYMtb2kBysG6maf.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;float.png&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;在开始时记住一些值的来源：E = exp - Bias；M = 1/0 + f&lt;/p&gt;
-&lt;h4 id=&#34;规格化的值&#34;&gt;规格化的值&lt;/h4&gt;
-&lt;p&gt;当阶数 &lt;code&gt;exp ≠ 000…0&lt;/code&gt;和 &lt;code&gt;exp ≠ 111…1&lt;/code&gt;时，表示的其实都是规范化的值，这里只需要大概知道因为实数轴上原来连续的值会被规范到有限的定值上并且这些定值之间的间距也是不一样的，具体可以通过后面给出的例子来理解。&lt;/p&gt;
-&lt;p&gt;当 exp 的位模式既不全为0(数值0), 也不全为(32位的255，64位的2047)的时候，frac可以随意取值；&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;E = exp - Bias(2[^w-1] - 1)&lt;/li&gt;
-&lt;li&gt;M = 1 + f;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;例子：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    12345 = 0b0011.0000.0011.1001 = 1.1000000111001 * 2[^13]
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    E = 13 = exp - 127 -&amp;gt; exp = 140;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    M = 1 + f = 1.1000000111001 -&amp;gt; f = 1000000111001;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;s(1)&lt;/th&gt;
-&lt;th&gt;exp(8)&lt;/th&gt;
-&lt;th&gt;frac(23)&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;10001100&lt;/td&gt;
-&lt;td&gt;10000001110010000000000&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/FvmEjJeDSVWkQtH.jpg&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;Normalized&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;h4 id=&#34;非规格化的值&#34;&gt;非规格化的值&lt;/h4&gt;
-&lt;p&gt;当exp每一位都为0的时候，可以想象到这时候的数无限的接近数值0，可画个数轴来看，此时的 &lt;code&gt;E = 1 - Bias&lt;/code&gt;而且M没有隐含的1表示了，&lt;code&gt;M = f&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;第一个功能就是表示0，0的时候exp位为0，frac位为0，符号位的不同使得-0/+0有相同的地方何不同的地方。&lt;/p&gt;
-&lt;p&gt;非规格化数的另外一个功能是表示那些非常接近于0.0 的数。它们提供了一种属性，称为逐渐溢出(gradual underflow), 其中，可能的数值分布均匀地接近于0.0 。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/ZmftLThWNq5kD4p.jpg&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;Denormalized&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;h4 id=&#34;无穷大和nan&#34;&gt;无穷大和NaN&lt;/h4&gt;
-&lt;p&gt;最后一类数值是当指阶码全为1 的时候出现的。当小数域全为0时，得到的值表示无穷，当 s=O 时是 +∞ 或者是 s=1 时是 -∞ 。当我们把两个非常大的数相乘，或者除以零时，无穷能够表示溢出的结果。当小数域为非零时，结果值被称为&amp;quot;NaN&amp;quot;, 即“不是一个数(&lt;strong&gt;Not a Number&lt;/strong&gt;)&amp;quot; 的缩写。一些运算的结果不能是实数或无穷，就会返回这样的NaN值，比如当计算sqrt(-1)或 (∞-∞) 时。在某些应用中，表示未初始化的数据时，它们也很有用处。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/iYnoLHDCwqASEyg.jpg&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;inf&#34;
-	
-	
-&gt;
-&lt;img src=&#34;https://s2.loli.net/2023/04/24/15xlfajNMHpnrwG.jpg&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;NaN&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;h4 id=&#34;练习&#34;&gt;练习&lt;/h4&gt;
-&lt;p&gt;假设一个基于IEEE 浮点格式的5 位浮点表示，有1 个符号位、2 个阶 码位(k=Z) 和两个小数位(n=2) 。阶码偏置量是2[2-1] - 1 = 1 。下表中列举了这个5 位浮点表示的全部非负取值范围。使用下面的条件，填写表格中的空白项：&lt;/p&gt;
-&lt;p&gt;e: 假定阶码字段是一个无符号整数所表示的值。&lt;/p&gt;
-&lt;p&gt;E: 偏置之后的阶码值。&lt;/p&gt;
-&lt;p&gt;2[^E]: 阶码的权重。&lt;/p&gt;
-&lt;p&gt;f: 小数值。&lt;/p&gt;
-&lt;p&gt;M: 尾数的值。&lt;/p&gt;
-&lt;p&gt;2[^E] * M: 该数（未归约的）小数值。&lt;/p&gt;
-&lt;p&gt;V: 该数归约后的小数值。&lt;/p&gt;
-&lt;p&gt;十进制：该数的十进制表示。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;位&lt;/th&gt;
-&lt;th&gt;e&lt;/th&gt;
-&lt;th&gt;E&lt;/th&gt;
-&lt;th&gt;2[^E]&lt;/th&gt;
-&lt;th&gt;f&lt;/th&gt;
-&lt;th&gt;M&lt;/th&gt;
-&lt;th&gt;2[^E]*M&lt;/th&gt;
-&lt;th&gt;V&lt;/th&gt;
-&lt;th&gt;十进制&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;0 00 00&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;0/4&lt;/td&gt;
-&lt;td&gt;0/4&lt;/td&gt;
-&lt;td&gt;0/4&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;0.0&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 00 01&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;1/4&lt;/td&gt;
-&lt;td&gt;1/4&lt;/td&gt;
-&lt;td&gt;1/4&lt;/td&gt;
-&lt;td&gt;1/4&lt;/td&gt;
-&lt;td&gt;0.25&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 00 10&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;2/4&lt;/td&gt;
-&lt;td&gt;2/4&lt;/td&gt;
-&lt;td&gt;2/4&lt;/td&gt;
-&lt;td&gt;1/2&lt;/td&gt;
-&lt;td&gt;0.5&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 00 11&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;3/4&lt;/td&gt;
-&lt;td&gt;3/4&lt;/td&gt;
-&lt;td&gt;3/4&lt;/td&gt;
-&lt;td&gt;3/4&lt;/td&gt;
-&lt;td&gt;0.75&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 01 00&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;0/4&lt;/td&gt;
-&lt;td&gt;4/4&lt;/td&gt;
-&lt;td&gt;4/4&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;1.0&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 01 01&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;1/4&lt;/td&gt;
-&lt;td&gt;5/4&lt;/td&gt;
-&lt;td&gt;5/4&lt;/td&gt;
-&lt;td&gt;5/4&lt;/td&gt;
-&lt;td&gt;1.25&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 01 10&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;2/4&lt;/td&gt;
-&lt;td&gt;6/4&lt;/td&gt;
-&lt;td&gt;6/4&lt;/td&gt;
-&lt;td&gt;3/2&lt;/td&gt;
-&lt;td&gt;1.5&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 01 11&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;3/4&lt;/td&gt;
-&lt;td&gt;7/4&lt;/td&gt;
-&lt;td&gt;7/4&lt;/td&gt;
-&lt;td&gt;7/4&lt;/td&gt;
-&lt;td&gt;1.75&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 10 00&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;0/4&lt;/td&gt;
-&lt;td&gt;4/4&lt;/td&gt;
-&lt;td&gt;8/4&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;2.0&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 10 01&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;1/4&lt;/td&gt;
-&lt;td&gt;5/4&lt;/td&gt;
-&lt;td&gt;10/4&lt;/td&gt;
-&lt;td&gt;5/2&lt;/td&gt;
-&lt;td&gt;2.5&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 10 10&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;2/4&lt;/td&gt;
-&lt;td&gt;6/4&lt;/td&gt;
-&lt;td&gt;12/4&lt;/td&gt;
-&lt;td&gt;3&lt;/td&gt;
-&lt;td&gt;3.0&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 10 11&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;3/4&lt;/td&gt;
-&lt;td&gt;7/4&lt;/td&gt;
-&lt;td&gt;14/4&lt;/td&gt;
-&lt;td&gt;7/2&lt;/td&gt;
-&lt;td&gt;3.5&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 11 00&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;∞&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 11 01&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;NaN&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 11 10&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;NaN&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;0 11 11&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;NaN&lt;/td&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;浮点数的舍入&#34;&gt;浮点数的舍入&lt;/h3&gt;
-&lt;h3 id=&#34;溢出-1&#34;&gt;溢出&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;浮点数的溢出:&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n\t&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;(1e20 + (-1e20)) + 3.14 = %lf&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n\t&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.14&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;1e20 + (-1e20 + 3.14) = %lf&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.14&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;浮点数的加乘法&#34;&gt;浮点数的加乘法&lt;/h3&gt;
-&lt;p&gt;浮点数的加乘法是和我们想的不一样的，它不满足结合律，交换律的，如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 编译器可能试图通过产生下列代码来省去一个浮点加法
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 但是对x来说，这个计算可能会产生于原始值不同的值,因为它使用了加法运算的不同结合方式
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;//浮点数的溢出:
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;   &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.14&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;  &lt;span class=&#34;mf&#34;&gt;3.140000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.14&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;  &lt;span class=&#34;mf&#34;&gt;0.000000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
-&lt;p&gt;这一章我们具体的学习了在机器上数的表示，我们用无符号数和补码来表示我的数值，用浮点数表示二进制的科学计数法，数与数的计算，它们是会有溢出的，用模运算来截断防止位溢出。
-大多数C 语言实现遵循的原则是底层的位模式不变。在补码机器上，对于一个w 位的值，这种行为是由函数T2Uw 和U2Tw来描述的。C 语言隐式的强制类型转换会出现许多程序员无法预计的结果，常常导致程序错误。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;我的建议是通读一遍课本，课本比我写的好很多，我想表达的写不出来那个&lt;code&gt;味道&lt;/code&gt;，而后再去看看视频会更加的理解。&lt;/p&gt;
-&lt;h2 id=&#34;外部链接&#34;&gt;外部链接&lt;/h2&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://en.wikipedia.org/wiki/IEEE_754&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;IEEE754&amp;mdash;wiki&lt;/a&gt;
-&lt;a class=&#34;link&#34; href=&#34;https://zh.wikipedia.org/wiki/%E6%B5%AE%E7%82%B9%E6%95%B0&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;浮点数&amp;mdash;wiki&lt;/a&gt;&lt;/p&gt;</description>
-        </item>
-        <item>
         <title>二.程序的机器级表示(CSAPP)</title>
         <link>https://FeiNiaoBF.github.io/zh-cn/p/%E4%BA%8C.%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BAcsapp/</link>
         <pubDate>Sun, 09 Apr 2023 20:13:06 +0800</pubDate>
@@ -1755,6 +960,801 @@
     &gt;RISC-V基本指令集概述&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://segmentfault.com/a/1190000022161796&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;过程调用&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>一.数的表示(CSAPP)</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E4%B8%80.%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BAcsapp/</link>
+        <pubDate>Sun, 19 Mar 2023 20:13:06 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E4%B8%80.%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BAcsapp/</guid>
+        <description>&lt;h1 id=&#34;二进制系统的核心---bit&#34;&gt;二进制系统的核心&amp;mdash;bit&lt;/h1&gt;
+&lt;p&gt;众所周知，在计算机里面的所以数据都是由&lt;strong&gt;bit&lt;/strong&gt;表示的，可能这与我们日常使用的十进制来说是十分不方便的，而要想从现实世界的十进制到二进制的过程需要一点点的改变。&lt;/p&gt;
+&lt;p&gt;正如我们所想的一样，bit的表示符合物理的形式，更加的底层，也与数学上的息息相关。当我们终究是要从程序员的看发来看bit的，对我们来说，计算机就是通过对&lt;strong&gt;bit&lt;/strong&gt;进行不同方式的编码和描述，来完成和执行不同的任务。&lt;/p&gt;
+&lt;h2 id=&#34;信息存储&#34;&gt;信息存储&lt;/h2&gt;
+&lt;h3 id=&#34;二进制和十六进制&#34;&gt;二进制和十六进制&lt;/h3&gt;
+&lt;p&gt;下面是各个进制的转换:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;二进制&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;十进制&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;十六进制&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;二进制&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;十进制&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;十六进制&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0000&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1000&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;8&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0001&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1001&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;9&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;9&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0010&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1010&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;10&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;A&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0011&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;3&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;3&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1011&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;11&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;B&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0100&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;4&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;4&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1100&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;12&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;C&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0101&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;5&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;5&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1101&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;13&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;D&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0110&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;6&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;6&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1110&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;14&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;E&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0111&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;7&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;7&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1111&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;15&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;F&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;这是一个十分重要的表格，我们要记得它。&lt;/p&gt;
+&lt;h3 id=&#34;位-字节-字bit-byte-word&#34;&gt;位， 字节， 字（bit, Byte, word）&lt;/h3&gt;
+&lt;p&gt;我们的一个位就是一bit， 一个字节就是8个bit， 一般32位字长机器一个字就是4个bit。&lt;/p&gt;
+&lt;p&gt;如果你问我为什么要这么规定的话，我可以告诉你我也不知道，笑，可以去看看历史，我猜是这样的设计符合机器的一些特性。&lt;/p&gt;
+&lt;p&gt;在C语言里面，所有的数据类型都有分配好的字节数，&lt;code&gt;char：1字节、short：2字节、int：4字节、long： 4字节、float：4字节、double：8字节&lt;/code&gt;（均在32位机器上）等等。&lt;/p&gt;
+&lt;p&gt;分配成这样：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;有规范，可以在不同的机器程序可以运行。&lt;/li&gt;
+&lt;li&gt;机器没有无限大的内存。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;寻址和字节顺序&#34;&gt;寻址和字节顺序&lt;/h3&gt;
+&lt;p&gt;在内存里，我们把它们抽象成一个一定大的数组块，为每一均匀分布的地址块编上编号(图片)，因此我们要知道多字节的存储顺序，这对于我们在进行网络数据的发送/接收格式，阅读反汇编的时候等等有关系。&lt;/p&gt;
+&lt;p&gt;大小端的判定：&lt;/p&gt;
+&lt;p&gt;以下是我使用书中的代码看我的电脑是大端还是小端：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;byte_pointer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;show_bytes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;byte_pointer&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;size_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;size_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;size_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;%.2x &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;show_int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;show_bytes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;byte_pointer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;sizeof&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;argc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;argv&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[])&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;short&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12345&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;short&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ua&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;number = %d&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;show_int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;number = %d&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ua&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;show_int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ua&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;==========================&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;$&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;byte&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;number&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12345&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;c7&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cf&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;number&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;53191&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;c7&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cf&lt;/span&gt; &lt;span class=&#34;mo&#34;&gt;00&lt;/span&gt; &lt;span class=&#34;mo&#34;&gt;00&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 我的电脑是小端的
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 系统Linux: Alpine apk-tools 2.12.9, compiled for x86_64.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;位的boolean-algebras&#34;&gt;位的Boolean Algebras&lt;/h3&gt;
+&lt;p&gt;位的布尔运算可以看我的&lt;a class=&#34;link&#34; href=&#34;https://clever-klepon-d14cb6.netlify.app/posts/bitsoperation/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;这一篇&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;左移和右移的计算&#34;&gt;左移和右移的计算&lt;/h4&gt;
+&lt;p&gt;这里我想着重的记下来：
+对于左移&lt;code&gt;&amp;lt;&amp;lt;&lt;/code&gt;&amp;amp; 右移&lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 是对于位的计算，相比于右移来说左移比较简单，在移动的同时往最低位右边补 0 即可。右移的话有两种类型，一种是&lt;code&gt;逻辑右移&lt;/code&gt;（左边补 0），另一种是&lt;code&gt;算术右移&lt;/code&gt;（左边补符号位）。为什么会有这两种，因为对应无符号数和有符号数的运算是不同的计算方法。&lt;/p&gt;
+&lt;h3 id=&#34;c语言上的logic计算&#34;&gt;C语言上的logic计算&lt;/h3&gt;
+&lt;p&gt;不必多言，做题：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// P76 练习题2.44
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;foo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;bar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ux&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uy&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;           &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ux&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;7&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;7&lt;/span&gt;     &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ux&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;           &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;整数表示&#34;&gt;整数表示&lt;/h2&gt;
+&lt;h3 id=&#34;无符号表示&#34;&gt;无符号表示&lt;/h3&gt;
+&lt;p&gt;无符号数（unsigned），就是在&lt;code&gt;0~2[^w] - 1&lt;/code&gt;范围的数，w是表示字长。有一个重要的特性，就是每个介于0~2[^w]-1 之间的数都有唯一的一个w位的值编码。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;UMin = 0;&lt;/li&gt;
+&lt;li&gt;UMax = 2[^w]−1;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;补码表示&#34;&gt;补码表示&lt;/h3&gt;
+&lt;p&gt;补码（Two&amp;rsquo; s Complement）， 就是在&lt;code&gt;-2[^w-1] ~ 2[^w-1] - 1&lt;/code&gt;范围的数，补码的出现使得数据的表示得到最好的利用，在运算上和我们的计算自觉一样了，只有一个0没正负之分。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;TMin = -2[^w-1]&lt;/li&gt;
+&lt;li&gt;TMax = 2[^w-1] - 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们可以从上面得到一些特性：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;|TMin|  = |TMax| + 1&lt;/li&gt;
+&lt;li&gt;UMax = 2 &lt;em&gt;|TMax| + 1  = 2&lt;/em&gt; |TMin| - 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/ZcUXbMrG2T4OJhP.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;B2Tx.png&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;整数运算&#34;&gt;整数运算&lt;/h2&gt;
+&lt;h3 id=&#34;加法&#34;&gt;加法&lt;/h3&gt;
+&lt;p&gt;考虑两个非负整数x 和y, 满足0 &amp;lt; x, y &amp;lt; 2[^w] 。每个数都能表示为w位无符号数字。然而，
+如果计算它们的和，我们就有一个可能的范围0 &amp;lt; x+y &amp;lt; 2[^w+1]-2 。我们需要&lt;code&gt;w+1&lt;/code&gt;位&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;8&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;11&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;3（19）&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1000&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+  1011&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;= 10011&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;我们来想想补码的形式，两个数x，y满足-2[^w-1] &amp;lt; x, y &amp;lt; 2[^w-1]-1,   计算它们的和，我们就有一个可能的范围-2[^w] &amp;lt; x + y &amp;lt; 2[^w-1]-2。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;8&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;11&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;3（19）&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1000&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;+  1011&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;= 10011&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;乘法&#34;&gt;乘法&lt;/h3&gt;
+&lt;p&gt;无符号数的乘法就是&lt;code&gt;UMul(x,y) = x * y mod 2[^w]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;补码的乘法&lt;code&gt;TMul(x,y) = U2T(x * y mod 2[^w])&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;溢出&#34;&gt;溢出&lt;/h3&gt;
+&lt;p&gt;在我们的运算中（特别是很大的数）不仅仅只考虑算不算的对，还要考虑有没有溢出，一旦我需要的位变成&lt;code&gt;w+1&lt;/code&gt;的十分你要十分注意了。&lt;/p&gt;
+&lt;p&gt;[&lt;img src=&#34;https://s2.loli.net/2023/04/21/5iVANckMR9qseoZ.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Two&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此时我们要用上扩展与截取：&lt;/p&gt;
+&lt;p&gt;扩展：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于无符号数，用x位向量表示[xn-1,&amp;hellip;,x0] -&amp;gt;[0,0,0,0,xn-1,&amp;hellip;,x0],用0把剩下的位补齐&lt;/li&gt;
+&lt;li&gt;对于补码， 用x位向量表示[xn-1,&amp;hellip;,x0] -&amp;gt;[ xn-1,xn-1,xn-1,xn-1,&amp;hellip;,x0],用&lt;code&gt;最高位xn-1&lt;/code&gt;把剩下的位补齐
+截取：&lt;/li&gt;
+&lt;li&gt;对于无符号数，UAdd(u,v) = u+v mod 2[^w], UMult(u,v)  = u * v mod 2[^w]&lt;/li&gt;
+&lt;li&gt;对于补码，先把数转换成无符号数再模运算最后再转换补码， TAdd(u,v) = U2T(u+v mod 2[^w]), TMult(u,v)  = U2T(u * v mod 2[^w])&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;类型转换&#34;&gt;类型转换&lt;/h3&gt;
+&lt;p&gt;无符号数和补码的转换是对位的表示不同来达到转换的过程。&lt;/p&gt;
+&lt;h2 id=&#34;浮点数floating-point&#34;&gt;浮点数（floating point）&lt;/h2&gt;
+&lt;p&gt;关于浮点数，本质上就是我们如何使用二进制来表达一个很大或者很小的数 (类似科学计数法，但是编码上有显著的区别)。&lt;/p&gt;
+&lt;p&gt;由于二进制的数值系统在表达能力上存在一定的限制 (位数的限制)，我们实际上没有办法表示所有的数，因此浮点数的设计需要认真的权衡和折中，既要考虑能够表达的范围，也要考虑表达的精度。&lt;/p&gt;
+&lt;p&gt;浮点数是一种近似的数，和我们十进制中的小数（或分数）一样，比如：3/10 = 0.333！。所以浮点数在不论大小项目里面都是要十分小心的地方。&lt;/p&gt;
+&lt;h3 id=&#34;ieee-浮点表示&#34;&gt;IEEE 浮点表示&lt;/h3&gt;
+&lt;p&gt;IEEE 浮点标准用V=(-1)[^s] &lt;em&gt;M&lt;/em&gt; 2[^E]的形式来表示一个数：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;符号(sign) s 决定这数是负数(s=1) 还是正数(s=0), 而对于数值0的符号位解释
+作为特殊情况处理(-0.0 = +0.0)。&lt;/li&gt;
+&lt;li&gt;尾数(significand) M 是一个二进制小数，它的范围是1~2-£, 或者是0~1 - £。&lt;/li&gt;
+&lt;li&gt;阶码(exponent) E 的作用是对浮点数加权，这个权重是2 的E 次幕（可能是负数） 。
+将浮点数的位表示划分为三个字段，分别对这些值进行编码：&lt;/li&gt;
+&lt;li&gt;一个单独的符号位s 直接编码符号s 。&lt;/li&gt;
+&lt;li&gt;k 位的阶码字段exp=ek - 1 … e1,e0 编码阶码E 。&lt;/li&gt;
+&lt;li&gt;n 位小数字段frac= fn-1 &amp;hellip; f1,f0 编码尾数M, 但是编码出来的值也依赖于阶码字
+段的值是否等千0 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/TYMtb2kBysG6maf.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;float.png&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在开始时记住一些值的来源：E = exp - Bias；M = 1/0 + f&lt;/p&gt;
+&lt;h4 id=&#34;规格化的值&#34;&gt;规格化的值&lt;/h4&gt;
+&lt;p&gt;当阶数 &lt;code&gt;exp ≠ 000…0&lt;/code&gt;和 &lt;code&gt;exp ≠ 111…1&lt;/code&gt;时，表示的其实都是规范化的值，这里只需要大概知道因为实数轴上原来连续的值会被规范到有限的定值上并且这些定值之间的间距也是不一样的，具体可以通过后面给出的例子来理解。&lt;/p&gt;
+&lt;p&gt;当 exp 的位模式既不全为0(数值0), 也不全为(32位的255，64位的2047)的时候，frac可以随意取值；&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;E = exp - Bias(2[^w-1] - 1)&lt;/li&gt;
+&lt;li&gt;M = 1 + f;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;例子：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    12345 = 0b0011.0000.0011.1001 = 1.1000000111001 * 2[^13]
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    E = 13 = exp - 127 -&amp;gt; exp = 140;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    M = 1 + f = 1.1000000111001 -&amp;gt; f = 1000000111001;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;s(1)&lt;/th&gt;
+&lt;th&gt;exp(8)&lt;/th&gt;
+&lt;th&gt;frac(23)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;10001100&lt;/td&gt;
+&lt;td&gt;10000001110010000000000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/FvmEjJeDSVWkQtH.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Normalized&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;非规格化的值&#34;&gt;非规格化的值&lt;/h4&gt;
+&lt;p&gt;当exp每一位都为0的时候，可以想象到这时候的数无限的接近数值0，可画个数轴来看，此时的 &lt;code&gt;E = 1 - Bias&lt;/code&gt;而且M没有隐含的1表示了，&lt;code&gt;M = f&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;第一个功能就是表示0，0的时候exp位为0，frac位为0，符号位的不同使得-0/+0有相同的地方何不同的地方。&lt;/p&gt;
+&lt;p&gt;非规格化数的另外一个功能是表示那些非常接近于0.0 的数。它们提供了一种属性，称为逐渐溢出(gradual underflow), 其中，可能的数值分布均匀地接近于0.0 。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/ZmftLThWNq5kD4p.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Denormalized&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;无穷大和nan&#34;&gt;无穷大和NaN&lt;/h4&gt;
+&lt;p&gt;最后一类数值是当指阶码全为1 的时候出现的。当小数域全为0时，得到的值表示无穷，当 s=O 时是 +∞ 或者是 s=1 时是 -∞ 。当我们把两个非常大的数相乘，或者除以零时，无穷能够表示溢出的结果。当小数域为非零时，结果值被称为&amp;quot;NaN&amp;quot;, 即“不是一个数(&lt;strong&gt;Not a Number&lt;/strong&gt;)&amp;quot; 的缩写。一些运算的结果不能是实数或无穷，就会返回这样的NaN值，比如当计算sqrt(-1)或 (∞-∞) 时。在某些应用中，表示未初始化的数据时，它们也很有用处。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/iYnoLHDCwqASEyg.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;inf&#34;
+	
+	
+&gt;
+&lt;img src=&#34;https://s2.loli.net/2023/04/24/15xlfajNMHpnrwG.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;NaN&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;练习&#34;&gt;练习&lt;/h4&gt;
+&lt;p&gt;假设一个基于IEEE 浮点格式的5 位浮点表示，有1 个符号位、2 个阶 码位(k=Z) 和两个小数位(n=2) 。阶码偏置量是2[2-1] - 1 = 1 。下表中列举了这个5 位浮点表示的全部非负取值范围。使用下面的条件，填写表格中的空白项：&lt;/p&gt;
+&lt;p&gt;e: 假定阶码字段是一个无符号整数所表示的值。&lt;/p&gt;
+&lt;p&gt;E: 偏置之后的阶码值。&lt;/p&gt;
+&lt;p&gt;2[^E]: 阶码的权重。&lt;/p&gt;
+&lt;p&gt;f: 小数值。&lt;/p&gt;
+&lt;p&gt;M: 尾数的值。&lt;/p&gt;
+&lt;p&gt;2[^E] * M: 该数（未归约的）小数值。&lt;/p&gt;
+&lt;p&gt;V: 该数归约后的小数值。&lt;/p&gt;
+&lt;p&gt;十进制：该数的十进制表示。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;位&lt;/th&gt;
+&lt;th&gt;e&lt;/th&gt;
+&lt;th&gt;E&lt;/th&gt;
+&lt;th&gt;2[^E]&lt;/th&gt;
+&lt;th&gt;f&lt;/th&gt;
+&lt;th&gt;M&lt;/th&gt;
+&lt;th&gt;2[^E]*M&lt;/th&gt;
+&lt;th&gt;V&lt;/th&gt;
+&lt;th&gt;十进制&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0 00 00&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0/4&lt;/td&gt;
+&lt;td&gt;0/4&lt;/td&gt;
+&lt;td&gt;0/4&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 00 01&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1/4&lt;/td&gt;
+&lt;td&gt;1/4&lt;/td&gt;
+&lt;td&gt;1/4&lt;/td&gt;
+&lt;td&gt;1/4&lt;/td&gt;
+&lt;td&gt;0.25&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 00 10&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2/4&lt;/td&gt;
+&lt;td&gt;2/4&lt;/td&gt;
+&lt;td&gt;2/4&lt;/td&gt;
+&lt;td&gt;1/2&lt;/td&gt;
+&lt;td&gt;0.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 00 11&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;3/4&lt;/td&gt;
+&lt;td&gt;3/4&lt;/td&gt;
+&lt;td&gt;3/4&lt;/td&gt;
+&lt;td&gt;3/4&lt;/td&gt;
+&lt;td&gt;0.75&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 01 00&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0/4&lt;/td&gt;
+&lt;td&gt;4/4&lt;/td&gt;
+&lt;td&gt;4/4&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 01 01&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1/4&lt;/td&gt;
+&lt;td&gt;5/4&lt;/td&gt;
+&lt;td&gt;5/4&lt;/td&gt;
+&lt;td&gt;5/4&lt;/td&gt;
+&lt;td&gt;1.25&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 01 10&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2/4&lt;/td&gt;
+&lt;td&gt;6/4&lt;/td&gt;
+&lt;td&gt;6/4&lt;/td&gt;
+&lt;td&gt;3/2&lt;/td&gt;
+&lt;td&gt;1.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 01 11&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;3/4&lt;/td&gt;
+&lt;td&gt;7/4&lt;/td&gt;
+&lt;td&gt;7/4&lt;/td&gt;
+&lt;td&gt;7/4&lt;/td&gt;
+&lt;td&gt;1.75&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 10 00&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;0/4&lt;/td&gt;
+&lt;td&gt;4/4&lt;/td&gt;
+&lt;td&gt;8/4&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;2.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 10 01&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;1/4&lt;/td&gt;
+&lt;td&gt;5/4&lt;/td&gt;
+&lt;td&gt;10/4&lt;/td&gt;
+&lt;td&gt;5/2&lt;/td&gt;
+&lt;td&gt;2.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 10 10&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;2/4&lt;/td&gt;
+&lt;td&gt;6/4&lt;/td&gt;
+&lt;td&gt;12/4&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;3.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 10 11&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3/4&lt;/td&gt;
+&lt;td&gt;7/4&lt;/td&gt;
+&lt;td&gt;14/4&lt;/td&gt;
+&lt;td&gt;7/2&lt;/td&gt;
+&lt;td&gt;3.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 11 00&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;∞&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 11 01&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;NaN&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 11 10&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;NaN&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0 11 11&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;NaN&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;浮点数的舍入&#34;&gt;浮点数的舍入&lt;/h3&gt;
+&lt;h3 id=&#34;溢出-1&#34;&gt;溢出&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;浮点数的溢出:&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n\t&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;(1e20 + (-1e20)) + 3.14 = %lf&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n\t&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.14&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;1e20 + (-1e20 + 3.14) = %lf&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.14&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;浮点数的加乘法&#34;&gt;浮点数的加乘法&lt;/h3&gt;
+&lt;p&gt;浮点数的加乘法是和我们想的不一样的，它不满足结合律，交换律的，如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 编译器可能试图通过产生下列代码来省去一个浮点加法
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 但是对x来说，这个计算可能会产生于原始值不同的值,因为它使用了加法运算的不同结合方式
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;//浮点数的溢出:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;   &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.14&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;  &lt;span class=&#34;mf&#34;&gt;3.140000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;1e20&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.14&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;  &lt;span class=&#34;mf&#34;&gt;0.000000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
+&lt;p&gt;这一章我们具体的学习了在机器上数的表示，我们用无符号数和补码来表示我的数值，用浮点数表示二进制的科学计数法，数与数的计算，它们是会有溢出的，用模运算来截断防止位溢出。
+大多数C 语言实现遵循的原则是底层的位模式不变。在补码机器上，对于一个w 位的值，这种行为是由函数T2Uw 和U2Tw来描述的。C 语言隐式的强制类型转换会出现许多程序员无法预计的结果，常常导致程序错误。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;double&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;我的建议是通读一遍课本，课本比我写的好很多，我想表达的写不出来那个&lt;code&gt;味道&lt;/code&gt;，而后再去看看视频会更加的理解。&lt;/p&gt;
+&lt;h2 id=&#34;外部链接&#34;&gt;外部链接&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://en.wikipedia.org/wiki/IEEE_754&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;IEEE754&amp;mdash;wiki&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://zh.wikipedia.org/wiki/%E6%B5%AE%E7%82%B9%E6%95%B0&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;浮点数&amp;mdash;wiki&lt;/a&gt;&lt;/p&gt;</description>
+        </item>
+        <item>
+        <title>零.深入理解计算机系统(CSAPP)</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E9%9B%B6.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcsapp/</link>
+        <pubDate>Sun, 12 Mar 2023 21:46:39 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E9%9B%B6.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9Fcsapp/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&#34;有志有识有恒则断无不成之事&#34;&gt;有志，有识，有恒，则断无不成之事&lt;/h3&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我自己在2022年学习过&lt;code&gt;CS61c&lt;/code&gt;，这门课主要是讲解了计算机的体系结构，终于踏入了计算机的门槛。计算机体系结构，这是一个计算机十分难啃的一门知识，内容之多、范围之广，无论里面的&lt;code&gt;数的表示、编译原理、CPU的基本架构、内存、虚拟内存、流水线、线程级并行、I/O、OS、网络等等&lt;/code&gt;，每个方面都可以单独拎出来成为一门课程。而想要精通这些知识需要耗费大量的时间和精力，即使学习十年也不嫌少。哈哈哈。&lt;/p&gt;
+&lt;p&gt;我对计算机的热爱促使我非正式地学习了 &lt;code&gt;CS61c&lt;/code&gt;（可惜我不是伯克利的学子）过后，我发现，它给我的是课堂上没有的一些思想，比如：为什么？通过已经有的事实发出提问（即存在有缘由，而不是想当然的存在即真理）。&lt;/p&gt;
+&lt;p&gt;在我上大学的时候我就知道一本&lt;code&gt;神书&lt;/code&gt;《深入理解计算机系统》（即：&lt;em&gt;&lt;strong&gt;《Computer Systems: A Programmer’s Perspective》&lt;/strong&gt;&lt;/em&gt;），可是一直没有机会读一读（也看不懂 😂 ，也正是在有CS61c的基础上我想去好好的通读一遍它。&lt;/p&gt;
+&lt;p&gt;这本书好在哪里？它是一本以程序员的视角来看计算机的底层机制，不需要你对物理，电子层面有多么高的水准来看计算机，如果有的话更好的（在这里就不得不吐槽国内的教学了）。它里面的内容也是十分的丰富，结合了计算机组成与体系结构，链接与装载，程序优化，内存存储层次，操作系统，网络等基础知识。&lt;/p&gt;
+&lt;p&gt;好的，说那么多，我也想把我在学习的过程写下来这也不失成为我的一场回忆。&lt;/p&gt;
+&lt;h2 id=&#34;学习目的&#34;&gt;学习目的&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;知其然而不知其所以然&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在看这本书的时候问问自己，这本书可以给我带来什么？我为什么要学习这本书？正如上面的这句话一样，况且我也不想做一个”代码的搬运工“。&lt;/p&gt;
+&lt;h3 id=&#34;学到什么&#34;&gt;学到什么？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;可以对计算机底层系统有一个更加全面且深入的认识。&lt;/li&gt;
+&lt;li&gt;系统的理解计算机系统底层的工作原理。&lt;/li&gt;
+&lt;li&gt;写出更加健壮的、安全的代码。&lt;/li&gt;
+&lt;li&gt;走向现实层面的计算机。&lt;/li&gt;
+&lt;li&gt;打下编译原理、操作系统的基础。&lt;/li&gt;
+&lt;li&gt;等等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;学习是要你静下心来，认真思考，积极动手的，用我的话来说就是：事无巨细&lt;/p&gt;
+&lt;h2 id=&#34;计算机系统漫游&#34;&gt;计算机系统漫游&lt;/h2&gt;
+&lt;p&gt;接下来就看看我们要学什么。&lt;/p&gt;
+&lt;h3 id=&#34;信息bit化&#34;&gt;信息&lt;code&gt;bit&lt;/code&gt;化&lt;/h3&gt;
+&lt;p&gt;人类与机器交互最大的问题是&lt;code&gt;语言不通&lt;/code&gt;。让我们回到五六十年代，那时没有像现在这样方便的手机、iPad和电脑操作方式。那个&amp;quot;古老时代&amp;quot;没有图像、键盘或字符，只有打孔器、巨型电子管和满屋子的电线&amp;hellip;&amp;hellip;我们唯一能与计算机交流的方法就是通过电流和“疯狂”的思维。&lt;/p&gt;
+&lt;p&gt;而随着物理学和数学的发展，计算机得以快速发展，并且我们开始使用二进制来与机器进行交互，这比以前好多了。&lt;/p&gt;
+&lt;p&gt;但仍然存在一个问题：“为什么要使用二进制？”因为它适用于我们的电路（高/低电压）和逻辑门（0/1），似乎所有事情都变成了二进制。 我们在这里已经迈出了很大的步伐。&lt;/p&gt;
+&lt;p&gt;在计算机领域里面，我们叫一个可以正常显示0/1的位叫&lt;code&gt;bit&lt;/code&gt;，而后续的研究证明了一次性对8bit进行操作是十分成功的，因此&lt;strong&gt;1 Byte = 8 bit&lt;/strong&gt;(注意大小写)，在后面我们的位越来越多，我们使用了&lt;code&gt;十六进制&lt;/code&gt;。由此来看，人类是很富有想象力的种族。&lt;/p&gt;
+&lt;p&gt;在后面的学习中，数值的表示是很重要的知识点，计算机就是为精准，快速计算这些数值，特别是浮点数（float）的计算而发展的。&lt;/p&gt;
+&lt;h3 id=&#34;编译系统&#34;&gt;编译系统&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Hello World&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;上面是一个简单的C语言程序，打印一个&amp;quot;Hello World&amp;quot;(并且换行)，但是，它要经过好几个步骤才能打印在你的屏幕上，分别是：编译(Compiler)，汇编(Assembler)，装载器(Loader)，链接器(Linker)。&lt;/p&gt;
+&lt;p&gt;我们在这一部分将要学到从 &lt;code&gt;高级语言 --&amp;gt; 汇编语言 --&amp;gt; 机器语言&lt;/code&gt; 这一过程的具体实现，这使我们能够更深入地了解系统的底层。。&lt;/p&gt;
+&lt;h3 id=&#34;cpu基本结构&#34;&gt;CPU基本结构&lt;/h3&gt;
+&lt;p&gt;CPU（中央处理器），可以说是本世纪最伟大的发明了，一个小小的芯片装载着人类的智慧，这一部分我们要了解 CPU 的内部构造，下面是一张 CPU 的大致图片：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/07/24/sU86Dw3jgNBOoV2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;cpu8085.png&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这是一个复杂但十分有趣的部分，相信我，你会体会它的魅力的。&lt;/p&gt;
+&lt;h3 id=&#34;操作系统&#34;&gt;操作系统&lt;/h3&gt;
+&lt;p&gt;操作系统(&lt;em&gt;&lt;strong&gt;Operating System&lt;/strong&gt;&lt;/em&gt;)，是来控制电脑的执行硬件、软件资源，控制&lt;strong&gt;I/O&lt;/strong&gt;操作，提供基本的用户互动等。&lt;/p&gt;
+&lt;p&gt;它也负责加载程序、处理服务（如网络堆栈和文件系统）以及为多个程序复用资源，但它实际上是要负责隔离各个程序，使得一个给定的程序不会干扰另一个程序的内存或执行。&lt;/p&gt;
+&lt;h3 id=&#34;网络通信&#34;&gt;网络通信&lt;/h3&gt;
+&lt;p&gt;这一部分我也写了自己的&lt;a class=&#34;link&#34; href=&#34;https://clever-klepon-d14cb6.netlify.app/posts/internet-0/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;学习笔记&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;外部链接&#34;&gt;外部链接&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.bottomupcs.com/index.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Computer Science from the Bottom Up&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://wdxtub.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;小土刀博主的『读薄』&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://fengmuzi2003.gitbook.io/csapp3e/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;fengmuzi2003up主的计算机系统漫游&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
         

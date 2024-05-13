@@ -7,7 +7,63 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Example Person. All rights reserved.</copyright>
-        <lastBuildDate>Thu, 14 Mar 2024 22:49:04 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 13 May 2024 09:13:33 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Development</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/development/</link>
+        <pubDate>Mon, 13 May 2024 09:13:33 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/categories/development/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Golang</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/golang/</link>
+        <pubDate>Mon, 13 May 2024 09:13:33 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/categories/golang/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Q&amp;A</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/qa/</link>
+        <pubDate>Mon, 13 May 2024 09:13:33 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/categories/qa/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>CS</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/cs/</link>
+        <pubDate>Mon, 13 May 2024 09:10:39 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/categories/cs/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Start</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/start/</link>
+        <pubDate>Mon, 13 May 2024 09:10:39 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/categories/start/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Resource</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/resource/</link>
+        <pubDate>Mon, 13 May 2024 09:08:51 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/categories/resource/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Languages</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/languages/</link>
+        <pubDate>Mon, 13 May 2024 09:08:32 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/categories/languages/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Linux</title>
         <link>https://FeiNiaoBF.github.io/zh-cn/categories/linux/</link>
         <pubDate>Thu, 14 Mar 2024 22:49:04 +0800</pubDate>
@@ -21,14 +77,6 @@
         <pubDate>Thu, 14 Mar 2024 22:49:04 +0800</pubDate>
         
         <guid>https://FeiNiaoBF.github.io/zh-cn/categories/os/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>CS</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/categories/cs/</link>
-        <pubDate>Thu, 14 Mar 2024 21:48:19 +0800</pubDate>
-        
-        <guid>https://FeiNiaoBF.github.io/zh-cn/categories/cs/</guid>
         <description></description>
         </item>
         <item>
@@ -85,22 +133,6 @@
         <pubDate>Sun, 10 Mar 2024 16:21:29 +0800</pubDate>
         
         <guid>https://FeiNiaoBF.github.io/zh-cn/categories/datastructures/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Golang</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/categories/golang/</link>
-        <pubDate>Sun, 10 Mar 2024 16:21:29 +0800</pubDate>
-        
-        <guid>https://FeiNiaoBF.github.io/zh-cn/categories/golang/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Languages</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/categories/languages/</link>
-        <pubDate>Sun, 10 Mar 2024 16:04:14 +0800</pubDate>
-        
-        <guid>https://FeiNiaoBF.github.io/zh-cn/categories/languages/</guid>
         <description></description>
         </item>
         <item>

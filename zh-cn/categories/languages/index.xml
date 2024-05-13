@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Example Person. All rights reserved.</copyright>
-        <lastBuildDate>Sun, 10 Mar 2024 16:04:14 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/languages/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 13 May 2024 09:08:32 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/languages/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Golang 语言学习</title>
         <link>https://FeiNiaoBF.github.io/zh-cn/post/gohh/1.computerbasics/cslanguages/golang/</link>
         <pubDate>Sun, 10 Mar 2024 16:02:27 +0800</pubDate>
@@ -16,185 +16,69 @@
         <description></description>
         </item>
         <item>
-        <title>Golang 语言笔记(5)</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/golang-%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B05/</link>
-        <pubDate>Sun, 10 Mar 2024 16:04:14 +0800</pubDate>
+        <title>LearningPath</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/learningpath/</link>
+        <pubDate>Mon, 13 May 2024 09:08:32 +0800</pubDate>
         
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/golang-%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B05/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Golang 语言笔记(4)</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/golang-%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B04/</link>
-        <pubDate>Sun, 10 Mar 2024 16:04:11 +0800</pubDate>
-        
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/golang-%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B04/</guid>
-        <description>&lt;h2 id=&#34;包和函数&#34;&gt;包和函数&lt;/h2&gt;
-&lt;h3 id=&#34;包&#34;&gt;包&lt;/h3&gt;
-&lt;h3 id=&#34;函数定义&#34;&gt;函数定义&lt;/h3&gt;
-&lt;p&gt;在 Go 语言中，函数名的大小写是有特殊含义的。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;如果一个函数名以大写字母开头，那么它是可导出的（public），可以被其他包（package）访问和调用。&lt;/li&gt;
-&lt;li&gt;如果一个函数名以小写字母开头，那么它是不可导出的（private），只能在定义该函数的包内部使用。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;这种大小写的规则也适用于其他标识符，比如变量名、常量名和类型名。这种规则有助于控制包内部的可见性，使得包可以选择性地暴露或隐藏其内部实现的细节。&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title>Golang 语言笔记(3)</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/golang-%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B03/</link>
-        <pubDate>Sun, 10 Mar 2024 16:04:09 +0800</pubDate>
-        
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/golang-%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B03/</guid>
-        <description>&lt;h2 id=&#34;值得一提的函数&#34;&gt;值得一提的函数&lt;/h2&gt;
-&lt;h3 id=&#34;make-函数&#34;&gt;make 函数&lt;/h3&gt;
-&lt;p&gt;在 Go 语言中，&lt;code&gt;make&lt;/code&gt; 是一个内建函数，用于创建切片（slice）、映射（map）和通道（channel）这三种数据结构。&lt;code&gt;make&lt;/code&gt; 函数的语法如下：&lt;/p&gt;
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/learningpath/</guid>
+        <description>&lt;h2 id=&#34;hello-golang&#34;&gt;Hello, Golang&lt;/h2&gt;
+&lt;p&gt;Go 语言是 Google 开发的一种&lt;strong&gt;静态强类型&lt;/strong&gt;、&lt;strong&gt;编译型&lt;/strong&gt;、&lt;strong&gt;并发型&lt;/strong&gt;，并具有&lt;strong&gt;垃圾回收功能&lt;/strong&gt;的编程语言。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;下载地址：&lt;a class=&#34;link&#34; href=&#34;https://go.dev/dl/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Downloads - The Go Programming Language&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;快速开始&#34;&gt;快速开始&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;下载 Go 到你的学习机上，检查 go 的现状&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;go version
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;其中，&lt;code&gt;T&lt;/code&gt; 代表要创建的数据结构的类型，&lt;code&gt;size&lt;/code&gt; 代表要创建的数据结构的大小或容量（取决于具体的数据结构类型）。下面是 &lt;code&gt;make&lt;/code&gt; 函数在不同数据结构上的使用示例：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;创建切片：&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;在你喜欢的 Workspace 上 Create a new directory&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;slice&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 创建一个包含5个整数的切片
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;创建映射：&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 创建一个字符串到整数的映射
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;创建通道：&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 创建一个整数类型的无缓冲通道
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;总之，&lt;code&gt;make&lt;/code&gt; 函数在 Go 语言中用于初始化并分配内存给切片、映射和通道，是创建这些数据结构的常用方式。&lt;/p&gt;
-&lt;h3 id=&#34;new-函数&#34;&gt;new 函数&lt;/h3&gt;
-&lt;p&gt;在 Go 语言中，&lt;code&gt;new&lt;/code&gt; 是一个内建函数，用于分配内存并返回指向已分配类型的指针。&lt;code&gt;new&lt;/code&gt; 函数的语法如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;new&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir gowork
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;其中，&lt;code&gt;Type&lt;/code&gt; 代表要分配内存的类型。&lt;code&gt;new&lt;/code&gt; 函数返回一个指向该类型的零值的指针。下面是 &lt;code&gt;new&lt;/code&gt; 函数的使用示例：&lt;/p&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;添加一个名为 &lt;code&gt;hello.go&lt;/code&gt; 的文件，在其中输入代码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In vim, vscode &amp;hellip;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;new&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 分配一个整数类型的内存，并返回指向该整数的指针
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;在这个示例中，&lt;code&gt;p&lt;/code&gt; 是一个指向整数类型的指针，它指向的整数的初始值为 0。&lt;code&gt;new&lt;/code&gt; 函数通常用于分配内存给基本类型或结构体，并返回指向该类型的指针。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 分配一个整数数组的内存，并返回指向该数组的指针
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;arr&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;new&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;main&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 分配一个字符串切片的内存，并返回指向该切片的指针
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;slice&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;new&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 分配一个映射的内存，并返回指向该映射的指针
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;new&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 分配一个自定义类型的内存，并返回指向该类型的指针
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Person&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Name&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Age&lt;/span&gt;  &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Hello, world&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;new&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Person&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;blockquote&gt;
-&lt;p&gt;new 和 make 的区别：
-在 Go 语言中，&lt;code&gt;new&lt;/code&gt; 和 &lt;code&gt;make&lt;/code&gt; 是两个不同的内建函数，它们用于分配内存和初始化不同类型的数据结构。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;new&lt;/code&gt; 函数用于分配内存，并返回指向该类型的零值的指针。它适用于所有类型，包括基本类型、结构体以及其他自定义类型。例如，&lt;code&gt;new(int)&lt;/code&gt; 会分配一个整数类型的内存，并返回指向该整数的指针。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;make&lt;/code&gt; 函数则用于创建切片（slice）、映射（map）和通道（channel）这三种数据结构。它不返回指针，而是返回已初始化的数据结构。例如，&lt;code&gt;make([]int, 5)&lt;/code&gt; 会创建一个包含 5 个整数的切片，并进行初始化。&lt;/p&gt;
-&lt;p&gt;因此，&lt;code&gt;new&lt;/code&gt; 用于任何类型的内存分配，而 &lt;code&gt;make&lt;/code&gt; 专门用于切片、映射和通道的初始化。&lt;/p&gt;
+&lt;p&gt;In shell&lt;/p&gt;
 &lt;/blockquote&gt;
-</description>
-        </item>
-        <item>
-        <title>Golang 语言笔记(2)</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/golang-%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B02/</link>
-        <pubDate>Sun, 10 Mar 2024 16:04:07 +0800</pubDate>
-        
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/golang-%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B02/</guid>
-        <description>&lt;h2 id=&#34;控制结构&#34;&gt;控制结构&lt;/h2&gt;
-&lt;h3 id=&#34;for-循环&#34;&gt;For 循环&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;for &lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;循环跳出&#34;&gt;循环跳出&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;break&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;return&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;goto&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;panic&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-</description>
-        </item>
-        <item>
-        <title>Golang 语言笔记(1)</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/golang-%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B01/</link>
-        <pubDate>Sun, 10 Mar 2024 16:04:04 +0800</pubDate>
-        
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/golang-%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B01/</guid>
-        <description>&lt;h2 id=&#34;基本类型&#34;&gt;基本类型&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Int（int8，int16，int32，int64）&lt;/li&gt;
-&lt;li&gt;Uint（uint 8，uint 16，uint 32，uint 64）&lt;/li&gt;
-&lt;li&gt;Bool&lt;/li&gt;
-&lt;li&gt;String&lt;/li&gt;
-&lt;li&gt;Byte (uint8 的别名)&lt;/li&gt;
-&lt;li&gt;Rune（int32 的别名一个 unicode）&lt;/li&gt;
-&lt;li&gt;Float 32，float 64&lt;/li&gt;
-&lt;li&gt;Complex 32，complex 64 （虚数）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;变量&#34;&gt;变量&lt;/h2&gt;
-&lt;p&gt;在Go语言中，变量使用 &lt;code&gt;var&lt;/code&gt; 关键字进行声明。变量可以在声明时进行初始化，也可以单独声明后再进行赋值。另外，Go语言还支持使用 &lt;code&gt;:=&lt;/code&gt; 运算符进行短变量声明，用于在函数内部快速声明并初始化变量。
-示例：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -207,102 +91,37 @@
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;bool&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;//只能用在局部函数
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;匿名变量&#34;&gt;匿名变量&lt;/h3&gt;
-&lt;p&gt;在 Go 语言中，匿名变量用下划线 &lt;code&gt;_&lt;/code&gt; 表示。它通常用于占位，表示一个不需要的值。在函数返回多个值时，如果你只关心其中的某些值，可以使用匿名变量来忽略其他值。&lt;/p&gt;
-&lt;p&gt;示例:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;SomeFunction&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 忽略第一个返回值
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;常量&#34;&gt;常量&lt;/h2&gt;
-&lt;p&gt;在 Go 语言中，常量使用 &lt;code&gt;const&lt;/code&gt; 关键字进行声明。常量在声明时必须进行初始化，并且一旦被赋值后就不能再次修改。常量的命名规则与变量相同，使用驼峰命名法或全大写命名法。&lt;/p&gt;
-&lt;p&gt;示例:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Pi&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.14159&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;package main
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;import &amp;#34;&lt;/span&gt;fmt&lt;span class=&#34;s2&#34;&gt;&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;func main() {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt; fmt.Println(&amp;#34;&lt;/span&gt;Hello, world&lt;span class=&#34;s2&#34;&gt;&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;}&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; hello.go
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;ascll-码&#34;&gt;ASCLL 码&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;用 &lt;code&gt;\x&lt;/code&gt; 表示十六进制&lt;/li&gt;
-&lt;li&gt;用 &lt;code&gt;\&lt;/code&gt; 表示八进制&lt;/li&gt;
-&lt;li&gt;用 &lt;code&gt;\u&lt;/code&gt; 表示 unicode&lt;/li&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;运行它&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;go-语言中的数据结构&#34;&gt;Go 语言中的数据结构&lt;/h2&gt;
-&lt;h3 id=&#34;基础数据结构&#34;&gt;基础数据结构&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;[[数组（Array）]]&lt;/strong&gt; - 由固定长度的相同类型元素组成的数据结构。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;切片（Slice）&lt;/strong&gt; - 由数组构成的动态长度序列，提供了更灵活的操作方式。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;映射（Map）&lt;/strong&gt; - 存储键值对的集合，用于快速检索数据。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;结构体（Struct）&lt;/strong&gt; - 可以包含不同类型字段的复合数据类型。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/blockquote&gt;
-&lt;h4 id=&#34;数组array&#34;&gt;数组（Array）&lt;/h4&gt;
-&lt;h4 id=&#34;切片-slice&#34;&gt;切片 （Slice）&lt;/h4&gt;
-&lt;h4 id=&#34;映射-map&#34;&gt;映射 （Map）&lt;/h4&gt;
-&lt;h4 id=&#34;结构体-struct&#34;&gt;结构体 （Struct）&lt;/h4&gt;
-&lt;h3 id=&#34;其他数据结构和类型&#34;&gt;其他数据结构和类型&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;通道（Channel）&lt;/strong&gt; - 用于在 Go 协程之间进行通信的类型。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;接口（Interface）&lt;/strong&gt; - 定义对象的行为，是一种抽象类型。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;指针（Pointer）&lt;/strong&gt; - 存储变量的内存地址，用于直接访问内存中的值。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/blockquote&gt;
-&lt;h4 id=&#34;通道channel&#34;&gt;通道（Channel）&lt;/h4&gt;
-&lt;h4 id=&#34;接口interface&#34;&gt;接口（Interface）&lt;/h4&gt;
-&lt;h4 id=&#34;指针pointer&#34;&gt;指针（Pointer）&lt;/h4&gt;
-&lt;h2 id=&#34;命名规范&#34;&gt;命名规范&lt;/h2&gt;
-&lt;p&gt;注意：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;首字母大小写：&lt;/strong&gt; 以大写字母开头的标识符是 &lt;strong&gt;public&lt;/strong&gt; 的（可导出的），可以被其他包访问。以小写字母开头的标识符是私有的，只能在当前包内访问。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;在 Go 语言中，有一些命名规范适用于不同的命名情况。以下是一些常见的命名规范：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;包名&lt;/strong&gt;：包名应该使用单数形式，且应该是小写的，例如 &lt;code&gt;utils&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;文件名&lt;/strong&gt;：文件名应该全部使用小写字母，可以包含下划线 &lt;code&gt;_&lt;/code&gt;，例如 &lt;code&gt;my_file.go&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;变量&lt;/strong&gt;：变量名使用驼峰命名法，例如 &lt;code&gt;myVariable&lt;/code&gt;。私有变量的命名应该以小写字母开头，公共变量则以大写字母开头。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;常量&lt;/strong&gt;：常量的命名应该全部使用大写字母，可以包含下划线 &lt;code&gt;_&lt;/code&gt;，例如 &lt;code&gt;MAX_SIZE&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;函数&lt;/strong&gt;：函数名同样使用驼峰命名法，例如 &lt;code&gt;calculateTotal&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;结构体&lt;/strong&gt;：结构体的命名同样使用驼峰命名法，例如 &lt;code&gt;type MyStruct struct&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;接口&lt;/strong&gt;：接口的命名同样使用驼峰命名法，例如 &lt;code&gt;type MyInterface interface&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;枚举&lt;/strong&gt;：枚举的命名同样使用驼峰命名法，例如 &lt;code&gt;type Color int&lt;/code&gt;。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;在 Go 语言中，命名变量时有一些常见的命名规范，这些规范有助于编写清晰、易读的代码。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;使用驼峰命名法：变量名应该使用驼峰命名法，即除第一个单词外，其余单词的首字母大写，例如 &lt;code&gt;myVariable&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;使用有意义的名称：变量名应该具有描述性，能够清晰地表达变量的用途和含义。&lt;/li&gt;
-&lt;li&gt;避免使用单个字符作为变量名：除非是临时变量或者循环变量，否则应该避免使用单个字符作为变量名，以提高代码的可读性。&lt;/li&gt;
-&lt;li&gt;使用短小的名称：变量名应该尽量简洁，但又能清晰表达变量的含义。&lt;/li&gt;
-&lt;li&gt;使用全大写命名的常量：在 Go 语言中，全大写的变量名通常用于表示常量。&lt;/li&gt;
-&lt;li&gt;遵循约定俗成的命名规范：Go 语言社区有一些常见的命名约定，比如用 &lt;code&gt;i&lt;/code&gt; 表示循环变量，用 &lt;code&gt;err&lt;/code&gt; 表示错误变量等，建议遵循这些约定以保持代码风格的一致性。&lt;/li&gt;
-&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;go run hell.go
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Welcome to Go!&lt;/p&gt;
+&lt;h2 id=&#34;其他&#34;&gt;其他&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2024/05/06/pE3MQOLJI2lNGRY.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
 </description>
         </item>
         

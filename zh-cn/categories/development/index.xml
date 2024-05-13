@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Development on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/development/</link>
+        <description>Recent content in Development on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Mon, 13 May 2024 09:13:33 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/development/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>问题集</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E9%97%AE%E9%A2%98%E9%9B%86/</link>
+        <pubDate>Mon, 13 May 2024 09:13:33 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E9%97%AE%E9%A2%98%E9%9B%86/</guid>
+        <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;h2 id=&#34;一般问题&#34;&gt;一般问题&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Go 语言的显式范围和垃圾回收和变量逃逸
+&lt;ol&gt;
+&lt;li&gt;在一个包范围内声明的变量，如果在函数内部声明了同名变量，那么这两个变量是不同的实体，作用域不同，垃圾回收器会分别管理它们。&lt;/li&gt;
+&lt;li&gt;发生逃逸的情况包括：变量生命周期不确定、变量占用内存较大、变量不确定类型、变量不确定大小。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;使用更好的注释&lt;/li&gt;
+&lt;li&gt;Go 的命名规则&lt;/li&gt;
+&lt;li&gt;对于类型中的底层类型&lt;/li&gt;
+&lt;li&gt;内置类型中 string 是否和 c 中的一样有 &lt;code&gt;\0&lt;/code&gt;
+没有 C 语言定义字符用的结尾 &lt;code&gt;\0&lt;/code&gt;，而且获取长度的时间复杂度是常数时间，消除了获取字符串长度的开销&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;type boolean = bool&lt;/code&gt; 和 &lt;code&gt;type boolean bool&lt;/code&gt; 区别
+定义声明和别名声明&lt;/li&gt;
+&lt;li&gt;常量和变量之间的转化
+&lt;ol&gt;
+&lt;li&gt;常量可以赋值给变量，但变量不能赋值给常量，因为常量的值在编译时就必须是确定的。&lt;/li&gt;
+&lt;li&gt;常量可以转换为不同类型的变量，只要这个转换是安全的，即不会丢失信息或导致溢出。&lt;/li&gt;
+&lt;li&gt;变量之间也可以进行类型转换，但必须满足类型转换的规则&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;定义时传递方法不同
+数组是值类型，拥有固定的长度，重点是它是值传递的，所以说他是值类型。切片的话则是传递地址或者说指针，所以说它是引用类型，而且他的长度是可以变化的可以扩容的。&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;主要问题&#34;&gt;主要问题&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Go Modules 的使用有感&lt;/li&gt;
+&lt;li&gt;Go Package 的使用&lt;/li&gt;
+&lt;li&gt;Goroutine 并行的开始&lt;/li&gt;
+&lt;li&gt;Go 中的 Interfaces type&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>面试集</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E9%9D%A2%E8%AF%95%E9%9B%86/</link>
+        <pubDate>Mon, 13 May 2024 09:13:20 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E9%9D%A2%E8%AF%95%E9%9B%86/</guid>
+        <description>&lt;h2 id=&#34;成功软件-424&#34;&gt;成功软件 4.24&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;主要是以项目问问题&amp;mdash;后端项目小银行&lt;/li&gt;
+&lt;li&gt;问具体数据表
+有三个表，数据库的范式
+怎么使用的（我这里忘记有一个表是做什么了 :( ）&lt;/li&gt;
+&lt;li&gt;ORM: 第三方的库的 sqlc&lt;/li&gt;
+&lt;li&gt;项目中具体的 API 的实现
+Go 中的 Gin
+RESTful&lt;/li&gt;
+&lt;li&gt;配置管理（这个是项目的配置，不是面对用户的）&lt;/li&gt;
+&lt;li&gt;吃豆人的项目&lt;/li&gt;
+&lt;li&gt;Go 协程的使用（我没说清楚）&lt;/li&gt;
+&lt;li&gt;Docker 的使用&lt;/li&gt;
+&lt;li&gt;怎么理解容器-容器为什么叫容器&lt;/li&gt;
+&lt;li&gt;映像和容器的区别&lt;/li&gt;
+&lt;li&gt;Docker 是什么&lt;/li&gt;
+&lt;li&gt;Docker File（我不会就没问）&lt;/li&gt;
+&lt;li&gt;docker run 的使用&lt;/li&gt;
+&lt;li&gt;Github Action&lt;/li&gt;
+&lt;li&gt;Makefile 用来做什么&lt;/li&gt;
+&lt;li&gt;Go 中的 context 的使用（我没具体的看过）&lt;/li&gt;
+&lt;li&gt;Go 的标准库有哪些使用和了解&lt;/li&gt;
+&lt;li&gt;一些操作系统的问题&lt;/li&gt;
+&lt;li&gt;文件系统-log&lt;/li&gt;
+&lt;li&gt;lock-原子操作&lt;/li&gt;
+&lt;li&gt;Linux 常用命令&lt;/li&gt;
+&lt;li&gt;git 常用命令&lt;/li&gt;
+&lt;li&gt;有一串每个提交它那有一串那个数字英文的组合 - SHA-1哈希算法-哈希值&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Example Person. All rights reserved.</copyright>
-        <lastBuildDate>Thu, 14 Mar 2024 23:07:09 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 13 May 2024 09:16:00 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>博客搭建更新日记✨</title>
         <link>https://FeiNiaoBF.github.io/zh-cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%9B%B4%E6%96%B0%E6%97%A5%E8%AE%B0/</link>
         <pubDate>Wed, 08 Mar 2023 19:56:58 +0800</pubDate>
@@ -41,15 +41,13 @@
 &lt;p&gt;&lt;strong&gt;项目练习&lt;/strong&gt;&lt;/p&gt;
 &lt;h3 id=&#34;python-语言&#34;&gt;python 语言&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;项目练习&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;TG_bot&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
+&lt;!-- 1. [TG_bot]() --&gt;
 &lt;h2 id=&#34;数据结构&#34;&gt;数据结构&lt;/h2&gt;
 &lt;p&gt;数据结构是对计算机高级语言最能体现打基础的学习，目前有许多常见的数据结构，我喜欢分类来处理。&lt;/p&gt;
-&lt;h3 id=&#34;基础结构&#34;&gt;基础结构&lt;/h3&gt;
+&lt;h3 id=&#34;基础结构hahahugoshortcode41s2hbhb&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/post/gohh/2.datastructures_algorithms/golangds/&#34; &gt;基础结构&lt;/a&gt;&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;数组&lt;/a&gt;&lt;/strong&gt;：是一种线性表数据结构，用于存储相同类型的数据元素。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;数组&lt;/strong&gt;：是一种线性表数据结构，用于存储相同类型的数据元素。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;二分搜索&lt;/em&gt;&lt;/li&gt;
 &lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;冒泡排序&lt;/em&gt;&lt;/li&gt;
@@ -58,7 +56,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;链表&lt;/a&gt;&lt;/strong&gt;：由一系列节点组成的数据结构，每个节点包含数据和指向下一个节点的指针。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;链表&lt;/strong&gt;：由一系列节点组成的数据结构，每个节点包含数据和指向下一个节点的指针。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;反转链表&lt;/em&gt;&lt;/li&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; &lt;em&gt;环形链表&lt;/em&gt;&lt;/li&gt;
@@ -140,25 +138,248 @@
 &lt;p&gt;算法是计算机科学的核心，它们不仅仅是问题求解的工具，也是构建复杂系统和应对实际挑战的基础。深入理解和熟练运用各种算法，有助于提高问题解决和计算机科学建模的能力。&lt;/p&gt;
 &lt;h2 id=&#34;体系结构&#34;&gt;体系结构&lt;/h2&gt;
 &lt;h2 id=&#34;操作系统&#34;&gt;操作系统&lt;/h2&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;操作系统的具体学习目录&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/post/gohh/4.os/s6.081/&#34; &gt;操作系统的具体学习目录&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;计算机网络&#34;&gt;计算机网络&lt;/h2&gt;
 &lt;h2 id=&#34;cs-后续学习路径&#34;&gt;CS 后续学习路径&lt;/h2&gt;
-&lt;p&gt;为自身打造的路径
-_
-目标：人工智能&lt;strong&gt;Artificial intelligence&lt;/strong&gt;
+&lt;p&gt;为自身打造的路径&lt;/p&gt;
+&lt;p&gt;目标：人工智能&lt;strong&gt;Artificial intelligence&lt;/strong&gt;
 数学
-&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Search &amp;mdash; Graph theory&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Knowledge &amp;mdash; Boolean logic&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Uncertainty &amp;mdash; Probability&lt;/a&gt;&lt;/p&gt;
+&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Search&amp;mdash;GraphTheory&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Knowledge&amp;mdash;BooleanLogic&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Uncertainty&amp;mdash;Probability&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;目标：应用程序开发&lt;strong&gt;Application Developer&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;Full Stack&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;目标：计算机图形学&lt;strong&gt;Computer graphics&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;目标：软件工程&lt;strong&gt;Software engineering&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;leetcode&#34;&gt;LeetCode&lt;/h2&gt;
-&lt;p&gt;每日任务
-&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;合并两个有序数组&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;移除元素&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;删除有序数组中的重复项&lt;/a&gt;&lt;/p&gt;
+&lt;!-- ## LeetCode
+
+每日任务
+[合并两个有序数组]()
+
+[移除元素]()
+
+[删除有序数组中的重复项]() --&gt;
+</description>
+        </item>
+        <item>
+        <title>Cache Notes</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/cache-notes/</link>
+        <pubDate>Mon, 13 May 2024 08:39:14 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/cache-notes/</guid>
+        <description>&lt;p&gt;&lt;em&gt;资料来源: cs61c&lt;/em&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Cache 可以说是计算机技术革命中最伟大的想法了&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;想一个问题：在我们的电脑里，指令是怎么控制内存里的东西的？因为我们要运行电脑除了 CPU 以外我们要向外 &lt;code&gt;拿取&lt;/code&gt; 数据才能执行一系列的指令，这样电脑才算运行起来。&lt;/p&gt;
+&lt;p&gt;让我们来看下面的这张图，这是十分完整的计算机组成结构：&lt;/p&gt;
+&lt;h2 id=&#34;components-of-a-computer&#34;&gt;Components of a Computer&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/Fzb3uHQBLTlqOgD.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Components of a Computer&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;我们可以从中看到在 CPU 需要运行一个进程的时候，首先会将指令告诉主存（main memory）, 然后开始在主存中找地址（Address）找到后加载到在 CPU 内部通用寄存器（register）然后开始执行
+执行完后再写入主存中。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在这里面还有一个步骤，memory 要先向 disk 中读取数据&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;其实现实中，CPU 通用寄存器的速度和主存之间存在着太大的差异。两者之间的速度大致如下关系：
+&lt;img src=&#34;https://s2.loli.net/2023/04/24/KtvMSR7QmrXpjbl.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;memory-steep&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Oh!!! 它们相差 1,000 倍左右，这是无法想像的，就比如当我前 1 ns 的时候 CPU 已经做完了，而我还要等 1000 ns 的 memory 的时间，因此在我们看来 CPU 此时是空闲的，大大的浪费了。&lt;/p&gt;
+&lt;p&gt;因此，如果我们可以提升主存的速度，那么对于系统来说将会获得很大的性能提升。但我们试图提升主存的速度和容量，又期望其成本很低，这就有点难为人了。因此，我们有一种折中的方法，那就是制作一块速度极快但是容量极小的存储设备。那么其成本也不会太高。这块存储设备我们称之为 &lt;code&gt;cache&lt;/code&gt;。在硬件上，我们将 &lt;code&gt;cache&lt;/code&gt; 放置在 &lt;code&gt;CPU&lt;/code&gt; 和 &lt;code&gt;主存&lt;/code&gt; 之间，作为主存数据的缓存。当 CPU 试图从主存中 load/store 数据的时候， CPU 会首先从 cache 中查找对应地址的数据是否缓存在 cache 中。如果其数据缓存在 cache 中，直接从 cache 中拿到数据并返回给 CPU。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/qLhOmsTV2IE9S8p.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;add-cache.png&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;其实类比的话，我蛮喜欢 CS 61 c 里面的 Library Analogy，而我自己的想法是有点像现在的物流运输：对一些物品都有一个 &lt;code&gt;主要的仓库&lt;/code&gt;，而也有一些 &lt;code&gt;本地仓&lt;/code&gt;，当我要送东西的时候我先去看看 &lt;code&gt;本地仓&lt;/code&gt; 有没有，没有就再去 &lt;code&gt;主仓&lt;/code&gt; 去看看，但时间上就没有本地仓的快&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[[2. Areas/01 Blog/03-ComputerSystems/cs61c/SRAM vs. DRAM vs. Disk]]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;memory-hierarchy&#34;&gt;Memory Hierarchy&lt;/h2&gt;
+&lt;p&gt;好的现在我们知道了 &lt;code&gt;cache&lt;/code&gt; 的出现了，而下面的图是说明了对于不同的内存级别
+&lt;img src=&#34;https://s2.loli.net/2023/04/24/3anw1UgNoWDZBsq.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Cache-line.png&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;cache&#34;&gt;Cache&lt;/h2&gt;
+&lt;h3 id=&#34;cache-的级别&#34;&gt;Cache 的级别&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;每一级的 cache 就是每一个下级内存的副本&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Cahe 的速度在一定程度上同样影响着系统的性能. 当 cache 中没有缓存我们想要的数据的时候，依然需要漫长的等待从主存中 load 数据。为了进一步提升性能，引入多级 cache。前面提到的 cache，称之为 L 1 cache（第一级 cache）。我们在 L 1 cache 后面连接 L 2 cache，在 L 2 cache 和主存之间连接 L 3 cache。等级越高，速度越慢，容量越大。&lt;/p&gt;
+&lt;h3 id=&#34;temporal-locality-时间局部性&#34;&gt;Temporal Locality (时间局部性)&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If a memory location is referenced then it will tend to be referenced again soon&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;比如说我用过一次这个地址, 我保存起来以防我下次使用&lt;/p&gt;
+&lt;h3 id=&#34;spatial-locality-空间局部性&#34;&gt;Spatial Locality (空间局部性)&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If a memory location is referenced, the locations with nearby addresses will
+Tend to be referenced soon&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;比如一个数组，在我读取的时候它会把数组左右的都读取了&lt;/p&gt;
+&lt;h3 id=&#34;cache-hit-vs-cache-miss&#34;&gt;Cache Hit vs Cache Miss&lt;/h3&gt;
+&lt;p&gt;在我要对数据进行查找的时候会出现两种情况 &lt;code&gt;Cache Hit&lt;/code&gt; &amp;amp; &lt;code&gt;Cache Miss&lt;/code&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;cache-hit&#34;&gt;Cache hit&lt;/h4&gt;
+&lt;p&gt;你要查找的数据 &lt;code&gt;在缓存中&lt;/code&gt; 从缓存中检索数据并将其带到处理器.&lt;/p&gt;
+&lt;h4 id=&#34;cache-miss&#34;&gt;Cache miss&lt;/h4&gt;
+&lt;p&gt;你要查找的数据 &lt;code&gt;不在缓存中&lt;/code&gt; 去内存中找数据，把数据放到缓存中，带到处理器中&lt;/p&gt;
+&lt;h2 id=&#34;cache-的工作原理&#34;&gt;Cache 的工作原理&lt;/h2&gt;
+&lt;p&gt;现在我们来继续说一些快取的工作原理, 在此之前先来说一下的一些名词
+什么是 &lt;code&gt;line/tag/index/offset/valid&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;line:&lt;/strong&gt; 我们将 cache 平均分成相等的很多块，每一个块大小称之为 &lt;code&gt;cache line&lt;/code&gt; 也可以叫 &lt;code&gt;cache block&lt;/code&gt;，其大小是 &lt;code&gt;cache line size&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;tag:&lt;/strong&gt; Used to identify the data (用于识别数据)。每条 Cache Line 前都会有一个独立分配的内存来存 tag，其就是内存地址的前 Nbits。
+$$ addressbits -  offsetbits $$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;offset:&lt;/strong&gt; Identifies the byte offset (标识字节偏移量)。一般是低位后几位。
+$$ offset = log_2(line size) $$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;index:&lt;/strong&gt; 内存地址后续的 bits 则是在这&amp;ndash;Way 的是 Cache Line 索引，可以索引 Cache Line。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Valid bit:&lt;/strong&gt; Tells you if the data stored at a given cache line is valid (告诉您存储在给定缓存行中的数据是否有效)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一个地址访问要映射到 Cache 中，地址被分成三个字段：tag，set index, block offset。这样，通过一个物理地址就可以获取数据或指令在缓存中的位置 (set, way, byte))&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/mHdMoveGWXkiNL4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;line-block.png&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;direct-mapped-cache-直接映射缓存&#34;&gt;Direct mapped cache (直接映射缓存)&lt;/h3&gt;
+&lt;p&gt;优点：直接映射缓存在硬件设计上会更加简单，因此成本上也会较低。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一句话, 我一个个的加载进入 cache, 当我的 cache 满了我就转头再来一遍&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;只适合于&lt;strong&gt;大容量&lt;/strong&gt;Cache&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;缺点: 继续访问下面的地址时，依然会 cache 缺失。这就相当于每次访问数据都要从主存中读取，所以 cache 的存在并没有对性能提升有效, 有 &lt;code&gt;cache颠簸&lt;/code&gt; (每个主存块只有一个固定位置可存放，容易产生冲突)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/xeav7mlIDAyOwqK.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Direct Mapped.png&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/4EYI7Va1S5lKgow.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Direct Mapped-cache.png&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;two-way-set-associative-cache-两路组相连缓存&#34;&gt;Two-way set associative cache (两路组相连缓存)&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Cache 分了 2 组&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;优点: 减少 cache 颠簸出现频率&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;组相联映射实际上是直接映射和全相联映射的折中方案&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;缺点: 增加硬件设计复杂读、成本较高 (需要比较多个 cache line 的 TAG)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/yXE8J6RMo9F3Vxq.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;set associative-cache.png&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;fully-associative-cache-全相连缓存&#34;&gt;Fully Associative Cache (全相连缓存)&lt;/h3&gt;
+&lt;p&gt;优点: 最大程度的降低 cache 颠簸的频率&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;只适合于&lt;strong&gt;小容量&lt;/strong&gt;Cache&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;缺点: 增加硬件设计复杂读、成本较高 (需要比较多个 cache line 的 TAG)&lt;/p&gt;
+&lt;p&gt;扩展：[[More Eviction Policies]]
+&lt;img src=&#34;https://s2.loli.net/2023/07/10/TRUdXNBPsveZS7D.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/76uSATyrPno1eYf.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Fully Associative.png&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;寻找 Hit 的电路&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/3VYzGo9dkgHwcrS.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Required to Check for Hit&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;[[Types of Misses]]&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2023/04/24/M4Fc1g6k5OrfBpj.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;comparisons&#34;&gt;Comparisons&lt;/h3&gt;
+&lt;p&gt;三个 cache 的区别之分
+&lt;img src=&#34;https://s2.loli.net/2023/04/24/iICnWkpOMcFtKZH.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Comparisons&#34;
+	
+	
+&gt;
+&lt;strong&gt;需补充&lt;/strong&gt;&lt;/p&gt;
 </description>
         </item>
         <item>

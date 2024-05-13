@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Resource on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/resource/</link>
+        <description>Recent content in Resource on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Mon, 13 May 2024 09:08:51 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/resource/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Resource</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/resource/</link>
+        <pubDate>Mon, 13 May 2024 09:08:51 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/resource/</guid>
+        <description>&lt;h2 id=&#34;入门资料&#34;&gt;入门资料&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://go.dev/doc/effective_go&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;官方Docs&lt;/a&gt; ，官方的文档是最好的入门资料，强烈推荐看，如果可以完整看完、理解并实践的话说明就吃透 Go 语言了。&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://gobyexample.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Go by Example&lt;/a&gt;，是一个集合了 Go 语言基础类型、特性等众多示例的网站，你可以通过这些实例来初步了解和学习 Go 语言的使用。&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://quii.gitbook.io/learn-go-with-tests&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Learn GO with Tests&lt;/a&gt;，该网址是通过使用 Test 来学习 Go 的开源书籍，在其中作者将以如何使用 Go 自带的 &lt;code&gt;testing&lt;/code&gt; 库来一步一步的认识 Go 语言当中的类型和其他特性。从中将学习到 &lt;strong&gt;TDD&lt;/strong&gt; 的技术、Go 语言的单元测试、学习测试驱动开发等，很大的提升自己的 Go 语言的使用和开发&lt;/p&gt;
+&lt;h2 id=&#34;社交平台&#34;&gt;社交平台&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.reddit.com/r/golang/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Reddit 上的go社区&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;书籍推荐&#34;&gt;书籍推荐&lt;/h2&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
