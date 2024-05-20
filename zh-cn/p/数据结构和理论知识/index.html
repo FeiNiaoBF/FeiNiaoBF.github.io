@@ -2,16 +2,16 @@
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Go 语言中的数据结构 基础数据结构 数组（Array） - 由固定长度的相同类型元素组成的数据结构。 切片（Slice） - 由数组构成的动态长度序列，提供">
-<title>DataType</title>
+<title>数据结构和理论知识</title>
 
-<link rel='canonical' href='https://FeiNiaoBF.github.io/zh-cn/p/datatype/'>
+<link rel='canonical' href='https://FeiNiaoBF.github.io/zh-cn/p/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%90%86%E8%AE%BA%E7%9F%A5%E8%AF%86/'>
 
-<link rel="stylesheet" href="/scss/style.min.d8118f156935b64eca93aca758476adca858d2c47354971654d9bd2933a0e45f.css"><meta property='og:title' content="DataType">
+<link rel="stylesheet" href="/scss/style.min.d8118f156935b64eca93aca758476adca858d2c47354971654d9bd2933a0e45f.css"><meta property='og:title' content="数据结构和理论知识">
 <meta property='og:description' content="Go 语言中的数据结构 基础数据结构 数组（Array） - 由固定长度的相同类型元素组成的数据结构。 切片（Slice） - 由数组构成的动态长度序列，提供">
-<meta property='og:url' content='https://FeiNiaoBF.github.io/zh-cn/p/datatype/'>
+<meta property='og:url' content='https://FeiNiaoBF.github.io/zh-cn/p/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%90%86%E8%AE%BA%E7%9F%A5%E8%AF%86/'>
 <meta property='og:site_name' content='Yeelight の 小屋'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-05-13T09:10:19&#43;08:00'/><meta property='article:modified_time' content='2024-05-13T09:10:19&#43;08:00'/>
-<meta name="twitter:title" content="DataType">
+<meta name="twitter:title" content="数据结构和理论知识">
 <meta name="twitter:description" content="Go 语言中的数据结构 基础数据结构 数组（Array） - 由固定长度的相同类型元素组成的数据结构。 切片（Slice） - 由数组构成的动态长度序列，提供">
     <link rel="shortcut icon" href="/favicon.ico" />
 
@@ -288,16 +288,39 @@
     <li><a href="#go-语言中的数据结构">Go 语言中的数据结构</a>
       <ol>
         <li><a href="#基础数据结构">基础数据结构</a></li>
-        <li><a href="#其他数据结构和类型">其他数据结构和类型</a>
+        <li><a href="#其他数据结构和类型">其他数据结构和类型</a></li>
+      </ol>
+    </li>
+    <li><a href="#命名规范">命名规范</a></li>
+    <li><a href="#类型">类型</a>
+      <ol>
+        <li><a href="#类型定义type-definition-declaration">类型定义（type definition declaration）</a></li>
+        <li><a href="#具名类型named-type">具名类型(named type)</a></li>
+        <li><a href="#类型别名声明">类型别名声明</a></li>
+        <li><a href="#底层类型underlying-type">底层类型（underlying type）</a>
           <ol>
-            <li><a href="#通道channel">通道（Channel）</a></li>
-            <li><a href="#接口interface">接口（Interface）</a></li>
-            <li><a href="#指针pointer">指针（Pointer）</a></li>
+            <li><a href="#在-go-中">在 Go 中</a></li>
           </ol>
         </li>
       </ol>
     </li>
-    <li><a href="#命名规范">命名规范</a></li>
+    <li><a href="#值value">值（value）</a></li>
+    <li><a href="#其他概念">其他概念</a>
+      <ol>
+        <li><a href="#指针类型的基类型base-type">指针类型的基类型（base type）</a></li>
+        <li><a href="#结构体类型的字段field">结构体类型的字段（field）</a></li>
+        <li><a href="#函数类型的签名signature">函数类型的签名（signature）</a></li>
+        <li><a href="#类型的方法method和方法集method-set">类型的方法（method）和方法集（method set）</a></li>
+        <li><a href="#接口类型的动态类型和动态值">接口类型的动态类型和动态值</a></li>
+        <li><a href="#一个值的具体类型concrete-type和具体值concrete-value">一个值的具体类型（concrete type）和具体值（concrete value）</a></li>
+        <li><a href="#容器类型">容器类型</a></li>
+        <li><a href="#映射类型的键值key类型">映射类型的键值（key）类型</a></li>
+        <li><a href="#容器类型的元素element类型">容器类型的元素（element）类型</a></li>
+        <li><a href="#通道类型的方向">通道类型的方向</a></li>
+        <li><a href="#可比较类型和不可比较类型">可比较类型和不可比较类型</a></li>
+      </ol>
+    </li>
+    <li><a href="#外部链接">外部链接</a></li>
   </ol>
 </nav>
         </div>
@@ -329,7 +352,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/zh-cn/p/datatype/">DataType</a>
+            <a href="/zh-cn/p/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%90%86%E8%AE%BA%E7%9F%A5%E8%AF%86/">数据结构和理论知识</a>
         </h2>
     
         
@@ -366,7 +389,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 3 分钟
+                    阅读时长: 6 分钟
                 </time>
             </div>
         
@@ -395,9 +418,6 @@
 <li><strong>接口（Interface）</strong> - 定义对象的行为，是一种抽象类型。</li>
 <li><strong>指针（Pointer）</strong> - 存储变量的内存地址，用于直接访问内存中的值。</li>
 </ol>
-<h4 id="通道channel">通道（Channel）</h4>
-<h4 id="接口interface">接口（Interface）</h4>
-<h4 id="指针pointer">指针（Pointer）</h4>
 <h2 id="命名规范">命名规范</h2>
 <p>注意：</p>
 <blockquote>
@@ -414,16 +434,183 @@
 <li><strong>接口</strong>：接口的命名同样使用驼峰命名法，例如 <code>type MyInterface interface</code>。</li>
 <li><strong>枚举</strong>：枚举的命名同样使用驼峰命名法，例如 <code>type Color int</code>。</li>
 </ol>
-<p>在 Go 语言中，命名变量时有一些常见的命名规范，这些规范有助于编写清晰、易读的代码。</p>
-<ol>
-<li>使用驼峰命名法：变量名应该使用驼峰命名法，即除第一个单词外，其余单词的首字母大写，例如 <code>myVariable</code>。</li>
-<li>使用有意义的名称：变量名应该具有描述性，能够清晰地表达变量的用途和含义。</li>
-<li>避免使用单个字符作为变量名：除非是临时变量或者循环变量，否则应该避免使用单个字符作为变量名，以提高代码的可读性。</li>
-<li>使用短小的名称：变量名应该尽量简洁，但又能清晰表达变量的含义。</li>
-<li>使用全大写命名的常量：在 Go 语言中，全大写的变量名通常用于表示常量。</li>
-<li>遵循约定俗成的命名规范：Go 语言社区有一些常见的命名约定，比如用 <code>i</code> 表示循环变量，用 <code>err</code> 表示错误变量等，建议遵循这些约定以保持代码风格的一致性。</li>
-</ol>
-<p>这些命名规范有助于编写清晰、易读的代码，并且有助于提高代码的可维护性。</p>
+<blockquote>
+<p>目前（Go 1.21），Go 有 26 个类型种类。</p>
+</blockquote>
+<h2 id="类型">类型</h2>
+<h3 id="类型定义type-definition-declaration">类型定义（type definition declaration）</h3>
+<p>用如下形式来定义新的类型。<code>type</code>为一个关键字。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 定义单个类型。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">NewTypeName</span> <span class="nx">SourceType</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 定义多个类型（将多个类型描述合并在一个声明中）。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">NewTypeName1</span> <span class="nx">SourceType1</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">NewTypeName2</span> <span class="nx">SourceType2</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>一个新定义的类型和它的源类型为两个不同的类型。</li>
+<li>在两个不同的类型定义中所定义的两个类型肯定是两个不同的类型。</li>
+<li>一个新定义的类型和它的源类型的底层类型一致并且它们的值可以相互显式转换。</li>
+<li>类型定义可以出现在函数体内（局部）。</li>
+</ul>
+<h3 id="具名类型named-type">具名类型(named type)</h3>
+<p>一个具名类型可能为</p>
+<ul>
+<li>一个预声明类型；</li>
+<li>一个定义（非自定义泛型）类型；</li>
+<li>一个（泛型类型的）实例化类型；</li>
+<li>一个类型参数类型（使用在自定义泛型中）。</li>
+</ul>
+<p>其它类型称为<em>无名类型</em>。一个无名类型肯定是一个<em>组合类型</em>。
+<a class="link" href="https://stackoverflow.com/questions/32983546/named-and-unnamed-types"  target="_blank" rel="noopener"
+    >Named and Unnamed Types</a></p>
+<h3 id="类型别名声明">类型别名声明</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">Name</span> <span class="p">=</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">Age</span>  <span class="p">=</span> <span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">table</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Table</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="nx">Name</span><span class="p">]</span><span class="nx">Age</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>map[string]int</code> 和 <code>map[Name]Age</code> 表示同一类型</p>
+<h3 id="底层类型underlying-type">底层类型（underlying type）</h3>
+<p>规则：</p>
+<ul>
+<li>一个内置类型的底层类型为它自己。</li>
+<li><code>unsafe</code>标准库包中定义的<code>Pointer</code>类型的底层类型是它自己。<code>unsafe.Pointer</code>也被视为一个内置类型。</li>
+<li>一个无名类型（必为一个组合类型）的底层类型为它自己。</li>
+<li>在一个类型声明中，新声明的类型和源类型共享底层类型。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 这四个类型的底层类型均为内置类型int。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">MyInt</span> <span class="kt">int</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">Age</span>   <span class="nx">MyInt</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 下面这三个新声明的类型的底层类型各不相同。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">IntSlice</span>   <span class="p">[]</span><span class="kt">int</span>   <span class="c1">// 底层类型为[]int
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="nx">MyIntSlice</span> <span class="p">[]</span><span class="nx">MyInt</span> <span class="c1">// 底层类型为[]MyInt
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="nx">AgeSlice</span>   <span class="p">[]</span><span class="nx">Age</span>   <span class="c1">// 底层类型为[]Age
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 类型[]Age、Ages和AgeSlice的底层类型均为[]Age。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">Ages</span> <span class="nx">AgeSlice</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="在-go-中">在 Go 中</h4>
+<ul>
+<li>底层类型为内置类型<code>bool</code>的类型称为<strong>布尔类型</strong>；</li>
+<li>底层类型为任一内置整数类型的类型称为<strong>整数类型</strong>；</li>
+<li>底层类型为内置类型<code>float32</code>或者<code>float64</code>的类型称为<strong>浮点数类型</strong>；</li>
+<li>底层类型为内置类型<code>complex64</code>或<code>complex128</code>的类型称为<strong>复数类型</strong>；</li>
+<li>整数类型、浮点数类型和复数类型统称为<strong>数字值类型</strong>；</li>
+<li>底层类型为内置类型<code>string</code>的类型称为<strong>字符串类型</strong>。</li>
+</ul>
+<h2 id="值value">值（value）</h2>
+<p>一个类型的一个<strong>实例</strong>称为此类型的一个值。一个类型可以有很多不同的值，其中一个为它的零值。同一类型的不同值共享很多相同的属性。</p>
+<p>每个类型有一个零值。一个类型的零值可以看作是此类型的默认值。预声明的标识符 <code>nil</code> 可以看作是切片、映射、函数、通道、指针（包括非类型安全指针）和接口类型的零值的字面量表示。</p>
+<p>值分为类型确定的和类型不确定的。</p>
+<h2 id="其他概念">其他概念</h2>
+<h3 id="指针类型的基类型base-type">指针类型的基类型（base type）</h3>
+<p>若一个指针类型的底层类型表示为 <code>*T</code>，则此指针类型的基类型为 <code>T</code> 所表示的类型。</p>
+<h3 id="结构体类型的字段field">结构体类型的字段（field）</h3>
+<p>一个结构体类型由若干成员变量组成。每个这样的成员变量称为此结构体的一个字段。</p>
+<h3 id="函数类型的签名signature">函数类型的签名（signature）</h3>
+<p>一个函数和其类型的签名由此函数的<strong>输入参数</strong>和<strong>返回结果</strong>的类型列表组成。函数名称和函数体不属于函数签名的构成部分。
+如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"> <span class="nf">Write</span><span class="p">(</span><span class="nx">p</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="nx">n</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="类型的方法method和方法集method-set">类型的方法（method）和方法集（method set）</h3>
+<p>在 Go 中，我们可以给满足某些条件的类型（构造器）声明方法。方法也常被称为成员函数。一个类型的所有方法组成了此类型的<strong>方法集</strong>。</p>
+<h3 id="接口类型的动态类型和动态值">接口类型的动态类型和动态值</h3>
+<p>接口类型的值称为<strong>接口值</strong>。一个接口值可以包裹装载一个非接口值。<em>包裹在一个接口值中的非接口值称为此接口值的动态值</em>。此动态值的类型称为此接口值的动态类型。 一个什么也没包裹的接口值为一个零值接口值。零值接口值的动态值和动态类型均为不存在。
+一个接口类型可以指定若干个（可以是零个）方法，这些方法形成了此接口类型的方法集。
+如果一个类型（可以是接口或者非接口类型）的方法集是一个接口类型的方法集的超集，则我们说此类型实现了此接口类型。</p>
+<h3 id="一个值的具体类型concrete-type和具体值concrete-value">一个值的具体类型（concrete type）和具体值（concrete value）</h3>
+<p>对于一个（类型确定的）非接口值，它的具体类型就是它的类型，它的具体值就是它自己。
+一个 <em>零值接口值</em> 没有具体类型和具体值。对于一个非零值接口值，它的具体类型和具体值就是它的动态类型和动态值。</p>
+<h3 id="容器类型">容器类型</h3>
+<p><strong>数组</strong> <code>[]int</code>、<strong>切片</strong> <code>slice</code> 和<strong>映射</strong> <code>map</code> 是 Go 中的三种正式意义上的内置容器类型。
+有时候，<strong>字符串</strong>和<strong>通道类型</strong>也可以被非正式地看作是容器类型。
+（正式和非正式的）容器类型的每个值都有一个<strong>长度属性</strong>。</p>
+<h3 id="映射类型的键值key类型">映射类型的键值（key）类型</h3>
+<p>如果一个映射类型的底层类型表示为 <code>map[Tkey]T</code>，则此映射类型的键值类型为 <code>Tkey</code>。 <code>Tkey</code> 必须为一个<strong>可比较类型</strong> 。</p>
+<h3 id="容器类型的元素element类型">容器类型的元素（element）类型</h3>
+<p>存储在一个容器值中的所有元素的类型必须为同一个类型。此同一类型称为此容器值的（容器）类型的元素类型。</p>
+<h3 id="通道类型的方向">通道类型的方向</h3>
+<p>一个通道值可以被看作是 <strong>先入先出（first-in-first-out，FIFO）</strong> 队列。一个通道值可能是可读可写的、只读的（receive-only）或者只写的（send-only）。</p>
+<ul>
+<li>一个可读可写的通道值也称为一个双向通道。 一个双向通道类型的底层类型可以被表示为<code>chan T</code>。</li>
+<li>我们只能向一个只写的通道值发送数据，而不能从其中接收数据。 只写通道类型的底层类型可以被表示为<code>chan&lt;- T</code>。</li>
+<li>我们只能从一个只读的通道值接收数据，而不能向其发送数据。 只读通道类型的底层类型可以被表示为<code>&lt;-chan T</code>。</li>
+</ul>
+<h3 id="可比较类型和不可比较类型">可比较类型和不可比较类型</h3>
+<p>目前（<del>Go 1.21</del>），下面这些类型的值不支持（使用 <code>==</code> 和 <code>!=</code> 运算标识符）比较。这些类型称为 <em>不可比较类型</em>。</p>
+<ul>
+<li>切片类型</li>
+<li>映射类型</li>
+<li>函数类型</li>
+<li>任何包含有不可比较类型的字段的结构体类型和任何元素类型为不可比较类型的数组类型。
+其它类型称为可比较类型。
+映射类型的键值类型必须为可比较类型。</li>
+</ul>
+<h2 id="外部链接">外部链接</h2>
+<p><a class="link" href="https://gfw.go101.org/article/type-system-overview.html"  target="_blank" rel="noopener"
+    >Go 101</a></p>
 
 </section>
 
@@ -460,6 +647,19 @@
             
                 
 <article class="">
+    <a href="/zh-cn/p/%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E6%A0%87%E8%AF%86%E7%AC%A6/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">关键字与标识符</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/zh-cn/p/strings/">
         
         
@@ -473,12 +673,12 @@
             
                 
 <article class="">
-    <a href="/zh-cn/p/resource/">
+    <a href="/zh-cn/p/go%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Resource</h2>
+            <h2 class="article-title">Go学习资源</h2>
         </div>
     </a>
 </article>
@@ -486,12 +686,12 @@
             
                 
 <article class="">
-    <a href="/zh-cn/p/learningpath/">
+    <a href="/zh-cn/p/%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">LearningPath</h2>
+            <h2 class="article-title">学习之路</h2>
         </div>
     </a>
 </article>
@@ -505,19 +705,6 @@
 
         <div class="article-details">
             <h2 class="article-title">数组(Go语言实现)</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/zh-cn/p/%E6%A0%88go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">栈(Go语言实现)</h2>
         </div>
     </a>
 </article>

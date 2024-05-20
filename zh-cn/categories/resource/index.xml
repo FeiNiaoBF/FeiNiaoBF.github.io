@@ -8,11 +8,11 @@
         <language>zh-cn</language>
         <copyright>Example Person. All rights reserved.</copyright>
         <lastBuildDate>Mon, 13 May 2024 09:08:51 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/resource/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Resource</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/resource/</link>
+        <title>Go学习资源</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/go%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</link>
         <pubDate>Mon, 13 May 2024 09:08:51 +0800</pubDate>
         
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/resource/</guid>
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/go%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</guid>
         <description>&lt;h2 id=&#34;入门资料&#34;&gt;入门资料&lt;/h2&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://go.dev/doc/effective_go&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;官方Docs&lt;/a&gt; ，官方的文档是最好的入门资料，强烈推荐看，如果可以完整看完、理解并实践的话说明就吃透 Go 语言了。&lt;/p&gt;
@@ -24,6 +24,21 @@
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.reddit.com/r/golang/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Reddit 上的go社区&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;书籍推荐&#34;&gt;书籍推荐&lt;/h2&gt;
+&lt;h3 id=&#34;电子书&#34;&gt;电子书&lt;/h3&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.yuque.com/aceld/golang&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Golang修养之路&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://draveness.me/golang/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Go 语言设计与实现&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://golang.halfiisland.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Golang中文学习文档站&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://golang.design/under-the-hood/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Go 语言原本&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://gfw.go101.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Go语言101&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;实体书&#34;&gt;实体书&lt;/h3&gt;
+&lt;h2 id=&#34;github-stars&#34;&gt;Github stars&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/stars/FeiNiaoBF/lists/golang&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Starred to github&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
         

@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Example Person. All rights reserved.</copyright>
-        <lastBuildDate>Mon, 13 May 2024 09:10:39 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/cs/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 20 May 2024 10:37:53 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/cs/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Golang 语言学习</title>
         <link>https://FeiNiaoBF.github.io/zh-cn/post/gohh/1.computerbasics/cslanguages/golang/</link>
         <pubDate>Sun, 10 Mar 2024 16:02:27 +0800</pubDate>
@@ -53,12 +53,46 @@
 </description>
         </item>
         <item>
+        <title>关键字与标识符</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E6%A0%87%E8%AF%86%E7%AC%A6/</link>
+        <pubDate>Mon, 20 May 2024 10:37:53 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E6%A0%87%E8%AF%86%E7%AC%A6/</guid>
+        <description>&lt;h2 id=&#34;25个关键字&#34;&gt;25个关键字&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;break&lt;/span&gt;     &lt;span class=&#34;k&#34;&gt;default&lt;/span&gt;      &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;    &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt;  &lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;case&lt;/span&gt;      &lt;span class=&#34;k&#34;&gt;defer&lt;/span&gt;        &lt;span class=&#34;k&#34;&gt;go&lt;/span&gt;      &lt;span class=&#34;kd&#34;&gt;map&lt;/span&gt;        &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt;      &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;         &lt;span class=&#34;k&#34;&gt;goto&lt;/span&gt;    &lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt;    &lt;span class=&#34;k&#34;&gt;switch&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;const&lt;/span&gt;     &lt;span class=&#34;k&#34;&gt;fallthrough&lt;/span&gt;  &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;      &lt;span class=&#34;k&#34;&gt;range&lt;/span&gt;      &lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;continue&lt;/span&gt;  &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;          &lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt;  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;     &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;规定的标识符unicode-字符&#34;&gt;规定的标识符（Unicode 字符）&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;标识符由字母（Unicode字母，包括中文等）、数字和下划线（&lt;code&gt;_&lt;/code&gt;）组成。&lt;/li&gt;
+&lt;li&gt;标识符的第一个字符必须是字母或下划线。&lt;/li&gt;
+&lt;li&gt;标识符区分大小写，例如&lt;code&gt;count&lt;/code&gt;和&lt;code&gt;Count&lt;/code&gt;是两个不同的标识符。&lt;/li&gt;
+&lt;li&gt;标识符不能是Go语言的关键字。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;注意：
+中文的标识符是 &lt;code&gt;private&lt;/code&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Strings</title>
         <link>https://FeiNiaoBF.github.io/zh-cn/p/strings/</link>
         <pubDate>Mon, 13 May 2024 09:10:39 +0800</pubDate>
         
         <guid>https://FeiNiaoBF.github.io/zh-cn/p/strings/</guid>
-        <description>&lt;h2 id=&#34;utf-8编码和-unicode-文本区别&#34;&gt;UTF-8编码和 Unicode 文本区别&lt;/h2&gt;
+        <description>&lt;h2 id=&#34;utf-8-编码和-unicode-文本区别&#34;&gt;UTF-8 编码和 Unicode 文本区别&lt;/h2&gt;
 &lt;p&gt;在 Golang 中字符串的底层结构字节使用 UTF-8 编码来表示 Unicode 文本&lt;/p&gt;
 &lt;p&gt;其中 &lt;em&gt;Unicode&lt;/em&gt; 是一个&lt;strong&gt;字符集&lt;/strong&gt;，定义了字符和它们的唯一&lt;strong&gt;代码点&lt;/strong&gt;，而 &lt;em&gt;UTF-8&lt;/em&gt; 是一种&lt;strong&gt;编码方式&lt;/strong&gt;，用于将 Unicode 字符表示为字节序列。&lt;/p&gt;
 &lt;h2 id=&#34;字符串&#34;&gt;字符串&lt;/h2&gt;
@@ -66,11 +100,11 @@
 </description>
         </item>
         <item>
-        <title>DataType</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/datatype/</link>
+        <title>数据结构和理论知识</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%90%86%E8%AE%BA%E7%9F%A5%E8%AF%86/</link>
         <pubDate>Mon, 13 May 2024 09:10:19 +0800</pubDate>
         
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/datatype/</guid>
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%90%86%E8%AE%BA%E7%9F%A5%E8%AF%86/</guid>
         <description>&lt;h2 id=&#34;go-语言中的数据结构&#34;&gt;Go 语言中的数据结构&lt;/h2&gt;
 &lt;h3 id=&#34;基础数据结构&#34;&gt;基础数据结构&lt;/h3&gt;
 &lt;ol&gt;
@@ -85,9 +119,6 @@
 &lt;li&gt;&lt;strong&gt;接口（Interface）&lt;/strong&gt; - 定义对象的行为，是一种抽象类型。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;指针（Pointer）&lt;/strong&gt; - 存储变量的内存地址，用于直接访问内存中的值。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h4 id=&#34;通道channel&#34;&gt;通道（Channel）&lt;/h4&gt;
-&lt;h4 id=&#34;接口interface&#34;&gt;接口（Interface）&lt;/h4&gt;
-&lt;h4 id=&#34;指针pointer&#34;&gt;指针（Pointer）&lt;/h4&gt;
 &lt;h2 id=&#34;命名规范&#34;&gt;命名规范&lt;/h2&gt;
 &lt;p&gt;注意：&lt;/p&gt;
 &lt;blockquote&gt;
@@ -104,24 +135,191 @@
 &lt;li&gt;&lt;strong&gt;接口&lt;/strong&gt;：接口的命名同样使用驼峰命名法，例如 &lt;code&gt;type MyInterface interface&lt;/code&gt;。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;枚举&lt;/strong&gt;：枚举的命名同样使用驼峰命名法，例如 &lt;code&gt;type Color int&lt;/code&gt;。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;在 Go 语言中，命名变量时有一些常见的命名规范，这些规范有助于编写清晰、易读的代码。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;使用驼峰命名法：变量名应该使用驼峰命名法，即除第一个单词外，其余单词的首字母大写，例如 &lt;code&gt;myVariable&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;使用有意义的名称：变量名应该具有描述性，能够清晰地表达变量的用途和含义。&lt;/li&gt;
-&lt;li&gt;避免使用单个字符作为变量名：除非是临时变量或者循环变量，否则应该避免使用单个字符作为变量名，以提高代码的可读性。&lt;/li&gt;
-&lt;li&gt;使用短小的名称：变量名应该尽量简洁，但又能清晰表达变量的含义。&lt;/li&gt;
-&lt;li&gt;使用全大写命名的常量：在 Go 语言中，全大写的变量名通常用于表示常量。&lt;/li&gt;
-&lt;li&gt;遵循约定俗成的命名规范：Go 语言社区有一些常见的命名约定，比如用 &lt;code&gt;i&lt;/code&gt; 表示循环变量，用 &lt;code&gt;err&lt;/code&gt; 表示错误变量等，建议遵循这些约定以保持代码风格的一致性。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;这些命名规范有助于编写清晰、易读的代码，并且有助于提高代码的可维护性。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;目前（Go 1.21），Go 有 26 个类型种类。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;类型&#34;&gt;类型&lt;/h2&gt;
+&lt;h3 id=&#34;类型定义type-definition-declaration&#34;&gt;类型定义（type definition declaration）&lt;/h3&gt;
+&lt;p&gt;用如下形式来定义新的类型。&lt;code&gt;type&lt;/code&gt;为一个关键字。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 定义单个类型。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;NewTypeName&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;SourceType&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 定义多个类型（将多个类型描述合并在一个声明中）。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;NewTypeName1&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;SourceType1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;NewTypeName2&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;SourceType2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;一个新定义的类型和它的源类型为两个不同的类型。&lt;/li&gt;
+&lt;li&gt;在两个不同的类型定义中所定义的两个类型肯定是两个不同的类型。&lt;/li&gt;
+&lt;li&gt;一个新定义的类型和它的源类型的底层类型一致并且它们的值可以相互显式转换。&lt;/li&gt;
+&lt;li&gt;类型定义可以出现在函数体内（局部）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;具名类型named-type&#34;&gt;具名类型(named type)&lt;/h3&gt;
+&lt;p&gt;一个具名类型可能为&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一个预声明类型；&lt;/li&gt;
+&lt;li&gt;一个定义（非自定义泛型）类型；&lt;/li&gt;
+&lt;li&gt;一个（泛型类型的）实例化类型；&lt;/li&gt;
+&lt;li&gt;一个类型参数类型（使用在自定义泛型中）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;其它类型称为&lt;em&gt;无名类型&lt;/em&gt;。一个无名类型肯定是一个&lt;em&gt;组合类型&lt;/em&gt;。
+&lt;a class=&#34;link&#34; href=&#34;https://stackoverflow.com/questions/32983546/named-and-unnamed-types&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Named and Unnamed Types&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;类型别名声明&#34;&gt;类型别名声明&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;Name&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;Age&lt;/span&gt;  &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;table&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Table&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Age&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;其中 &lt;code&gt;map[string]int&lt;/code&gt; 和 &lt;code&gt;map[Name]Age&lt;/code&gt; 表示同一类型&lt;/p&gt;
+&lt;h3 id=&#34;底层类型underlying-type&#34;&gt;底层类型（underlying type）&lt;/h3&gt;
+&lt;p&gt;规则：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一个内置类型的底层类型为它自己。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;unsafe&lt;/code&gt;标准库包中定义的&lt;code&gt;Pointer&lt;/code&gt;类型的底层类型是它自己。&lt;code&gt;unsafe.Pointer&lt;/code&gt;也被视为一个内置类型。&lt;/li&gt;
+&lt;li&gt;一个无名类型（必为一个组合类型）的底层类型为它自己。&lt;/li&gt;
+&lt;li&gt;在一个类型声明中，新声明的类型和源类型共享底层类型。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 这四个类型的底层类型均为内置类型int。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;MyInt&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;Age&lt;/span&gt;   &lt;span class=&#34;nx&#34;&gt;MyInt&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 下面这三个新声明的类型的底层类型各不相同。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nx&#34;&gt;IntSlice&lt;/span&gt;   &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;// 底层类型为[]int
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;MyIntSlice&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;MyInt&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 底层类型为[]MyInt
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;AgeSlice&lt;/span&gt;   &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Age&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;// 底层类型为[]Age
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 类型[]Age、Ages和AgeSlice的底层类型均为[]Age。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Ages&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;AgeSlice&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id=&#34;在-go-中&#34;&gt;在 Go 中&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;底层类型为内置类型&lt;code&gt;bool&lt;/code&gt;的类型称为&lt;strong&gt;布尔类型&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;底层类型为任一内置整数类型的类型称为&lt;strong&gt;整数类型&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;底层类型为内置类型&lt;code&gt;float32&lt;/code&gt;或者&lt;code&gt;float64&lt;/code&gt;的类型称为&lt;strong&gt;浮点数类型&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;底层类型为内置类型&lt;code&gt;complex64&lt;/code&gt;或&lt;code&gt;complex128&lt;/code&gt;的类型称为&lt;strong&gt;复数类型&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;整数类型、浮点数类型和复数类型统称为&lt;strong&gt;数字值类型&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;底层类型为内置类型&lt;code&gt;string&lt;/code&gt;的类型称为&lt;strong&gt;字符串类型&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;值value&#34;&gt;值（value）&lt;/h2&gt;
+&lt;p&gt;一个类型的一个&lt;strong&gt;实例&lt;/strong&gt;称为此类型的一个值。一个类型可以有很多不同的值，其中一个为它的零值。同一类型的不同值共享很多相同的属性。&lt;/p&gt;
+&lt;p&gt;每个类型有一个零值。一个类型的零值可以看作是此类型的默认值。预声明的标识符 &lt;code&gt;nil&lt;/code&gt; 可以看作是切片、映射、函数、通道、指针（包括非类型安全指针）和接口类型的零值的字面量表示。&lt;/p&gt;
+&lt;p&gt;值分为类型确定的和类型不确定的。&lt;/p&gt;
+&lt;h2 id=&#34;其他概念&#34;&gt;其他概念&lt;/h2&gt;
+&lt;h3 id=&#34;指针类型的基类型base-type&#34;&gt;指针类型的基类型（base type）&lt;/h3&gt;
+&lt;p&gt;若一个指针类型的底层类型表示为 &lt;code&gt;*T&lt;/code&gt;，则此指针类型的基类型为 &lt;code&gt;T&lt;/code&gt; 所表示的类型。&lt;/p&gt;
+&lt;h3 id=&#34;结构体类型的字段field&#34;&gt;结构体类型的字段（field）&lt;/h3&gt;
+&lt;p&gt;一个结构体类型由若干成员变量组成。每个这样的成员变量称为此结构体的一个字段。&lt;/p&gt;
+&lt;h3 id=&#34;函数类型的签名signature&#34;&gt;函数类型的签名（signature）&lt;/h3&gt;
+&lt;p&gt;一个函数和其类型的签名由此函数的&lt;strong&gt;输入参数&lt;/strong&gt;和&lt;strong&gt;返回结果&lt;/strong&gt;的类型列表组成。函数名称和函数体不属于函数签名的构成部分。
+如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;nf&#34;&gt;Write&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;byte&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;n&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;类型的方法method和方法集method-set&#34;&gt;类型的方法（method）和方法集（method set）&lt;/h3&gt;
+&lt;p&gt;在 Go 中，我们可以给满足某些条件的类型（构造器）声明方法。方法也常被称为成员函数。一个类型的所有方法组成了此类型的&lt;strong&gt;方法集&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;接口类型的动态类型和动态值&#34;&gt;接口类型的动态类型和动态值&lt;/h3&gt;
+&lt;p&gt;接口类型的值称为&lt;strong&gt;接口值&lt;/strong&gt;。一个接口值可以包裹装载一个非接口值。&lt;em&gt;包裹在一个接口值中的非接口值称为此接口值的动态值&lt;/em&gt;。此动态值的类型称为此接口值的动态类型。 一个什么也没包裹的接口值为一个零值接口值。零值接口值的动态值和动态类型均为不存在。
+一个接口类型可以指定若干个（可以是零个）方法，这些方法形成了此接口类型的方法集。
+如果一个类型（可以是接口或者非接口类型）的方法集是一个接口类型的方法集的超集，则我们说此类型实现了此接口类型。&lt;/p&gt;
+&lt;h3 id=&#34;一个值的具体类型concrete-type和具体值concrete-value&#34;&gt;一个值的具体类型（concrete type）和具体值（concrete value）&lt;/h3&gt;
+&lt;p&gt;对于一个（类型确定的）非接口值，它的具体类型就是它的类型，它的具体值就是它自己。
+一个 &lt;em&gt;零值接口值&lt;/em&gt; 没有具体类型和具体值。对于一个非零值接口值，它的具体类型和具体值就是它的动态类型和动态值。&lt;/p&gt;
+&lt;h3 id=&#34;容器类型&#34;&gt;容器类型&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;数组&lt;/strong&gt; &lt;code&gt;[]int&lt;/code&gt;、&lt;strong&gt;切片&lt;/strong&gt; &lt;code&gt;slice&lt;/code&gt; 和&lt;strong&gt;映射&lt;/strong&gt; &lt;code&gt;map&lt;/code&gt; 是 Go 中的三种正式意义上的内置容器类型。
+有时候，&lt;strong&gt;字符串&lt;/strong&gt;和&lt;strong&gt;通道类型&lt;/strong&gt;也可以被非正式地看作是容器类型。
+（正式和非正式的）容器类型的每个值都有一个&lt;strong&gt;长度属性&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;映射类型的键值key类型&#34;&gt;映射类型的键值（key）类型&lt;/h3&gt;
+&lt;p&gt;如果一个映射类型的底层类型表示为 &lt;code&gt;map[Tkey]T&lt;/code&gt;，则此映射类型的键值类型为 &lt;code&gt;Tkey&lt;/code&gt;。 &lt;code&gt;Tkey&lt;/code&gt; 必须为一个&lt;strong&gt;可比较类型&lt;/strong&gt; 。&lt;/p&gt;
+&lt;h3 id=&#34;容器类型的元素element类型&#34;&gt;容器类型的元素（element）类型&lt;/h3&gt;
+&lt;p&gt;存储在一个容器值中的所有元素的类型必须为同一个类型。此同一类型称为此容器值的（容器）类型的元素类型。&lt;/p&gt;
+&lt;h3 id=&#34;通道类型的方向&#34;&gt;通道类型的方向&lt;/h3&gt;
+&lt;p&gt;一个通道值可以被看作是 &lt;strong&gt;先入先出（first-in-first-out，FIFO）&lt;/strong&gt; 队列。一个通道值可能是可读可写的、只读的（receive-only）或者只写的（send-only）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一个可读可写的通道值也称为一个双向通道。 一个双向通道类型的底层类型可以被表示为&lt;code&gt;chan T&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;我们只能向一个只写的通道值发送数据，而不能从其中接收数据。 只写通道类型的底层类型可以被表示为&lt;code&gt;chan&amp;lt;- T&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;我们只能从一个只读的通道值接收数据，而不能向其发送数据。 只读通道类型的底层类型可以被表示为&lt;code&gt;&amp;lt;-chan T&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;可比较类型和不可比较类型&#34;&gt;可比较类型和不可比较类型&lt;/h3&gt;
+&lt;p&gt;目前（&lt;del&gt;Go 1.21&lt;/del&gt;），下面这些类型的值不支持（使用 &lt;code&gt;==&lt;/code&gt; 和 &lt;code&gt;!=&lt;/code&gt; 运算标识符）比较。这些类型称为 &lt;em&gt;不可比较类型&lt;/em&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;切片类型&lt;/li&gt;
+&lt;li&gt;映射类型&lt;/li&gt;
+&lt;li&gt;函数类型&lt;/li&gt;
+&lt;li&gt;任何包含有不可比较类型的字段的结构体类型和任何元素类型为不可比较类型的数组类型。
+其它类型称为可比较类型。
+映射类型的键值类型必须为可比较类型。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;外部链接&#34;&gt;外部链接&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://gfw.go101.org/article/type-system-overview.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Go 101&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
-        <title>Resource</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/resource/</link>
+        <title>Go学习资源</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/go%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</link>
         <pubDate>Mon, 13 May 2024 09:08:51 +0800</pubDate>
         
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/resource/</guid>
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/go%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/</guid>
         <description>&lt;h2 id=&#34;入门资料&#34;&gt;入门资料&lt;/h2&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://go.dev/doc/effective_go&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;官方Docs&lt;/a&gt; ，官方的文档是最好的入门资料，强烈推荐看，如果可以完整看完、理解并实践的话说明就吃透 Go 语言了。&lt;/p&gt;
@@ -133,14 +331,29 @@
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.reddit.com/r/golang/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Reddit 上的go社区&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;书籍推荐&#34;&gt;书籍推荐&lt;/h2&gt;
+&lt;h3 id=&#34;电子书&#34;&gt;电子书&lt;/h3&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.yuque.com/aceld/golang&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Golang修养之路&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://draveness.me/golang/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Go 语言设计与实现&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://golang.halfiisland.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Golang中文学习文档站&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://golang.design/under-the-hood/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Go 语言原本&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://gfw.go101.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Go语言101&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;实体书&#34;&gt;实体书&lt;/h3&gt;
+&lt;h2 id=&#34;github-stars&#34;&gt;Github stars&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/stars/FeiNiaoBF/lists/golang&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Starred to github&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
-        <title>LearningPath</title>
-        <link>https://FeiNiaoBF.github.io/zh-cn/p/learningpath/</link>
+        <title>学习之路</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/</link>
         <pubDate>Mon, 13 May 2024 09:08:32 +0800</pubDate>
         
-        <guid>https://FeiNiaoBF.github.io/zh-cn/p/learningpath/</guid>
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/</guid>
         <description>&lt;h2 id=&#34;hello-golang&#34;&gt;Hello, Golang&lt;/h2&gt;
 &lt;p&gt;Go 语言是 Google 开发的一种&lt;strong&gt;静态强类型&lt;/strong&gt;、&lt;strong&gt;编译型&lt;/strong&gt;、&lt;strong&gt;并发型&lt;/strong&gt;，并具有&lt;strong&gt;垃圾回收功能&lt;/strong&gt;的编程语言。&lt;/p&gt;
 &lt;blockquote&gt;
