@@ -24,7 +24,7 @@
 &lt;!-- 1. [TG_bot]() --&gt;
 &lt;h2 id=&#34;数据结构&#34;&gt;数据结构&lt;/h2&gt;
 &lt;p&gt;数据结构是对计算机高级语言最能体现打基础的学习，目前有许多常见的数据结构，我喜欢分类来处理。&lt;/p&gt;
-&lt;h3 id=&#34;基础结构hahahugoshortcode41s2hbhb&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/post/gohh/2.datastructures_algorithms/golangds/&#34; &gt;基础结构&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&#34;基础结构hahahugoshortcode42s2hbhb&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/post/gohh/2.datastructures/golangds/&#34; &gt;基础结构&lt;/a&gt;&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;数组&lt;/strong&gt;：是一种线性表数据结构，用于存储相同类型的数据元素。&lt;/p&gt;

@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Example Person. All rights reserved.</copyright>
-        <lastBuildDate>Mon, 20 May 2024 10:54:30 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 11 Jun 2024 23:07:13 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>博客搭建更新日记✨</title>
         <link>https://FeiNiaoBF.github.io/zh-cn/p/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%9B%B4%E6%96%B0%E6%97%A5%E8%AE%B0/</link>
         <pubDate>Wed, 08 Mar 2023 19:56:58 +0800</pubDate>
@@ -44,7 +44,7 @@
 &lt;!-- 1. [TG_bot]() --&gt;
 &lt;h2 id=&#34;数据结构&#34;&gt;数据结构&lt;/h2&gt;
 &lt;p&gt;数据结构是对计算机高级语言最能体现打基础的学习，目前有许多常见的数据结构，我喜欢分类来处理。&lt;/p&gt;
-&lt;h3 id=&#34;基础结构hahahugoshortcode41s2hbhb&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/post/gohh/2.datastructures_algorithms/golangds/&#34; &gt;基础结构&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&#34;基础结构hahahugoshortcode42s2hbhb&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://FeiNiaoBF.github.io/zh-cn/post/gohh/2.datastructures/golangds/&#34; &gt;基础结构&lt;/a&gt;&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;数组&lt;/strong&gt;：是一种线性表数据结构，用于存储相同类型的数据元素。&lt;/p&gt;
@@ -159,6 +159,33 @@
 [移除元素]()
 
 [删除有序数组中的重复项]() --&gt;
+</description>
+        </item>
+        <item>
+        <title>回溯算法</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/</link>
+        <pubDate>Tue, 11 Jun 2024 22:39:52 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;有组合就要回溯&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
+&lt;p&gt;先想一个问题：
+怎么利用计算机算法去计算关于排序组合等的数学问题?&lt;/p&gt;
+&lt;p&gt;这些数学问题有个最大的特点他们都要根据数字多少来进去匹配，然后再来判断是否合题意&lt;/p&gt;
+&lt;p&gt;接下来我从两个方面图像逻辑和数学角度来讨论&lt;/p&gt;
+&lt;h3 id=&#34;从图像逻辑上来看&#34;&gt;从图像逻辑上来看&lt;/h3&gt;
+&lt;p&gt;我依稀记得我在计算组合的时候我喜欢画图，画一幅 N 树形图来找组合的数量，像下面这个图：&lt;/p&gt;
+&lt;p&gt;其实这个图向右转 90 度就是一副树图，从横向看和纵向看&lt;/p&gt;
+&lt;h3 id=&#34;从数学角度来看&#34;&gt;从数学角度来看&lt;/h3&gt;
+&lt;p&gt;一层的递归就是一次遍历&lt;/p&gt;
+&lt;p&gt;递归&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;确立终止条件&lt;/li&gt;
+&lt;li&gt;参数和返回值&lt;/li&gt;
+&lt;li&gt;主体逻辑&lt;/li&gt;
+&lt;/ol&gt;
 </description>
         </item>
         <item>

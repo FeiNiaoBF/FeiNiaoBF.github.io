@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Algorithms on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/algorithms/</link>
+        <description>Recent content in Algorithms on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Tue, 11 Jun 2024 22:39:52 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/algorithms/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>回溯算法</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/</link>
+        <pubDate>Tue, 11 Jun 2024 22:39:52 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;有组合就要回溯&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
+&lt;p&gt;先想一个问题：
+怎么利用计算机算法去计算关于排序组合等的数学问题?&lt;/p&gt;
+&lt;p&gt;这些数学问题有个最大的特点他们都要根据数字多少来进去匹配，然后再来判断是否合题意&lt;/p&gt;
+&lt;p&gt;接下来我从两个方面图像逻辑和数学角度来讨论&lt;/p&gt;
+&lt;h3 id=&#34;从图像逻辑上来看&#34;&gt;从图像逻辑上来看&lt;/h3&gt;
+&lt;p&gt;我依稀记得我在计算组合的时候我喜欢画图，画一幅 N 树形图来找组合的数量，像下面这个图：&lt;/p&gt;
+&lt;p&gt;其实这个图向右转 90 度就是一副树图，从横向看和纵向看&lt;/p&gt;
+&lt;h3 id=&#34;从数学角度来看&#34;&gt;从数学角度来看&lt;/h3&gt;
+&lt;p&gt;一层的递归就是一次遍历&lt;/p&gt;
+&lt;p&gt;递归&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;确立终止条件&lt;/li&gt;
+&lt;li&gt;参数和返回值&lt;/li&gt;
+&lt;li&gt;主体逻辑&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
