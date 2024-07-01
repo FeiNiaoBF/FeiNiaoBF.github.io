@@ -30,7 +30,7 @@
     <lastmod>2023-04-24T18:59:33+08:00</lastmod>
   </url><url>
     <loc>https://FeiNiaoBF.github.io/zh-cn/post/</loc>
-    <lastmod>2024-06-11T23:07:13+08:00</lastmod>
+    <lastmod>2024-07-01T17:16:23+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -42,8 +42,24 @@
                 href="https://FeiNiaoBF.github.io/zh-cn/post/"
                 />
   </url><url>
+    <loc>https://FeiNiaoBF.github.io/zh-cn/categories/</loc>
+    <lastmod>2024-07-01T17:16:23+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://FeiNiaoBF.github.io/en/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://FeiNiaoBF.github.io/zh-cn/categories/"
+                />
+  </url><url>
+    <loc>https://FeiNiaoBF.github.io/zh-cn/p/mit6.824-distributed-system1---lab01/</loc>
+    <lastmod>2024-07-01T17:16:23+08:00</lastmod>
+  </url><url>
     <loc>https://FeiNiaoBF.github.io/zh-cn/</loc>
-    <lastmod>2024-06-11T23:07:13+08:00</lastmod>
+    <lastmod>2024-07-01T17:16:23+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -55,18 +71,17 @@
                 href="https://FeiNiaoBF.github.io/zh-cn/"
                 />
   </url><url>
-    <loc>https://FeiNiaoBF.github.io/zh-cn/categories/</loc>
-    <lastmod>2024-06-11T22:49:31+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://FeiNiaoBF.github.io/en/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://FeiNiaoBF.github.io/zh-cn/categories/"
-                />
+    <loc>https://FeiNiaoBF.github.io/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/</loc>
+    <lastmod>2024-07-01T17:16:23+08:00</lastmod>
+  </url><url>
+    <loc>https://FeiNiaoBF.github.io/zh-cn/categories/%E8%AF%BE%E7%A8%8B/</loc>
+    <lastmod>2024-07-01T17:16:23+08:00</lastmod>
+  </url><url>
+    <loc>https://FeiNiaoBF.github.io/zh-cn/p/mit6.824-distributed-system1/</loc>
+    <lastmod>2024-07-01T17:16:12+08:00</lastmod>
+  </url><url>
+    <loc>https://FeiNiaoBF.github.io/zh-cn/post/gohh/6.distribut/mit6.824/</loc>
+    <lastmod>2024-07-01T17:15:54+08:00</lastmod>
   </url><url>
     <loc>https://FeiNiaoBF.github.io/zh-cn/p/http-%E6%98%AF%E4%BB%80%E4%B9%88/</loc>
     <lastmod>2024-06-11T22:49:31+08:00</lastmod>

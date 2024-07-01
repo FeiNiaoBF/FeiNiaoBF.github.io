@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>分布式 on Yeelight の 小屋</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/</link>
+        <description>Recent content in 分布式 on Yeelight の 小屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Example Person. All rights reserved.</copyright>
+        <lastBuildDate>Mon, 01 Jul 2024 17:16:23 +0800</lastBuildDate><atom:link href="https://FeiNiaoBF.github.io/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>MIT6.824 Distributed System(1)---Lab01</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/mit6.824-distributed-system1---lab01/</link>
+        <pubDate>Mon, 01 Jul 2024 17:16:23 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/mit6.824-distributed-system1---lab01/</guid>
+        <description>&lt;h2 id=&#34;mapreduce-基本工作原理&#34;&gt;MapReduce 基本工作原理&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;来自 MapReduce 的论文&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;The MapReduce library in the user program first  splits the input files into M pieces of typically 16  megabytes to 64 megabytes (MB) per piece (controllable by the user via an optional parameter). It  then starts up many copies of the program on a cluster of machines.&lt;/p&gt;
+&lt;p&gt;用户程序中的 MapReduce 库首先将输入文件分割成 M 个片段，每个片段通常为 16 到 64 兆字节（MB）（用户可以通过可选参数控制片段大小）。然后，它在一组机器集群上启动该程序的多个副本。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;One of the copies of the program is special – the  master. The rest are workers that are assigned work  by the master. There are M map tasks and R reduce  tasks to assign. The master picks idle workers and  assigns each one a map task or a reduce task.&lt;/p&gt;
+&lt;p&gt;这些程序副本中有一个特殊的是主节点，其余的是工作节点，由主节点分配任务。有 M 个 map 任务和 R 个 reduce 任务需要分配。主节点选择空闲的工作节点，并为其分配一个 map 任务或一个 reduce 任务&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;A worker who is assigned a map task reads the  contents of the corresponding input split. It parses  key/value pairs out of the input data and passes each  pair to the user-defined Map function. The intermediate key/value pairs produced by the Map function  are buffered in memory.&lt;/p&gt;
+&lt;p&gt;被分配了 map 任务的工作节点读取相应输入片段的内容。它从输入数据中解析出键/值对，并将每一对传递给用户定义的 Map 函数。由 Map 函数生成的中间键/值对被缓存在内存中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Periodically, the buffered pairs are written to local  disk, partitioned into R regions by the partitioning  function. The locations of these buffered pairs on  the local disk are passed back to the master, who  is responsible for forwarding these locations to the  reduce workers.&lt;/p&gt;
+&lt;p&gt;定期地，缓存的键/值对被写入本地磁盘，并通过分区函数分成 R 个区域。这些缓存在本地磁盘上的键/值对的位置被传递回主节点，主节点负责将这些位置转发给 reduce 工作节点。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When a reduce worker is notified by the master  about these locations, it uses remote procedure calls  to read the buffered data from the local disks of the  map workers. When a reduce worker has read all intermediate data, it sorts it by the intermediate keys  so that all occurrences of the same key are grouped  together. The sorting is needed because typically  many different keys map to the same reduce task. If  the amount of intermediate data is too large to fit in  memory, an external sort is used.&lt;/p&gt;
+&lt;p&gt;当 reduce 工作节点被主节点通知这些位置时，它通过远程过程调用从 map 工作节点的本地磁盘读取缓存数据。当 reduce 工作节点读取了所有中间数据后，它按中间键对数据进行排序，以便将相同键的所有出现组合在一起。排序是必要的，因为通常许多不同的键会映射到同一个 reduce 任务。如果中间数据量太大，无法放入内存，则使用外部排序&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The reduce worker iterates over the sorted intermediate data and for each unique intermediate key encountered, it passes the key and the corresponding  set of intermediate values to the user’s Reduce function. The output of the Reduce function is appended  to a final output file for this reduce partition.&lt;/p&gt;
+&lt;p&gt;reduce 工作节点遍历排序后的中间数据，对于遇到的每个唯一的中间键，它将键和相应的中间值集合传递给用户的 Reduce 函数。Reduce 函数的输出被追加到该 reduce 分区的最终输出文件中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When all map tasks and reduce tasks have been  completed, the master wakes up the user program.  At this point, the MapReduce call in the user program returns back to the user code.&lt;/p&gt;
+&lt;p&gt;当所有 map 任务和 reduce 任务完成后，主节点唤醒用户程序。此时，用户程序中的 MapReduce 调用返回到用户代码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;lab-01&#34;&gt;Lab 01&lt;/h2&gt;
+&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://imgs.search.brave.com/kRnqIwaErmRijpPv2RKP_0fFRkVYZkSCNJ0WCW5355A/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pLnNz/dGF0aWMubmV0L0VI/OHRZLmpwZw&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;MapReduce&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这就是一个典型的 MapReduce Job。从整体来看，为了保证完整性，有一些术语要介绍一下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Job。整个 MapReduce 计算称为 Job。&lt;/li&gt;
+&lt;li&gt;Task。每一次 MapReduce 调用称为 Task。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;任务描述&#34;&gt;任务描述&lt;/h3&gt;
+&lt;p&gt;实现分布式 MapReduce 中 &lt;code&gt;Coordinator&lt;/code&gt;（Master）和可多次使用的 &lt;code&gt;Worker&lt;/code&gt;, 在这次实验都在一个机器上运行。worker通过 RPC 和 coordinator 交互。worker请求任务,进行运算（&lt;code&gt;mapf&lt;/code&gt; 和 &lt;code&gt;reducef&lt;/code&gt;）, 写出结果并重命名到 &lt;code&gt;mr-X-Y&lt;/code&gt; 文件。&lt;/p&gt;
+&lt;h3 id=&#34;实施&#34;&gt;实施&lt;/h3&gt;
+&lt;h4 id=&#34;抽象-mater&#34;&gt;抽象 Mater&lt;/h4&gt;
+&lt;p&gt;在实验中提到，首先需要修改工作结构中的工作，然后通过 RPC 向 Coordinator 请求任务，即请求一个新的 map task。但在实际操作中，我发现不能直接开始编写这部分代码，必须先定义完 Coordinator 的抽象数据结构。只有明确了协调器管理的数据结构，才能更好地进行后续的开发工作。因此，首先需要抽象出协调器的数据结构，然后再编写 Worker 部分的代码。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Coordinator&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;mu&lt;/span&gt;              &lt;span class=&#34;nx&#34;&gt;sync&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Mutex&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// lock
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;files&lt;/span&gt;           &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;// all input file
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;nReduce&lt;/span&gt;         &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;// number of reduce tasks
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;nMap&lt;/span&gt;            &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;// number of map tasks
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mapTasks&lt;/span&gt;        &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Task&lt;/span&gt;     &lt;span class=&#34;c1&#34;&gt;// indxe(id): 0~(nmap-1)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;reduceTasks&lt;/span&gt;     &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Task&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;nmapFinished&lt;/span&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;nreduceFinished&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;之后来写 &lt;code&gt;Worker&lt;/code&gt; 函数，结合在实验的例子中，我们可以参考 &lt;code&gt;RPC&lt;/code&gt; 的例子。这个例子中有两个参数：第一个参数是传递给 coordinator 的参数，第二个参数是一个空参数，由 coordinator 返回。通过 &lt;code&gt;RPC&lt;/code&gt;，我们可以在不同的系统之间进行协调，实现分布式系统。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// example function to show how to make an RPC call to the coordinator.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;//
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// the RPC argument and reply types are defined in rpc.go.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;CallExample&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// declare an argument structure.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;args&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ExampleArgs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// fill in the argument(s).
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;X&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// declare a reply structure.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;reply&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ExampleReply&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// send the RPC request, wait for the reply.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// the &amp;#34;Coordinator.Example&amp;#34; tells the
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// receiving server that we&amp;#39;d like to call
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// the Example() method of struct Coordinator.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ok&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;call&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Coordinator.Example&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;reply&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ok&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;c1&#34;&gt;// reply.Y should be 100.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;   &lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;reply.Y %v\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;reply&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;call failed!\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id=&#34;抽象-wokerstask&#34;&gt;抽象 Wokers（Task）&lt;/h4&gt;
+&lt;p&gt;按照例子，我可以模仿“照猫画虎”的方式来编写关于工作的具体实现。具体来说，我需要明确一个任务（task）的概念。看完 &lt;em&gt;MapRudce&lt;/em&gt; 后，我发现 &lt;code&gt;Worker&lt;/code&gt; 代码必须根据不同的 task 类型进行选择操作。其中发现 &lt;strong&gt;workers&lt;/strong&gt; 有三种不同的形态（实际上应该是四种，其中一种是特殊的管理者&amp;mdash;&lt;strong&gt;Mater&lt;/strong&gt;）：map、reduce和idle（空闲）。因此，我们需要为每种工作类型抽象出一个数据结构。为了方便管理和协调，我们将这些工作抽象成一个 task，每个 &lt;code&gt;task&lt;/code&gt; 代表一个独立的工作，它包含了该工作的状态信息。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;46
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;47
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Task is a struct that represents a worker task
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Task&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Id&lt;/span&gt;          &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;// worker ID
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;nx&#34;&gt;Type&lt;/span&gt;        &lt;span class=&#34;nx&#34;&gt;workerType&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// worker state
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;nx&#34;&gt;Status&lt;/span&gt;      &lt;span class=&#34;nx&#34;&gt;statusType&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 0 &amp;#34;Unassigned&amp;#34;, 1 &amp;#34;Assigned&amp;#34;, 2 &amp;#34;Finished&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;nx&#34;&gt;Timestamp&lt;/span&gt;   &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Time&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// Start time
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;nx&#34;&gt;MapFile&lt;/span&gt;     &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;     &lt;span class=&#34;c1&#34;&gt;// File for map task
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;nx&#34;&gt;ReduceFiles&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;// List of files for reduce task
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// MapReduceArgs is the message worker sends to coordinator
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// that have the worker&amp;#39;s task and message type
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;MapReduceArgs&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Task&lt;/span&gt;        &lt;span class=&#34;nx&#34;&gt;Task&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;MessageType&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;messageType&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// MapReduceReply is the message coordinator sends to worker
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// when coordinator receives the worker&amp;#39;s request.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// that have the worker&amp;#39;s task and number of reduce tasks of can be assigned
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;MapReduceReply&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Task&lt;/span&gt;    &lt;span class=&#34;nx&#34;&gt;Task&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;NReduce&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;NMap&lt;/span&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// workerType is an enum for the type of worker
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;workerType&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Idle: 0, Map: 1, Reduce: 2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Idle&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;workerType&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;iota&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Map&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Reduce&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// messageType: 0 &amp;#34;RequestTask&amp;#34;, 1 &amp;#34;FinishTask&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;messageType&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;RequestTask&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;messageType&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;iota&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;FinishTask&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;statusType&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Unassigned&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;statusType&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;iota&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Assigned&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;Finished&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id=&#34;coordinator-分配&#34;&gt;Coordinator 分配&lt;/h4&gt;
+&lt;p&gt;当然写完 &lt;code&gt;worker&lt;/code&gt; 后，那么就要去写 &lt;code&gt;coordinator&lt;/code&gt;，他是对每个请求的 &lt;code&gt;Woker&lt;/code&gt; 进行分配的管理者，主要工作就是分配，那么我去根据我的类型。然后进行一次轮巡，当我为空的时候，我就把这个新的一个工作给予给工作，新的工作，它的类型一开始永远都是map，到后面它会变成readers。当我当控制，我整个控制流，当我整个分配结束后，那说明我这个系统也完成了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2024/07/01/WjyKLIMPOtJVRUv.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;test map task&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;有一点小坑的就是在当我在写分配的时候，需要注意对每个任务（&lt;code&gt;task&lt;/code&gt;）的状态进行区分。任务状态的改变或不变会导致不同的系统行为，因此需要非常清晰地理解和处理这些状态变化。&lt;/p&gt;
+&lt;h3 id=&#34;实验结束&#34;&gt;实验结束&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://s2.loli.net/2024/07/01/IEe7s4hyFQRuqxw.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;done lab&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;外部链接&#34;&gt;外部链接&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://pdos.csail.mit.edu/6.824/labs/lab-mr.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;6.5840 Lab 1: MapReduce&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>MIT6.824 Distributed System(1)</title>
+        <link>https://FeiNiaoBF.github.io/zh-cn/p/mit6.824-distributed-system1/</link>
+        <pubDate>Mon, 01 Jul 2024 17:16:12 +0800</pubDate>
+        
+        <guid>https://FeiNiaoBF.github.io/zh-cn/p/mit6.824-distributed-system1/</guid>
+        <description>&lt;h2 id=&#34;分布式系统&#34;&gt;分布式系统&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;以下是我在学习分布式系统的一些心得和具体的实验，该学习是围绕 MIT6.824 的实验进
+行的笔记技术。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;什么是分布式系统&#34;&gt;什么是分布式系统&lt;/h3&gt;
+&lt;p&gt;分布式系统是一个由&lt;strong&gt;多个独立计算机&lt;/strong&gt;组成的系统，这些计算机通过&lt;strong&gt;网络&lt;/strong&gt;(HTTP, RPC 等)相互通信和协调，以实现共同的目标。分布式系统的主要特点是其组件在物理上分布在不同的地点，但它们通过网络连接在一起，协同工作。&lt;/p&gt;
+&lt;p&gt;在摩尔定律的推动下，我们从单核发展到了多核。然而，在多核的情况下，我们不能无限制地增加核心数量。近年来，摩尔定律遇到了瓶颈，我们必须打破这一瓶颈，而分布式系统正是解决这一问题的关键。分布式系统的主要目标是将多台计算机连接在一起，共同执行一个任务，或者说是将一个任务分发给多台计算机，让它们分别执行一部分，从而实现任务的分流和合并，加速任务的处理。&lt;/p&gt;
+&lt;p&gt;我们需要增强计算能力，以满足当前的需求。当我们处理数百GB甚至数TB级的数据时，计算能力的提升尤为重要。我们不能仅仅依赖硬件的提升，因为硬件的发展触及了许多尚未突破的知识领域。因此，我们必须寻找新的途径来提高计算能力，分布式系统因此应运而生。&lt;/p&gt;
+&lt;p&gt;分布式系统的核心在于通过网络将多台计算机连接起来，形成一个协同工作的系统。这种系统可以有效地处理大规模数据和复杂计算任务，通过并行处理和任务分配，显著提高整体的计算效率。此外，分布式系统还具有高可用性和容错性，能够在部分节点失效的情况下继续运行，确保系统的稳定性和可靠性。&lt;/p&gt;
+&lt;p&gt;总之，分布式系统是应对摩尔定律瓶颈的有效解决方案，它通过协同多台计算机的工作，提高了计算能力，满足了大数据和复杂计算任务的需求。随着技术的不断进步，分布式系统将在未来的计算领域发挥越来越重要的作用。&lt;/p&gt;
+&lt;h3 id=&#34;驱动力有利部分&#34;&gt;驱动力（有利部分）&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;提高计算性能&lt;/strong&gt;：通过使用大量的计算机，可以实现大量的并行运算，充分利用多CPU、多内存和多磁盘资源，从而显著提升计算性能。这对于处理大规模数据和复杂计算任务至关重要。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;容错能力&lt;/strong&gt;：分布式系统能够提供容错机制，通过在多台计算机上运行相同的任务，即使其中一台计算机发生故障，系统也可以无缝切换到另一台计算机继续运行，确保服务的连续性和可靠性。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;空间分布的自然需求&lt;/strong&gt;：某些问题在空间上是自然分布的，例如跨国银行转账。在这种情况下，不同地理位置的服务器需要协同工作，确保交易的顺利进行。分布式系统提供了一种有效的协调方法，满足这类需求。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;安全性考虑&lt;/strong&gt;：在处理不可信代码或需要与潜在风险代码交互时，分布式系统可以将代码分散在多台计算机上运行，通过特定的网络协议进行通信，从而限制潜在的错误和安全风险的影响范围，提高系统的整体安全性。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;挑战需改进部分&#34;&gt;挑战（需改进部分）&lt;/h3&gt;
+&lt;p&gt;分布式系统面临的挑战主要包括：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;并发编程和复杂交互&lt;/strong&gt;：由于系统中存在多个并发执行的部分，开发者需要处理并发编程带来的复杂性，包括同步和异步问题。这些复杂交互可能导致难以预测的行为和错误，使得分布式系统的开发和维护变得困难。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;局部错误和网络故障&lt;/strong&gt;：在分布式系统中，由于涉及多台计算机和网络，可能会出现局部错误或网络故障。与单台计算机不同，分布式系统可能部分组件正常工作，而另一部分组件停止运行，或者所有计算机都在运行但网络连接不稳定。这种局部错误和网络故障增加了系统的复杂性和维护难度。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;性能预期与实际差距&lt;/strong&gt;：设计分布式系统的初衷通常是为了获得更高的性能，例如通过使用一千台计算机或一千个磁盘臂来提升性能。然而，实际性能往往难以精确预测，因为涉及到众多因素，如硬件性能、网络延迟、任务分配等。因此，需要精心设计和优化才能使系统达到预期的性能水平。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;抽象接口展望&#34;&gt;抽象接口（展望）&lt;/h3&gt;
+&lt;p&gt;分布式系统的实现和抽象对于开发者来说，必须围绕几个核心部分：首先是&lt;strong&gt;存储&lt;/strong&gt;，其次是&lt;strong&gt;通信&lt;/strong&gt;。一般来说，存储我们直接使用物理存储设备。然而，物理存储还有一些细分部分。至于通信，我们利用网络进行机器间的相互通信，因为有多台机器，网络如 HTTP 和 RPC 等技术能提供稳定可靠的连接，使得多台机器能够顺畅通信。&lt;/p&gt;
+&lt;p&gt;此外，对于分布式系统中的存储、计算和通信，我们必须设计一些非常简单的接口，使得用户或其他应用在使用这些分布式系统时能够简单易用。我们必须将所有系统的复杂性隐藏在抽象接口的背后。虽然对于分布式系统来说，完全隐藏其复杂性是一个难以实现的想法，但我们必须朝着这个方向努力。我们的抽象接口必须使得整个系统看起来像一个非分布式的系统，就像一个单独的简单系统。然而，我们又希望这个接口背后是一个具有极高性能和容错率的分布式系统，这对抽象接口的设计是一个挑战。&lt;/p&gt;
+&lt;p&gt;在实现这些抽象接口时，我们需要考虑如何简化用户的使用体验，同时确保系统的性能和可靠性。这需要我们在设计时充分考虑分布式系统的特性，如并发控制、数据一致性和故障恢复等。通过不断优化和改进，我们可以逐步接近这个理想化的抽象接口，为用户提供一个既简单又强大的分布式系统。&lt;/p&gt;
+&lt;p&gt;在考虑这些抽象时，首先出现的话题是实现。在构建分布式系统时，使用了许多工具，例如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;RPC（远程过程调用）&lt;/strong&gt;：RPC的目标是掩盖我们在不可靠网络上进行通信的事实，使得远程调用看起来就像本地调用一样简单。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;线程&lt;/strong&gt;：线程是一种编程技术，使我们能够利用多核心计算机。在本课程中，线程提供了一种结构化的并发操作方式，从而简化了并发编程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;实际上，成功的分布式系统需要在抽象的设计与具体实现之间找到适当的折衷。虽然这一过程充满挑战，但同时也孕育着无限的创新潜力。在现实世界中，一个设计良好的分布式系统能够解决众多看似不可解的问题，它通过协调众多计算资源的合作，实现了数据存储和处理的规模化、高效化&lt;/p&gt;
+&lt;h3 id=&#34;实践部分&#34;&gt;实践部分&lt;/h3&gt;
+&lt;h4 id=&#34;可扩展性scalability&#34;&gt;可扩展性（Scalability）&lt;/h4&gt;
+&lt;p&gt;通常，构建分布式系统的目的是为了实现可扩展的加速，即通过增加计算资源来提高系统的性能或吞吐量。具体来说，如果使用一台计算机解决问题需要一定时间，那么增加一台计算机后，理想情况下应该能够在相同时间内解决两倍的问题，或者在一半时间内解决相同数量的问题。这种性能的线性增长就是我们所追求的可扩展性。&lt;/p&gt;
+&lt;p&gt;可扩展性是一个强大的特性。如果一个系统能够通过简单地增加计算机数量来提升性能，这将是一个巨大的成果，因为计算机可以通过购买来获得。相比之下，如果不增加计算机，就需要投入大量资源来优化现有系统，这通常是一个昂贵且耗时的过程。因此，我们希望能够通过从少量计算机扩展到大量计算机，来应对流量的大幅增长。&lt;/p&gt;
+&lt;p&gt;在构建大型网站时，可扩展性是一个必须时刻考虑的因素。为了获得与计算机数量匹配的性能，需要精心设计系统。例如，一个典型的网站可能包括一个HTTP服务器、用户和浏览器，以及一个基于Python或PHP的web服务器与数据库交互。当用户数量增加时，可以通过增加web服务器来分散用户请求，从而提高系统的处理能力。然而，这种可扩展性并不是无限的。在某个临界点，数据库可能会成为瓶颈，即使增加更多的web服务器也无法提升性能。&lt;/p&gt;
+&lt;p&gt;在这种情况下，可能需要对系统进行重构，例如将单个数据库拆分成多个数据库来提升性能。这种重构需要大量的工作，但在某些情况下是必要的。在本课程中，我们将看到许多关于分布式存储系统的例子，这些系统通常用于支持大型网站，因为单个数据库或存储服务器无法支撑如此大规模的网站。&lt;/p&gt;
+&lt;p&gt;总结来说，可扩展性是我们希望通过增加机器来实现系统性能提升的目标，但在现实中，这需要通过合理的架构设计来实现。需要认识到，虽然增加机器可以提升性能，但在某些情况下，系统的某个组件可能会成为瓶颈，需要通过重构或其他方法来解决。&lt;/p&gt;
+&lt;h4 id=&#34;可用性availability&#34;&gt;可用性（Availability）&lt;/h4&gt;
+&lt;p&gt;容错是指系统在出现故障时仍能继续运行的能力。如果你只使用一台计算机构建系统，那么系统通常是可靠的，因为一台计算机可以稳定运行多年。然而，如果你使用数千台计算机构建系统，那么即使每台计算机都能稳定运行一年，对于1000台计算机来说，平均每天也会有3台计算机出现故障。&lt;/p&gt;
+&lt;p&gt;在大规模分布式系统中，一些罕见的问题会被放大。例如，在1000台计算机的集群中，总是会有机器故障、运行错误、运行缓慢或执行错误任务的情况。网络问题也很常见，如网线松动或交换机故障。因此，大规模系统会将一些几乎不可能且不需要考虑的问题，变成持续不断的问题。&lt;/p&gt;
+&lt;p&gt;由于错误总会发生，设计时必须考虑系统能够屏蔽错误或在出错时继续运行。同时，为了为第三方应用开发人员提供方便的抽象接口，我们需要构建一种基础架构，能够尽可能多地对应用开发人员屏蔽和掩盖错误，使他们不需要处理各种可能发生的错误。&lt;/p&gt;
+&lt;p&gt;可用性是容错的一个重要概念，它表示在特定类型的错误下，系统仍然能够正常运行，提供完整的服务。例如，通过构建多副本系统，当一个副本故障时，另一个副本可以继续运行。然而，如果所有副本都故障，系统就不再可用。因此，可用系统通常是指在特定故障范围内，系统仍然能够提供服务。&lt;/p&gt;
+&lt;p&gt;除了可用性，另一个容错特性是自我可恢复性。这意味着如果出现问题，服务会停止工作，不再响应请求，但在修复后系统可以恢复正常运行。这是一个比可用性更弱的需求，因为在故障修复期间，系统将完全停止工作。然而，修复后系统可以完全正确地重新运行，因此可恢复性是一个重要的需求。&lt;/p&gt;
+&lt;p&gt;为了实现这些特性，有许多工具。其中最重要的是非易失存储和复制。非易失存储（如硬盘、闪存、SSD）可以在电源故障时保存系统状态，以便在电源恢复后继续运行。然而，更新非易失存储是代价很高的操作，因此出现了许多非易失存储的管理工具。为了避免频繁写入非易失存储，需要进行许多思考以获取好的性能。&lt;/p&gt;
+&lt;p&gt;复制是另一个重要的容错工具，但管理复制的多副本系统会有些棘手。在任何多副本系统中，都会有一个关键问题，即副本可能会意外偏离同步状态，不再互为副本。lab2和lab3都是通过管理多副本来实现容错的系统，你将会看到这里有多复杂。&lt;/p&gt;
+&lt;h4 id=&#34;一致性consistency&#34;&gt;一致性（Consistency）&lt;/h4&gt;
+&lt;p&gt;一致性是分布式系统中的一个核心概念，它定义了系统中操作的行为和结果。在构建分布式存储系统时，理解一致性尤为重要，因为它直接影响到系统的性能、可靠性和用户体验。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;强一致性与弱一致性&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;为了解决不一致性这个问题，我们需要定义一致性的规则。一致性有两种主要类型：强一致性和弱一致性。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;强一致性&lt;/strong&gt;：保证&lt;code&gt;get&lt;/code&gt;请求总是返回最近一次&lt;code&gt;put&lt;/code&gt;请求写入的值。这意味着系统需要确保所有副本在任何时候都保持同步。实现强一致性通常需要大量的通信，因为每次&lt;code&gt;put&lt;/code&gt;或&lt;code&gt;get&lt;/code&gt;操作都需要与所有副本进行通信，以确保它们都更新或检查了最新的数据。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;弱一致性&lt;/strong&gt;：不保证&lt;code&gt;get&lt;/code&gt;请求总是返回最近一次&lt;code&gt;put&lt;/code&gt;请求写入的值。这意味着系统允许读取到旧数据。虽然弱一致性可能导致读取到旧数据，但它可以减少通信需求，从而提高性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;权衡&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;强一致性虽然提供了最高的数据准确性，但实现它的代价很高。在分布式系统中，为了容错和性能，副本通常分布在不同的地理位置。这导致跨副本的通信延迟增加，从而影响系统的响应速度。因此，许多系统选择弱一致性，以换取更高的性能和更好的容错性。&lt;/p&gt;
+&lt;h3 id=&#34;个人学习目标&#34;&gt;个人学习目标&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;基本理解分布式系统的各项功能和具体的实现。&lt;/li&gt;
+&lt;li&gt;亲自动手去实现一个小型的分布式系统，做好每一件分布式系统的一些细节。&lt;/li&gt;
+&lt;li&gt;归纳总结一下，在本次分布式系统学习中遇到了一些问题，或者是一些学习经验。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;外链&#34;&gt;外链&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mit-public-courses-cn-translatio.gitbook.io/mit6-824/lecture-01-introduction&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Lecture 01 - Introduction&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

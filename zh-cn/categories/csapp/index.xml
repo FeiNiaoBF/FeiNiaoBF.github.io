@@ -1294,7 +1294,7 @@
 &lt;ul&gt;
 &lt;li&gt;符号(sign) s 决定这数是负数(s=1) 还是正数(s=0), 而对于数值0的符号位解释
 作为特殊情况处理(-0.0 = +0.0)。&lt;/li&gt;
-&lt;li&gt;尾数(significand) M 是一个二进制小数，它的范围是1~2-£, 或者是0~1 - £。&lt;/li&gt;
+&lt;li&gt;尾数(significand) M 是一个二进制小数，它的范围是1&lt;del&gt;2-£, 或者是0&lt;/del&gt;1 - £。&lt;/li&gt;
 &lt;li&gt;阶码(exponent) E 的作用是对浮点数加权，这个权重是2 的E 次幕（可能是负数） 。
 将浮点数的位表示划分为三个字段，分别对这些值进行编码：&lt;/li&gt;
 &lt;li&gt;一个单独的符号位s 直接编码符号s 。&lt;/li&gt;
